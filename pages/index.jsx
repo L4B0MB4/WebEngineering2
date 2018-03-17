@@ -63,7 +63,7 @@ class Index extends Component
 
     newTransaction(data)
     {
-        let transaction = this.blockchain.new_transaction(this.blockchain.public_adress,this.blockchain.public_adress,data);
+        let transaction =this.blockchain.create_transaction(this.blockchain.public_adress,this.blockchain.public_adress,"content",data);
         this.actions.push({type:"transaction",transaction})
         this.socket.emit("get transaction code",rsaKeys.exportKey("public"))
     }
