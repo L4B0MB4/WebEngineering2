@@ -10,7 +10,7 @@ import Link from "next/link";
 
 const rsaKeys = new NodeRSA({ b: 512 });
 
-class Index extends Component {
+class Test extends Component {
   static getInitialProps({ store, query, req }) {
     if (req) {
       store.dispatch(receiveInfo(query));
@@ -31,25 +31,7 @@ class Index extends Component {
     }
   }
   render() {
-    return (
-      <div>
-        <Link prefetch href={"/test"}>
-          <a className="whitesmoke">Test !</a>
-        </Link>
-        <textarea
-          onChange={e => {
-            this.setState({ content: e.target.value });
-          }}
-        />
-        <button
-          onClick={() =>
-            this.blockchainWrapper.newTransaction(this.state.content)
-          }
-        >
-          mine!
-        </button>
-      </div>
-    );
+    return <div>Just a test page ! You have full access to the blockchain via the blockchainwrapper !</div>;
   }
 }
 const mapDispatchToProps = dispatch => ({
@@ -60,4 +42,4 @@ const mapStateToProps = state => ({
   info: state.commonReducer.info.payload
 });
 
-export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Test);

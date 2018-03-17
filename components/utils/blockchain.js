@@ -78,7 +78,6 @@ export class Blockchain {
   }
 
   valid_chain(chain) {
-    console.log("chain length: " + chain.length);
     if (chain.length <= 0) return false;
     let last_block = chain[0];
     let current_index = 1;

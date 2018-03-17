@@ -6,7 +6,7 @@
     "old-start": "nodemon --exec npm run babel-node -- ./src/main.js",
     "old-build": "babel src -d dist",
     "dev": "npm run babel-node -- ./server/server",
-    "build": "next build",
+    "build": "babel ./server/ -s -d dist && next build",
     "start": "next start"
   },
   "devDependencies": {
@@ -28,6 +28,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",

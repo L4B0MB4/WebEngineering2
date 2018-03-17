@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socketIO = require("socket.io");
-import { Blockchain } from "../components/blockchain";
+import { Blockchain } from "../components/utils/blockchain";
 const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
@@ -42,7 +42,6 @@ io.on("connection", socket => {
   });
 
   socket.on("new block", block => {
-    console.log("new block start");
     let test_chain = [];
     test_chain.push(...blockchain.chain);
     test_chain.push(block);
@@ -51,7 +50,6 @@ io.on("connection", socket => {
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
     }
-    console.log("new block end");
   });
   socket.on("get blockchain", () => {
     socket.emit("get blockchain", blockchain.chain);
