@@ -22,13 +22,13 @@ class Index extends Component {
     this.blockchain = new Blockchain();
     this.actions = [];
     this.blockchain.public_adress = rsaKeys.exportKey("public");
-    console.log(props);
   }
 
   componentDidMount() {
     this.socket = io({ endpoint: "http://localhost:3000" });
     this.socket.emit("init", { message: "init" });
     this.socket.on("blockchain", data => {
+      console.log(data);
       this.blockchain.chain = data;
     });
 

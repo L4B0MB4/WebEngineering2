@@ -24,13 +24,15 @@ export class Blockchain {
   }
 
   create_transaction(sender, recipient, type, data) {
+    let timestamp =(new Date()).getTime();
     return {
       sender,
       recipient,
       value: {
         type,
         data,
-        hash:this.hash(data)
+        timestamp,
+        hash:this.hash(JSON.stringify({type,data,timestamp})),
       }
     };
   }

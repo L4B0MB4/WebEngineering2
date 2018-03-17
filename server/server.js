@@ -6,6 +6,7 @@ const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
+const { createFeed } = require("./utils");
 
 const secrect = {
   value: Math.random()
@@ -28,20 +29,20 @@ io.on("connection", socket => {
   socket.on("get transaction code", publicKey => {
     rsaKeys.importKey(publicKey, "public");
     let encrypted = rsaKeys.encrypt(secrect.value, "base64");
-    console.log(encrypted);
     socket.emit("solve transaction code", encrypted);
   });
 
   socket.on("new transaction", data => {
     const transaction = {
-      sender:data.sender,
-      recipient:data.recipient,
-      value:data.value 
+      sender: data.sender,
+      recipient: data.recipient,
+      value: data.value
     };
     socket.broadcast.emit("mine", transaction);
   });
 
   socket.on("new block", block => {
+    console.log("new block start");
     let test_chain = [];
     test_chain.push(...blockchain.chain);
     test_chain.push(block);
@@ -50,6 +51,7 @@ io.on("connection", socket => {
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
     }
+    console.log("new block end");
   });
   socket.on("get blockchain", () => {
     socket.emit("get blockchain", blockchain.chain);
@@ -60,26 +62,28 @@ io.on("connection", socket => {
   });
 });
 
-
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-
-app.prepare()
+app
+  .prepare()
   .then(() => {
     exp.get("/", (req, res) => {
       const query = {
-        test:"hallo"
+        value: "Hey so schickt man daten von server zu den pages"
       };
-      return app.render(req, res, '/index', query);
+      return app.render(req, res, "/index", query);
     });
-    
+
+    exp.get("/api/feed", (req, res) => {
+      res.json(createFeed(req, res, blockchain.chain));
+    });
+
     exp.get("*", (req, res) => {
       return handle(req, res);
     });
-    
 
     server.listen(3000, err => {
       if (err) throw err;
