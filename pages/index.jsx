@@ -13,9 +13,7 @@ class Index extends Component
         super(props);
         this.blockchain = new Blockchain();
         this.actions = [];
-        var text = 'Hello RSA!';
-        var encrypted = rsaKeys.encrypt(text, 'base64');
-        var decrypted = rsaKeys.decrypt(encrypted, 'utf8');
+        this.blockchain.public_adress = rsaKeys.exportKey("public");
     }
 
     componentDidMount()
@@ -35,12 +33,13 @@ class Index extends Component
         this.socket.on("get blockchain", chain=>
         {
             this.blockchain.chain = chain;
+            console.log(chain)
             this.runAction();
         });
 
         this.socket.on("solve transaction code",code=>
         {
-            this.secret = rsaKeys.decrypt(code,"utf8");
+            this.secret = rsaKeys.decrypt(code);
             this.runAction();
         });
     }
@@ -62,16 +61,16 @@ class Index extends Component
         this.socket.emit("new transaction",transaction)
     }
 
-    newTransaction()
+    newTransaction(data)
     {
-        let transaction = this.blockchain.new_transaction("myadress","myadress",123);
+        let transaction = this.blockchain.new_transaction(this.blockchain.public_adress,this.blockchain.public_adress,data);
         this.actions.push({type:"transaction",transaction})
         this.socket.emit("get transaction code",rsaKeys.exportKey("public"))
     }
 
     render()
     {
-        return (<div> <button onClick={()=>this.newTransaction()}>mine!</button> <br/>halloooo </div>)
+        return (<div> <button onClick={()=>this.newTransaction("test")}>mine!</button></div>)
     }
 }
 export default (Index);

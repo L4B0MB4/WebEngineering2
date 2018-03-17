@@ -6,7 +6,7 @@ export class Blockchain {
       this.chain = [];
       this.nodes = new Set();
       this.new_block(100, "1");
-      this.public_id = Math.abs(Math.random() * 10000);
+      this.public_adress;
     }
 
 
@@ -14,7 +14,7 @@ export class Blockchain {
     {
       let last_block = this.chain[this.chain.length - 1];
       let proof = this.proof_of_work(last_block);
-      let reward = this.new_transaction(0, this.public_id, 1);
+      let reward = this.new_transaction(0, this.public_id, {coins:1});
       this.current_transactions.push(...[transaction,reward]);
       let previous_hash = this.hash(JSON.stringify(last_block));
       let block = this.new_block(proof, previous_hash);
@@ -41,8 +41,8 @@ export class Blockchain {
       return block;
     }
   
-    new_transaction(sender, recipient, amount) {
-      let transaction = {sender, recipient,amount}
+    new_transaction(sender, recipient, data) {
+      let transaction = {sender, recipient,data}
       return transaction;
     }
   

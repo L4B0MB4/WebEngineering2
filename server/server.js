@@ -36,7 +36,7 @@ io.on("connection", socket => {
     const transaction = {
       sender:data.sender,
       recipient:data.recipient,
-      amount:data.amount 
+      data:data.data 
     };
     socket.broadcast.emit("mine", transaction);
   });
