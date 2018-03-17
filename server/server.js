@@ -60,18 +60,25 @@ io.on("connection", socket => {
   });
 });
 
-const next = require("next");
 
+const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-app
-  .prepare()
+app.prepare()
   .then(() => {
+    exp.get("/", (req, res) => {
+      const query = {
+        test:"hallo"
+      };
+      return app.render(req, res, '/index', query);
+    });
+    
     exp.get("*", (req, res) => {
       return handle(req, res);
     });
+    
 
     server.listen(3000, err => {
       if (err) throw err;
