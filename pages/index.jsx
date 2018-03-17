@@ -40,11 +40,9 @@ class Index extends Component
 
         this.socket.on("solve transaction code",code=>
         {
-            //decrypted
-            console.log(rsaKeys.decrypt(code,"utf8"));
+            this.secret = rsaKeys.decrypt(code,"utf8");
+            this.runAction();
         });
-       
-        this.socket.emit("get transaction code",rsaKeys.exportKey("public"))
     }
 
     runAction()
@@ -54,13 +52,21 @@ class Index extends Component
         switch(action.type)
         {
             case "mine": this.socket.emit("new block",this.blockchain.mine(action.transaction));break;
+            case "transaction": this.sendTransaction(action.transaction);break;
         }
+    }
+
+    sendTransaction(transaction)
+    {
+        transaction.secret = this.secret;
+        this.socket.emit("new transaction",transaction)
     }
 
     newTransaction()
     {
         let transaction = this.blockchain.new_transaction("myadress","myadress",123);
-        this.socket.emit("new transaction",transaction)
+        this.actions.push({type:"transaction",transaction})
+        this.socket.emit("get transaction code",rsaKeys.exportKey("public"))
     }
 
     render()

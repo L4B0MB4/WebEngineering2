@@ -75,15 +75,15 @@ module.exports =
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__("C:\\Users\\Lars\\Documents\\Software Projects\\webengineering2\\node_modules\\next\\dist\\pages\\_error.js");
+module.exports = __webpack_require__("C:\\Users\\Lars\\Documents\\Software Projects\\WebEngineering2\\node_modules\\next\\dist\\pages\\_error.js");
 
 
 /***/ }),
 
-/***/ "C:\\Users\\Lars\\Documents\\Software Projects\\webengineering2\\node_modules\\next\\dist\\pages\\_error.js":
+/***/ "C:\\Users\\Lars\\Documents\\Software Projects\\WebEngineering2\\node_modules\\next\\dist\\pages\\_error.js":
 /***/ (function(module, exports) {
 
-module.exports = require("C:\\Users\\Lars\\Documents\\Software Projects\\webengineering2\\node_modules\\next\\dist\\pages\\_error.js");
+module.exports = require("C:\\Users\\Lars\\Documents\\Software Projects\\WebEngineering2\\node_modules\\next\\dist\\pages\\_error.js");
 
 /***/ })
 

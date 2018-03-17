@@ -295,15 +295,14 @@ var Index = function (_Component) {
             });
             this.socket.on("get blockchain", function (chain) {
                 _this2.blockchain.chain = chain;
+                console.log(chain);
                 _this2.runAction();
             });
 
             this.socket.on("solve transaction code", function (code) {
-                //decrypted
-                console.log(rsaKeys.decrypt(code, "utf8"));
+                _this2.secret = rsaKeys.decrypt(code, "utf8");
+                _this2.runAction();
             });
-
-            this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
         }
     }, {
         key: "runAction",
@@ -313,13 +312,22 @@ var Index = function (_Component) {
             switch (action.type) {
                 case "mine":
                     this.socket.emit("new block", this.blockchain.mine(action.transaction));break;
+                case "transaction":
+                    this.sendTransaction(action.transaction);break;
             }
+        }
+    }, {
+        key: "sendTransaction",
+        value: function sendTransaction(transaction) {
+            transaction.secret = this.secret;
+            this.socket.emit("new transaction", transaction);
         }
     }, {
         key: "newTransaction",
         value: function newTransaction() {
             var transaction = this.blockchain.new_transaction("myadress", "myadress", 123);
-            this.socket.emit("new transaction", transaction);
+            this.actions.push({ type: "transaction", transaction: transaction });
+            this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
         }
     }, {
         key: "render",

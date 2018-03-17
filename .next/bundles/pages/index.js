@@ -178,7 +178,7 @@ var Blockchain = exports.Blockchain = function () {
     return;
   }
 
-  reactHotLoader.register(Blockchain, "Blockchain", "C:/Users/Lars/Documents/Software Projects/webengineering2/components/blockchain.js");
+  reactHotLoader.register(Blockchain, "Blockchain", "C:/Users/Lars/Documents/Software Projects/WebEngineering2/components/blockchain.js");
   leaveModule(module);
 })();
 
@@ -16279,7 +16279,7 @@ utils.intFromLE = intFromLE;
 /***/ "./node_modules/elliptic/package.json":
 /***/ (function(module, exports) {
 
-module.exports = {"_from":"elliptic@^6.0.0","_id":"elliptic@6.4.0","_inBundle":false,"_integrity":"sha1-ysmvh2LIWDYYcAPI3+GT5eLq5d8=","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"elliptic@^6.0.0","name":"elliptic","escapedName":"elliptic","rawSpec":"^6.0.0","saveSpec":null,"fetchSpec":"^6.0.0"},"_requiredBy":["/browserify-sign","/create-ecdh"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz","_shasum":"cac9af8762c85836187003c8dfe193e5e2eae5df","_spec":"elliptic@^6.0.0","_where":"C:\\Users\\Lars\\Documents\\Software Projects\\webengineering2\\node_modules\\browserify-sign","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"bundleDependencies":false,"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"deprecated":false,"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.0"}
+module.exports = {"_args":[["elliptic@6.4.0","C:\\Users\\Lars\\Documents\\Software Projects\\WebEngineering2"]],"_from":"elliptic@6.4.0","_id":"elliptic@6.4.0","_inBundle":false,"_integrity":"sha1-ysmvh2LIWDYYcAPI3+GT5eLq5d8=","_location":"/elliptic","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"elliptic@6.4.0","name":"elliptic","escapedName":"elliptic","rawSpec":"6.4.0","saveSpec":null,"fetchSpec":"6.4.0"},"_requiredBy":["/browserify-sign","/create-ecdh"],"_resolved":"https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz","_spec":"6.4.0","_where":"C:\\Users\\Lars\\Documents\\Software Projects\\WebEngineering2","author":{"name":"Fedor Indutny","email":"fedor@indutny.com"},"bugs":{"url":"https://github.com/indutny/elliptic/issues"},"dependencies":{"bn.js":"^4.4.0","brorand":"^1.0.1","hash.js":"^1.0.0","hmac-drbg":"^1.0.0","inherits":"^2.0.1","minimalistic-assert":"^1.0.0","minimalistic-crypto-utils":"^1.0.0"},"description":"EC cryptography","devDependencies":{"brfs":"^1.4.3","coveralls":"^2.11.3","grunt":"^0.4.5","grunt-browserify":"^5.0.0","grunt-cli":"^1.2.0","grunt-contrib-connect":"^1.0.0","grunt-contrib-copy":"^1.0.0","grunt-contrib-uglify":"^1.0.1","grunt-mocha-istanbul":"^3.0.1","grunt-saucelabs":"^8.6.2","istanbul":"^0.4.2","jscs":"^2.9.0","jshint":"^2.6.0","mocha":"^2.1.0"},"files":["lib"],"homepage":"https://github.com/indutny/elliptic","keywords":["EC","Elliptic","curve","Cryptography"],"license":"MIT","main":"lib/elliptic.js","name":"elliptic","repository":{"type":"git","url":"git+ssh://git@github.com/indutny/elliptic.git"},"scripts":{"jscs":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","jshint":"jscs benchmarks/*.js lib/*.js lib/**/*.js lib/**/**/*.js test/index.js","lint":"npm run jscs && npm run jshint","test":"npm run lint && npm run unit","unit":"istanbul test _mocha --reporter=spec test/index.js","version":"grunt dist && git add dist/"},"version":"6.4.0"}
 
 /***/ }),
 
@@ -36841,15 +36841,14 @@ var Index = function (_Component) {
             });
             this.socket.on("get blockchain", function (chain) {
                 _this2.blockchain.chain = chain;
+                console.log(chain);
                 _this2.runAction();
             });
 
             this.socket.on("solve transaction code", function (code) {
-                //decrypted
-                console.log(rsaKeys.decrypt(code, "utf8"));
+                _this2.secret = rsaKeys.decrypt(code, "utf8");
+                _this2.runAction();
             });
-
-            this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
         }
     }, {
         key: "runAction",
@@ -36859,13 +36858,22 @@ var Index = function (_Component) {
             switch (action.type) {
                 case "mine":
                     this.socket.emit("new block", this.blockchain.mine(action.transaction));break;
+                case "transaction":
+                    this.sendTransaction(action.transaction);break;
             }
+        }
+    }, {
+        key: "sendTransaction",
+        value: function sendTransaction(transaction) {
+            transaction.secret = this.secret;
+            this.socket.emit("new transaction", transaction);
         }
     }, {
         key: "newTransaction",
         value: function newTransaction() {
             var transaction = this.blockchain.new_transaction("myadress", "myadress", 123);
-            this.socket.emit("new transaction", transaction);
+            this.actions.push({ type: "transaction", transaction: transaction });
+            this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
         }
     }, {
         key: "render",
@@ -36911,9 +36919,9 @@ exports.default = _default;
         return;
     }
 
-    reactHotLoader.register(rsaKeys, "rsaKeys", "C:/Users/Lars/Documents/Software Projects/webengineering2/pages/index.jsx");
-    reactHotLoader.register(Index, "Index", "C:/Users/Lars/Documents/Software Projects/webengineering2/pages/index.jsx");
-    reactHotLoader.register(_default, "default", "C:/Users/Lars/Documents/Software Projects/webengineering2/pages/index.jsx");
+    reactHotLoader.register(rsaKeys, "rsaKeys", "C:/Users/Lars/Documents/Software Projects/WebEngineering2/pages/index.jsx");
+    reactHotLoader.register(Index, "Index", "C:/Users/Lars/Documents/Software Projects/WebEngineering2/pages/index.jsx");
+    reactHotLoader.register(_default, "default", "C:/Users/Lars/Documents/Software Projects/WebEngineering2/pages/index.jsx");
     leaveModule(module);
 })();
 

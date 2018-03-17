@@ -5,30 +5,40 @@ import { Blockchain } from "../components/blockchain";
 const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
-const rsaKeys = new NodeRSA({b: 512});
+const rsaKeys = new NodeRSA({ b: 512 });
 
+const secrect = {
+  value: Math.random()
+};
 
-// our server instance
+function setCurrentSecret() {
+  secrect.value = Math.random();
+}
+
+setInterval(setCurrentSecret, 5000);
+
 const server = http.createServer(exp);
 
-// This creates our socket using the instance of the server
 const io = socketIO(server);
 
-// This is what the socket.io syntax is like, we will work this later
 io.on("connection", socket => {
   console.log("User connected");
   socket.emit("blockchain", blockchain.chain);
 
   socket.on("get transaction code", publicKey => {
-    rsaKeys.importKey(publicKey,"public");
-    let encrypted = rsaKeys.encrypt("hallo test","base64");
+    rsaKeys.importKey(publicKey, "public");
+    let encrypted = rsaKeys.encrypt(secrect.value, "base64");
     console.log(encrypted);
     socket.emit("solve transaction code", encrypted);
-    //socket.broadcast.emit("mine", transaction);
   });
 
-  socket.on("solved transaction code", data => {
-    console.log(data);
+  socket.on("new transaction", data => {
+    const transaction = {
+      sender:data.sender,
+      recipient:data.recipient,
+      amount:data.amount 
+    };
+    socket.broadcast.emit("mine", transaction);
   });
 
   socket.on("new block", block => {
