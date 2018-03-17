@@ -80,8 +80,8 @@ class Index extends Component {
   render() {
     return (
       <div>
-        {" "}
-        <button onClick={() => this.newTransaction("test")}>mine!</button>
+        <textarea onChange={(e)=>{this.setState({content:e.target.value})}}></textarea>
+        <button onClick={() => this.newTransaction(this.state.content)}>mine!</button>
       </div>
     );
   }
