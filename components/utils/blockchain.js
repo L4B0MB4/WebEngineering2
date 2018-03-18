@@ -53,13 +53,22 @@ export class Blockchain {
     return block;
   }
 
-  proof_of_work(last_block) {
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+
+   proof_of_work(last_block) {
     let last_proof = last_block.proof;
     let last_hash = this.hash(JSON.stringify(last_block));
 
     let proof = 0;
     while (this.valid_proof(last_proof, proof, last_hash) !== true)
+    {
       proof += parseInt(Math.random() * 10 + 1);
+     
+    }
+      
 
     return proof;
   }

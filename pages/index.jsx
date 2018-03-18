@@ -25,7 +25,6 @@ class Index extends Component {
   }
   componentDidMount() {
     if (!this.hasInit) {
-      console.log(this.blockchainWrapper);
       this.blockchainWrapper.init();
       this.hasInit = true;
     }

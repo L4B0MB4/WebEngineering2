@@ -7,6 +7,8 @@ const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
+const MongoClient = require("mongodb").MongoClient;
+const { saveUser,connect } = require("./database")
 
 const secrect = {
   value: Math.random()
@@ -23,7 +25,6 @@ const server = http.createServer(exp);
 const io = socketIO(server);
 
 io.on("connection", socket => {
-  console.log("User connected");
   socket.emit("blockchain", blockchain.chain);
 
   socket.on("get transaction code", publicKey => {
@@ -67,26 +68,28 @@ const handle = app.getRequestHandler();
 
 app
   .prepare()
-  .then(() => {
-    exp.get("/", (req, res) => {
-      const query = {
-        value: "Hey so schickt man daten von server zu den pages"
-      };
-      return app.render(req, res, "/index", query);
-    });
+  .then(async() => {
+    const database = await connect();
+      exp.get("/", async (req, res) => {
+        const query = {
+          value: "Hey so schickt man daten von server zu den pages"
+        };
+        await saveUser(1,{name:"testbenutzer",password:"passworthash"});
+        return app.render(req, res, "/index", query);
+      });
 
-    exp.get("/api/feed", (req, res) => {
-      res.json(createFeed(req, res, blockchain.chain));
-    });
+      exp.get("/api/feed", (req, res) => {
+        res.json(createFeed(req, res, blockchain.chain));
+      });
 
-    exp.get("*", (req, res) => {
-      return handle(req, res);
-    });
+      exp.get("*", (req, res) => {
+        return handle(req, res);
+      });
 
-    server.listen(3000, err => {
-      if (err) throw err;
-      console.log("> Ready on http://localhost:3000");
-    });
+      server.listen(3000, err => {
+        if (err) throw err;
+        console.log("> Ready on http://localhost:3000");
+      });
   })
   .catch(ex => {
     console.error(ex.stack);

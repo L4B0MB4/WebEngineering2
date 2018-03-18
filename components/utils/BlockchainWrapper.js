@@ -23,10 +23,14 @@ export default class BlockchainWrapper {
     this.socket.on("mine", transaction => {
       this.actions.push({ type: "mine", transaction });
       this.socket.emit("get blockchain");
+      console.log("mine")
+      console.log(transaction)
     });
     this.socket.on("get blockchain", chain => {
       this.blockchain.chain = chain;
       this.runAction();
+      console.log("get blockchain")
+      console.log(chain)
     });
 
     this.socket.on("solve transaction code", code => {
