@@ -7,6 +7,7 @@ import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import { receiveInfo } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
+import Layout from "../components/layout.jsx"
 
 const rsaKeys = new NodeRSA({ b: 512 });
 
