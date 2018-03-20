@@ -7,7 +7,7 @@ import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import { receiveInfo } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
-import Layout from "../components/layout.jsx"
+import Layout from "../components/layout.jsx";
 
 const rsaKeys = new NodeRSA({ b: 512 });
 
@@ -33,21 +33,23 @@ class Index extends Component {
   render() {
     return (
       <div>
-        <Link prefetch href={"/test"}>
-          <a className="whitesmoke">Test !</a>
-        </Link>
-        <textarea
-          onChange={e => {
-            this.setState({ content: e.target.value });
-          }}
-        />
-        <button
-          onClick={() =>
-            this.blockchainWrapper.newTransaction(this.state.content)
-          }
-        >
-          mine!
-        </button>
+        <Layout>
+          <Link prefetch href={"/test"}>
+            <a className="whitesmoke">Test !</a>
+          </Link>
+          <textarea
+            onChange={e => {
+              this.setState({ content: e.target.value });
+            }}
+          />
+          <button
+            onClick={() =>
+              this.blockchainWrapper.newTransaction(this.state.content)
+            }
+          >
+            mine!
+          </button>
+        </Layout>
       </div>
     );
   }
