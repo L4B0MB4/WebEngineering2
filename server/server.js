@@ -8,7 +8,7 @@ const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
-const { saveUser, connect } = require("./database");
+const { saveUser, connect, saveBlockchain, getBlockchain } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
 const bodyParser = require("body-parser");
@@ -110,7 +110,6 @@ app
   .prepare()
   .then(async () => {
     const database = await connect();
-
     exp.get("/", async (req, res) => {
       const query = {
         value: "Hey so schickt man daten von server zu den pages"
@@ -127,9 +126,12 @@ app
         failureFlash: true
       })
     );
-
-    exp.get("/api/feed", ensureAuthenticated, (req, res) => {
+    exp.get("/api/feed", (req, res) => {
       res.json(createFeed(req, res, blockchain.chain));
+    });
+    exp.get("/api/blockchain/save", (req, res) => {
+      saveBlockchain(blockchain.chain);
+      res.json(blockchain.chain);
     });
 
     exp.get("*", (req, res) => {

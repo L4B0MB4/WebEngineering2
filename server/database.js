@@ -43,7 +43,53 @@ const saveUser = (id,user) =>
     });
   });
 
+  const saveBlockchain = (blockchain) =>
+  new Promise((resolve, reject) => {
+    const id = 1;
+    const now = Date.now();
+    db.collection("blockchain").findOne({ _id: id }, {}, (err, res) => {
+      if (err) {
+        reject(err);
+      }
+      if (res !== null) {
+        db
+          .collection("blockchain")
+          .updateOne({ _id: id }, { blockchain, lastUpdate: now }, (e, r) => {
+            if (e) throw e;
+            resolve(blockchain);
+          });
+      } else {
+        db.collection("blockchain").save(
+          {
+            _id: id,
+            blockchain,
+            lastUpdate: now,
+            created: now
+          },
+          { w: 1 },
+          resolve
+        );
+      }
+    });
+  });
+
+
+  const getBlockchain = () =>
+  // this is using the same db connection
+  new Promise((resolve, reject) => {
+    db.collection('blockchain').findOne({}, (err, docs) => {
+      if (err) {
+        reject(err);
+      }
+      // do something 
+      resolve(docs);
+    });
+  });
+
+
 module.exports = {
     connect,
   saveUser,
+  getBlockchain,
+  saveBlockchain,
 };
