@@ -1,10 +1,19 @@
+@font-face {
+font-family: "Moving Skate";
+src: url("fonts/moving_skate-webfont.woff");
+src: url("fonts/moving_skate-webfont.woff2") format("woff2");
+}
+
 .own-grid{
     min-height: 100%;
 }
 
 .-header{
     background-color: #628B61 !important;
-    color: #F3D5BD !important;
+    color: #DAA520 !important;
+    font-family: "Moving Skate" !important;
+    font-size: 40px !important;
+    padding: 5px !important;
     margin-top: -1px !important;
     position: fixed !important;
     z-index: 1 !important;

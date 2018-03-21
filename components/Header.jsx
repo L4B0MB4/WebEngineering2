@@ -12,7 +12,7 @@ export default class Header extends Component {
         <link rel="stylesheet" href="static/style.css" />
         <Container fluid>
         <Menu fluid widths={1} size="massive" >
-          <Menu.Item className="-header">GOLDdigger.io</Menu.Item>
+          <Menu.Item className="-header">golddigger.io</Menu.Item>
         </Menu>
        
         </Container>
