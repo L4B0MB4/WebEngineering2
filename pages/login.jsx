@@ -8,29 +8,29 @@ class Login extends Component {
         return (
             <div>
             <OwnHeader/>
-                <div class="row">
-                    <div class="three wide column">
-                        <img src="/assets/images/wireframe/image.png" class="ui image" />
+                <div className="row">
+                    <div className="three wide column">
+                        <img src="/assets/images/wireframe/image.png" className="ui image" />
                     </div>
-                    <div class="ten wide column">
+                    <div className="ten wide column">
                         <form className="ui form">
                             <div className="field">
                                 <label>E-Mail-Adresse</label>
-                                <div class="ui input">
+                                <div className="ui input">
                                     <input type="text" placeholder="E-Mail" />
                                 </div>
                             </div>
                             <div className="field">
                                 <label>Passwort</label>
-                                <div class="ui input">
+                                <div className="ui input">
                                     <input type="text" placeholder="Passwort" />
                                 </div>
                             </div>
                             <button className="ui button" type="submit">Login</button>
                         </form>
                     </div>
-                    <div class="three wide column">
-                        <img src="/assets/images/wireframe/image.png" class="ui image" />
+                    <div className="three wide column">
+                        <img src="/assets/images/wireframe/image.png" className="ui image" />
                     </div>
                 </div>
             </div>
