@@ -12,7 +12,7 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
     background-color: #628B61 !important;
     color: #DAA520 !important;
     font-family: "Moving Skate" !important;
-    font-size: 40px !important;
+    font-size: 45px !important;
     padding: 5px !important;
     margin-top: -1px !important;
     position: fixed !important;
@@ -21,9 +21,8 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
 }
 
 .left-sidebar{
-    background-color: #C7E1BA !important;
-    height: 100% !important;
-    
+    background-color:   #C7E1BA !important;
+    height: 100% !important;    
 }
 
 .-feed{
@@ -33,6 +32,10 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
 .right-sidebar{
     background-color: #C7E1BA !important;
     height: 100% !important;
+}
+
+.-menu{
+    background-color: #F6E4CC !important;
 }
 
 
