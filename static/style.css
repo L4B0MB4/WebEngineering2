@@ -1,8 +1,8 @@
-.ui.grid{
+.own-grid{
     min-height: 100%;
 }
 
-.ui.menu{
+.header{
     color: green;
 }
 

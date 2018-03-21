@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import { Icon, Card, Label, Input, Menu, Header, Grid, Image, Sticky, Segment} from "semantic-ui-react";
+//import ".././static/style.css"
+import OwnHeader from "./Header"
 
-export default class Layout extends Component
+class Layout extends Component
 {
 
   state = { active: true, activeItem: 'inbox' }
@@ -16,16 +18,11 @@ export default class Layout extends Component
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
         />
-        
-        <Menu fluid widths={1} size='massive'>
-          <Menu.Item>
-            GOLDdigger.io
-          </Menu.Item>
-        </Menu>
-         
+        <OwnHeader/>
           <Grid celled="internally" >
 
-            <Grid.Column width={3}>
+            <Grid.Column width={3} stretched> 
+              <div>
               <Card>
                 <Image src='/components/bild.jpeg' />
                   <Card.Content>
@@ -46,6 +43,7 @@ export default class Layout extends Component
                   Feed
                 </Menu.Item>
               </Menu> 
+              </div>
             </Grid.Column>  
 
             <Grid.Column width={10}>{this.props.children}</Grid.Column>
@@ -57,3 +55,5 @@ export default class Layout extends Component
     )
   }
 }
+
+export default Layout
