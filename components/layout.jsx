@@ -58,7 +58,7 @@ class Layout extends Component {
             </div>
           </Grid.Column>
           <Grid.Column width={10} style={{ postion: "relative", margin: 0, padding: 0 }} >
-            <div style={{ position: "inital", width: "800px", margin: "inherit", padding: "30px" }}>
+            <div style={{ margin: "inherit", padding: "30px" }}>
               {this.props.children}
             </div>
           </Grid.Column>
