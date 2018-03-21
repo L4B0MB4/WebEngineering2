@@ -1,24 +1,59 @@
 import React, {Component} from "react";
-import { Grid, Image } from "semantic-ui-react";
+import { Icon, Card, Label, Input, Menu, Header, Grid, Image, Sticky, Segment} from "semantic-ui-react";
+//import ".././static/style.css"
+import OwnHeader from "./Header"
 
-export default class Layout extends Component
+class Layout extends Component
 {
+
+  state = { active: true, activeItem: 'inbox' }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   render ()
   {
+    const { activeItem, active } = this.state
     return(
       <div>
         <link
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
         />
-        <Grid celled="internally">
-          <Grid.Row>
-            <Grid.Column width={3}>Menüleiste</Grid.Column>
+        <OwnHeader/>
+          <Grid celled="internally" >
+
+            <Grid.Column width={3} stretched> 
+              <div>
+              <Card>
+                <Image src='/components/bild.jpeg' />
+                  <Card.Content>
+                    <Card.Header>Name</Card.Header>
+                  </Card.Content>
+                  <Card.Content extra>
+                    <a>
+                      <Icon name='ansehen' />
+                        10 Ansehen
+                      </a>
+                  </Card.Content>
+                </Card>
+              <Menu pointing vertical>
+                <Menu.Item name='profil' active={activeItem === 'profil'} onClick={this.handleItemClick}>
+                  Profil
+                </Menu.Item>
+                <Menu.Item name='feed' active={activeItem === 'feed'} onClick={this.handleItemClick}>
+                  Feed
+                </Menu.Item>
+              </Menu> 
+              </div>
+            </Grid.Column>  
+
             <Grid.Column width={10}>{this.props.children}</Grid.Column>
+
             <Grid.Column width={3}>Footer</Grid.Column>
-          </Grid.Row>
-        </Grid>
+          </Grid>
+        
       </div>
     )
   }
 }
+
+export default Layout

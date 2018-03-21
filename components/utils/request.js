@@ -35,30 +35,10 @@ class Request {
     }
   }
 
-  callGetItems(all) {
-    if (all === true) return this.callFetch('GET', '/admin/getItems');
-    return this.callFetch('GET', '/getItems');
+  callgetBlockchainFeed() {
+    return this.callFetch('GET', '/blockchain/feed');
   }
 
-  callGetItemDetails(query) {
-    return this.callFetch('GET', '/getItemDetails', query);
-  }
-
-  callGetProfile() {
-    return this.callFetch('GET', '/profile');
-  }
-
-  callInsertItem(query) {
-    return this.callFetch('POST', '/admin/item', query);
-  }
-
-  callUpdateItem(query) {
-    return this.callFetch('PUT', '/admin/item', query);
-  }
-
-  callDeleteItem(query) {
-    return this.callFetch('DELETE', '/admin/item', query);
-  }
 }
 
 export default Request;

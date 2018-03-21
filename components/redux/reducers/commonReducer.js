@@ -1,12 +1,12 @@
 import { actionTypes } from '../actions/commonActions';
 
-const ProfileReducer = (state = {}, action) => {
+const commonReducer = (state = {}, action) => {
   switch (action.type) {
-    case actionTypes.RECEIVE_INFO:
-      return Object.assign({}, state, {info:{payload:action.payload}});
+    case actionTypes.RECEIVE_BLOCKCHAIN_FEED:
+      return Object.assign({}, state, {payload:action.payload.blockchainFeed});
     default:
       return state;
   }
 };
 
-export default ProfileReducer;
+export default commonReducer;
