@@ -30,7 +30,6 @@ const io = socketIO(server);
 
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
-exp.use(upload.array());
 
 io.on("connection", socket => {
   socket.emit("blockchain", blockchain.chain);
