@@ -113,8 +113,15 @@ app
   .prepare()
   .then(async () => {
     exp.use(express.static('./static/'));
-    
     const database = await connect();
+    const chain = await getBlockchain();
+    if(chain!==null)
+    {
+      console.log(chain);
+      blockchain.chain = chain.blockchain;
+    }
+    
+
     exp.get("/", async (req, res) => {
       const query = {
         blockchainFeed:createFeed(req, res, blockchain.chain)
