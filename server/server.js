@@ -112,7 +112,7 @@ app
     const database = await connect();
     exp.get("/", async (req, res) => {
       const query = {
-        value: "Hey so schickt man daten von server zu den pages"
+        blockchainFeed:createFeed(req, res, blockchain.chain)
       };
       await saveUser(1, { name: "testbenutzer", password: "passworthash" });
       return app.render(req, res, "/index", query);
@@ -126,7 +126,7 @@ app
         failureFlash: true
       })
     );
-    exp.get("/api/feed", (req, res) => {
+    exp.get("/api/blockchain/feed", (req, res) => {
       res.json(createFeed(req, res, blockchain.chain));
     });
     exp.get("/api/blockchain/save", (req, res) => {
