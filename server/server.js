@@ -8,7 +8,10 @@ const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
-const { saveUser, connect, saveBlockchain, getBlockchain } = require("./database");
+const { saveUser, connect, saveBlockchain, getBlockchain, login, register } = require("./database");
+const bodyParser = require('body-parser');
+var multer = require('multer');
+const upload = multer();
 
 const secrect = {
   value: Math.random()
@@ -23,6 +26,10 @@ setInterval(setCurrentSecret, 5000);
 const server = http.createServer(exp);
 
 const io = socketIO(server);
+
+exp.use(bodyParser.json());
+exp.use(bodyParser.urlencoded({ extended: true }));
+exp.use(upload.array());
 
 io.on("connection", socket => {
   socket.emit("blockchain", blockchain.chain);
@@ -83,9 +90,30 @@ app
     exp.get("/api/feed", (req, res) => {
       res.json(createFeed(req, res, blockchain.chain));
     });
+
     exp.get("/api/blockchain/save", (req, res) => {
       saveBlockchain(blockchain.chain);
       res.json(blockchain.chain);
+    });
+
+    exp.post("/api/user/register", (req, res) => {
+       if(!req.body.password || !req.body.email) {
+           console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
+       } else {
+           console.log("Register...");
+           register(req.body.password, req.body.email);
+       }
+    });
+
+    exp.post("/api/user/login", (req, res) => {
+        console.log("Posting...");
+        if(!req.body.name || !req.body.password) {
+            console.log("Error signing in...");
+            console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.password);
+       } else {
+           console.log("Logging in...", req.body.name, ", ", req.body.password);
+           login(req.body.name, req.body.password);
+       }
     });
 
     exp.get("*", (req, res) => {
