@@ -10,8 +10,8 @@ export default class Header extends Component {
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
         />
         <link rel="stylesheet" href="static/style.css" />
-        <Menu fluid widths={1} size="massive" className="header">
-          <Menu.Item>GOLDdigger.io</Menu.Item>
+        <Menu fluid widths={1} size="massive" >
+          <Menu.Item className="-header">GOLDdigger.io</Menu.Item>
         </Menu>
       </div>
     );

@@ -16,8 +16,7 @@ class Layout extends Component
       <div>
         <OwnHeader/>
           <Grid celled="internally" >
-
-            <Grid.Column width={3} stretched> 
+            <Grid.Column width={3} stretched className='-sidebars'> 
               <div>
               <Card>
                 <Image src='/components/bild.jpeg' />
@@ -42,9 +41,11 @@ class Layout extends Component
               </div>
             </Grid.Column>  
 
-            <Grid.Column width={10}>{this.props.children}</Grid.Column>
+            <Grid.Column width={10} ref={this.handleContextRef}>{this.props.children}</Grid.Column>
 
-            <Grid.Column width={3}>Footer</Grid.Column>
+            <Grid.Column width={3} stretched className='-sidebars'>
+                Footer
+            </Grid.Column>
           </Grid>
         
       </div>
