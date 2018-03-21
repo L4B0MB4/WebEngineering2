@@ -9,6 +9,10 @@ const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const { saveUser, connect, saveBlockchain, getBlockchain } = require("./database");
+const passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy;
+const bodyParser = require("body-parser");
+const session = require("express-session");
 
 const secrect = {
   value: Math.random()
@@ -61,26 +65,68 @@ io.on("connection", socket => {
   });
 });
 
+passport.serializeUser(async (user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+passport.use(
+  new LocalStrategy(function(username, password, done) {
+    console.log("hier");
+    console.log(username);
+    done(null, { username });
+  })
+);
+
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+exp.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+exp.use(bodyParser.json());
+
+exp.use(
+  session({
+    secret: "RH9eRdcy4aQGxE*ddCeB^K6e?24j-hwc=S8Y",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+exp.use(passport.initialize());
+exp.use(passport.session());
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+}
 app
   .prepare()
   .then(async () => {
     const database = await connect();
-    const bc = await getBlockchain();
-    if(bc !==null)blockchain.chain = bc.blockchain;
     exp.get("/", async (req, res) => {
       const query = {
-        value: "Hey so schickt man daten von server zu den pages"
+        blockchainFeed:createFeed(req, res, blockchain.chain)
       };
       await saveUser(1, { name: "testbenutzer", password: "passworthash" });
       return app.render(req, res, "/index", query);
     });
 
-    exp.get("/api/feed", (req, res) => {
+    exp.post(
+      "/login",
+      passport.authenticate("local", {
+        successRedirect: "/sucess",
+        failureRedirect: "/login",
+        failureFlash: true
+      })
+    );
+    exp.get("/api/blockchain/feed", (req, res) => {
       res.json(createFeed(req, res, blockchain.chain));
     });
     exp.get("/api/blockchain/save", (req, res) => {

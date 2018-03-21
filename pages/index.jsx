@@ -4,18 +4,27 @@ import withRedux from "next-redux-wrapper";
 import NodeRSA from "node-rsa";
 import { bindActionCreators } from "redux";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { receiveInfo } from "../components/redux/actions/commonActions";
+import { receiveBlockchainFeed } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
 import Layout from "../components/layout.jsx";
+import ContentForm from "../components/ContentForm";
+import OwnFeed from "../components/OwnFeed";
+import { Divider } from "semantic-ui-react";
+import Request from "../components/utils/request";
 
-const rsaKeys = new NodeRSA({ b: 512 });
+const request = new Request();
 
 class Index extends Component {
-  static getInitialProps({ store, query, req }) {
+  static async getInitialProps({ store, query, req }) {
     if (req) {
-      store.dispatch(receiveInfo(query));
+      store.dispatch(receiveBlockchainFeed(query));
     } else {
+      let res = await request.callgetBlockchainFeed();
+      query = {
+        blockchainFeed: res.data
+      };
+      store.dispatch(receiveBlockchainFeed(query));
     }
   }
 
@@ -32,34 +41,24 @@ class Index extends Component {
   }
   render() {
     return (
-      <div>
-        <Layout>
-          <Link prefetch href={"/test"}>
-            <a className="whitesmoke">Test !</a>
-          </Link>
-          <textarea
-            onChange={e => {
-              this.setState({ content: e.target.value });
-            }}
-          />
-          <button
-            onClick={() =>
-              this.blockchainWrapper.newTransaction(this.state.content)
-            }
-          >
-            mine!
-          </button>
-        </Layout>
-      </div>
+      <Layout>
+        <Link prefetch href={"/test"}>
+          <a className="whitesmoke">Test !</a>
+        </Link>
+
+        <ContentForm blockchainWrapper={this.blockchainWrapper} />
+        <Divider />
+        <OwnFeed blockchainFeed={this.props.blockchainFeed} />
+      </Layout>
     );
   }
 }
 const mapDispatchToProps = dispatch => ({
-  receiveInfo: bindActionCreators(receiveInfo, dispatch)
+  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
 });
 
 const mapStateToProps = state => ({
-  info: state.commonReducer.info.payload
+  blockchainFeed: state.commonReducer.payload
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);
