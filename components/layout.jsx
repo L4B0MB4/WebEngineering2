@@ -17,31 +17,17 @@ import OwnHeader from "./Header";
 class Layout extends Component {
   state = { active: true, activeItem: "inbox" };
 
-
-  state = { active: true, activeItem: 'inbox' }
-
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-  render ()
-  {
-    const { activeItem, active } = this.state
-    return(
-      <div>
-        <OwnHeader/>
-          <Grid celled="internally" >
-            <Grid.Column width={3} stretched className='-sidebars'> 
-              <div>
-
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
   render() {
     const { activeItem, active } = this.state;
     return (
       <Fragment>
         <OwnHeader />
         <Grid celled="internally">
-          <Grid.Column width={3} stretched style={{postion:"relative"}}>
-            <div style={{position:"fixed",width:"inherit",padding:"inherit",margin:"inherit"}}>
+          <Grid.Column width={3} stretched style={{ postion: "relative", margin: 0, padding: 0 }} >
+            <div className='left-sidebar' style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "20px" }}>
               <Card>
-                <Image src="/components/bild.jpeg" />
+                <Image src="../static/bild.jpeg" />
                 <Card.Content>
                   <Card.Header>Name</Card.Header>
                 </Card.Content>
@@ -52,7 +38,7 @@ class Layout extends Component {
                   </a>
                 </Card.Content>
               </Card>
-              <Menu pointing vertical>
+              <Menu pointing vertical fluid>
                 <Menu.Item
                   name="profil"
                   active={activeItem === "profil"}
@@ -70,20 +56,32 @@ class Layout extends Component {
               </Menu>
             </div>
           </Grid.Column>
+          <Grid.Column width={10} style={{ postion: "relative", margin: 0, padding: 0 }} >
+            <div style={{ position: "inital", width: "800px", margin: "inherit", padding: "30px" }}>
+              {this.props.children}
+            </div>
+          </Grid.Column>
 
-            <Grid.Column width={10} ref={this.handleContextRef}>{this.props.children}</Grid.Column>
-
-            <Grid.Column width={3} stretched className='-sidebars'>
-                Footer
-            </Grid.Column>
-          </Grid>
-        
-      </div>
-    )
-
-          <Grid.Column width={10}>{this.props.children}</Grid.Column>
-
-          <Grid.Column width={3}>Footer</Grid.Column>
+          <Grid.Column width={3} stretched style={{ postion: "relative", margin: 0, padding: 0 }} >
+            <div className='right-sidebar' style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "20px" }}>
+              <Menu pointing vertical fluid>
+                <Menu.Item
+                  name="impressum"
+                  active={activeItem === "impressum"}
+                  onClick={this.handleItemClick}
+                >
+                  Impressum
+                </Menu.Item>
+                <Menu.Item
+                  name="kontakt"
+                  active={activeItem === "kontakt"}
+                  onClick={this.handleItemClick}
+                >
+                  Kontakt
+                </Menu.Item>
+              </Menu>
+            </div>
+          </Grid.Column>
         </Grid>
       </Fragment>
     );

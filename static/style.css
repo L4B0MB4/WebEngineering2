@@ -5,11 +5,27 @@
 .-header{
     background-color: #628B61 !important;
     color: #F3D5BD !important;
+    margin-top: -1px !important;
+    position: fixed !important;
+    z-index: 1 !important;
+    border-radius: 0px !important;
 }
 
-.-sidebars{
+.left-sidebar{
     background-color: #C7E1BA !important;
+    height: 100% !important;
+    
 }
+
+.-feed{
+    background-color: #F6E4CC !important;
+}
+
+.right-sidebar{
+    background-color: #C7E1BA !important;
+    height: 100% !important;
+}
+
 
 body
 {
