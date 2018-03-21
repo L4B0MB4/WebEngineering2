@@ -14,10 +14,6 @@ class Layout extends Component
     const { activeItem, active } = this.state
     return(
       <div>
-        <link
-          rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
-        />
         <OwnHeader/>
           <Grid celled="internally" >
 
