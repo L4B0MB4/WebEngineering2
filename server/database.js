@@ -69,6 +69,15 @@ const register = (email, password) => {
     );
 };
 
+const printAllUsers = () => {
+  new Promise((resolve, reject) => {
+      db.collection("users").find({}).toArray(function (err, res) {
+          if(err) throw err;
+          console.log("All users: ", res);
+      });
+  });
+};
+
 const saveBlockchain = (blockchain) =>
     new Promise((resolve, reject) => {
         const id = 1;
@@ -119,5 +128,6 @@ module.exports = {
     getBlockchain,
     saveBlockchain,
     login,
-    register
+    register,
+    printAllUsers
 };

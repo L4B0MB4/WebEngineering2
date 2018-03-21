@@ -8,7 +8,7 @@ const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
-const { saveUser, connect, saveBlockchain, getBlockchain, login, register } = require("./database");
+const { saveUser, connect, saveBlockchain, getBlockchain, login, register, printAllUsers } = require("./database");
 const bodyParser = require('body-parser');
 var multer = require('multer');
 const upload = multer();
@@ -103,6 +103,10 @@ app
            console.log("Register...");
            register(req.body.password, req.body.email);
        }
+    });
+
+    exp.get("/api/user/getAllUsers", (req, res) => {
+       printAllUsers();
     });
 
     exp.post("/api/user/login", (req, res) => {
