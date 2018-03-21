@@ -109,6 +109,8 @@ function ensureAuthenticated(req, res, next) {
 app
   .prepare()
   .then(async () => {
+    exp.use(express.static('./static/'));
+    
     const database = await connect();
     exp.get("/", async (req, res) => {
       const query = {

@@ -9,3 +9,9 @@
 .div{
     color: green;
 }
+
+body
+{
+    height:100%;
+    background-color:green;
+}
