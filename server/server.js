@@ -30,7 +30,6 @@ const io = socketIO(server);
 
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
-exp.use(upload.array());
 
 io.on("connection", socket => {
   socket.emit("blockchain", blockchain.chain);
@@ -79,9 +78,8 @@ passport.deserializeUser((obj, done) => {
 
 passport.use(
   new LocalStrategy(function(username, password, done) {
-    console.log("hier");
-    console.log(username);
-    done(null, { username });
+    console.log(username,password)
+    login(username,password,done);
   })
 );
 
@@ -104,6 +102,7 @@ exp.use(
 
 exp.use(passport.initialize());
 exp.use(passport.session());
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -114,20 +113,26 @@ app
   .prepare()
   .then(async () => {
     exp.use(express.static('./static/'));
-    
     const database = await connect();
+    const chain = await getBlockchain();
+    if(chain!==null)
+    {
+      console.log(chain);
+      blockchain.chain = chain.blockchain;
+    }
+    
+
     exp.get("/", async (req, res) => {
       const query = {
         blockchainFeed:createFeed(req, res, blockchain.chain)
       };
-      await saveUser(1, { name: "testbenutzer", password: "passworthash" });
       return app.render(req, res, "/index", query);
     });
 
     exp.post(
-      "/login",
+      "/api/user/login",
       passport.authenticate("local", {
-        successRedirect: "/sucess",
+        successRedirect: "/success",
         failureRedirect: "/login",
         failureFlash: true
       })
@@ -146,11 +151,11 @@ app
            console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
        } else {
            console.log("Register...");
-           register(req.body.password, req.body.email);
+           register(req.body.email, req.body.password);
        }
     });
 
-    exp.post("/api/user/login", (req, res) => {
+    exp.post("/api/user/loginOld", (req, res) => {
         console.log("Posting...");
         if(!req.body.name || !req.body.password) {
             console.log("Error signing in...");
@@ -160,6 +165,12 @@ app
            login(req.body.name, req.body.password);
        }
     });
+
+    exp.get("/success",ensureAuthenticated,(req,res)=>
+    {
+      return handle(req,res);
+    })
+
 
     exp.get("*", (req, res) => {
       return handle(req, res);
