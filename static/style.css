@@ -2,19 +2,34 @@
     min-height: 100%;
 }
 
-.header{
-    background-color: #628B61;
+.-header{
+    background-color: #628B61 !important;
+    color: #F3D5BD !important;
+    margin-top: -1px !important;
+    position: fixed !important;
+    z-index: 1 !important;
+    border-radius: 0px !important;
 }
-<<<<<<< HEAD
-=======
 
-.div{
-    color: green;
+.left-sidebar{
+    background-color: #C7E1BA !important;
+    height: 100% !important;
+    
 }
+
+.-feed{
+    background-color: #F6E4CC !important;
+}
+
+.right-sidebar{
+    background-color: #C7E1BA !important;
+    height: 100% !important;
+}
+
 
 body
 {
     height:100%;
-    background-color:green;
+    background-color: #F6E4CC !important;
 }
->>>>>>> 9c0285124b433a2be1f735700b543bd3b209abb7
+
