@@ -44,7 +44,7 @@ const saveUser = (id, user) =>
   });
 
 const login = (email, password, done) => {
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     db.collection("users").findOne(
       {
         $or: [
@@ -72,7 +72,7 @@ const login = (email, password, done) => {
 };
 
 const register = (email, password) => {
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     db.collection("users").findOne({ email: email }, {}, (err, res) => {
       console.log(res);
       var newUser = { email: email, password: password };
@@ -81,6 +81,19 @@ const register = (email, password) => {
         console.log("1 Document inserted: ", newUser);
       });
     });
+  });
+};
+
+const printAllUsers = () => {
+  return new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .find({})
+      .toArray(function(err, res) {
+        if (err) throw err;
+        let users = res;
+        resolve(users);
+      });
   });
 };
 
@@ -132,5 +145,6 @@ module.exports = {
   getBlockchain,
   saveBlockchain,
   login,
-  register
+  register,
+  printAllUsers
 };
