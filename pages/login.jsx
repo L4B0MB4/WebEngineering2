@@ -7,13 +7,16 @@ class Login extends Component {
         return (
             <div>
             <OwnHeader/>
-                <Grid celled>
+                <Grid>
                     <Grid.Row>
-                        <Grid.Column width={3}>
-                            <Image src="/static/picture.jpg" />
+                        <Grid.Column width={5}>
+
                         </Grid.Column>
-                        <Grid.Column width={10}>
-                            <form className="ui form">
+                        <Grid.Column width={6}>
+                            <form className="ui form loginform">
+                                <div className="login-imgcontainer">
+                                    <img src="/static/golddiggertext.png" alt="Avatar" className="avatar"/>
+                                </div>
                                 <div className="field">
                                     <label>E-Mail-Adresse</label>
                                     <div className="ui input">
@@ -21,16 +24,18 @@ class Login extends Component {
                                     </div>
                                 </div>
                                 <div className="field">
-                                    <label>Passwort</label>
+                                    <label htmlFor="passwd">Passwort</label>
                                     <div className="ui input">
-                                        <input type="password" placeholder="Passwort" />
+                                        <input name="passwd" type="password" placeholder="Passwort" />
                                     </div>
                                 </div>
-                                <button className="ui button" type="submit">Login</button>
+                                <div className="ui center aligned page grid  login-btn-form">
+                                    <button className="ui button login-btn" type="submit">Login</button>
+                                    <span className="psw"><a href="#">Passwort vergessen?</a></span>
+                                </div>
                             </form>
                         </Grid.Column>
-                        <Grid.Column width={3}>
-                            <Image src="/static/picture.jpg" />
+                        <Grid.Column  width={5}>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -38,3 +43,5 @@ class Login extends Component {
         );
     }
 }
+
+export default Login;

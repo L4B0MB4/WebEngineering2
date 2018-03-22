@@ -25,7 +25,15 @@
     background-color: #C7E1BA !important;
     height: 100% !important;
 }
+.login-imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
 
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
 
 body
 {
@@ -33,3 +41,23 @@ body
     background-color: #F6E4CC !important;
 }
 
+.ui.form.loginform{
+    background-color: #F3D5BD;
+    margin-top: 3em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 2em;
+    border-radius: 5px;
+}
+
+.ui.center.aligned.page.grid.login-btn-form{
+    margin-top: 1.5em;
+}
+
+.psw{
+    align-self: center;
+}
+
+.ui.button.login-btn {
+    background-color: #DAA520;
+    color: white;
+}
