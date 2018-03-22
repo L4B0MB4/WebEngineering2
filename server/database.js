@@ -71,15 +71,23 @@ const login = (email, password, done) => {
   });
 };
 
-const register = (email, password) => {
+const register = (email, body, httpRes) => {
   return new Promise((resolve, reject) => {
     db.collection("users").findOne({ email: email }, {}, (err, res) => {
-      console.log(res);
-      var newUser = { email: email, password: password };
-      db.collection("users").insertOne(newUser, function(err, res) {
-        if (err) throw err;
-        console.log("1 Document inserted: ", newUser);
-      });
+      if (res === null) {
+        var newUser = {
+          email: body.email,
+          name: body.name,
+          publicKey: body.publicKey,
+          privateKeyHash: body.privateKeyHash
+        };
+        db.collection("users").insertOne(newUser, function(err, res) {
+          if (err) throw err;
+          httpRes.json({ type: "success", message: "Erfolgreich registriert" });
+        });
+      } else {
+        httpRes.json({type:"error",message:"Email bereits vorhanden!"})
+      }
     });
   });
 };

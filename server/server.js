@@ -147,11 +147,11 @@ app
     });
 
     exp.post("/api/user/register", (req, res) => {
-       if(!req.body.password || !req.body.email || !req.body.publicKey) {
-           console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
+      console.log(req.body);
+       if(!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKeyHash) {
+         res.json({type:"error",message:"Bitte alles ausfüllen!"})
        } else {
-           console.log("Register...");
-           register(req.body.email, req.body.password);
+           register(req.body.email, req.body,res);
        }
     });
 
