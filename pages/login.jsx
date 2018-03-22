@@ -24,14 +24,17 @@ class Login extends Component {
                                     </div>
                                 </div>
                                 <div className="field">
-                                    <label htmlFor="passwd">Passwort</label>
-                                    <div className="ui input">
+                                    <label className="login-label" htmlFor="passwd">Passwort</label>
+                                    <div className="ui input" >
                                         <input name="passwd" type="password" placeholder="Passwort" />
                                     </div>
                                 </div>
                                 <div className="ui center aligned page grid  login-btn-form">
                                     <button className="ui button login-btn" type="submit">Login</button>
                                     <span className="psw"><a href="#">Passwort vergessen?</a></span>
+                                </div>
+                                <div className="ui center aligned page grid">
+                                    <span className=""><a href="#">Noch nicht registriert? Jetzt registrieren</a></span>
                                 </div>
                             </form>
                         </Grid.Column>

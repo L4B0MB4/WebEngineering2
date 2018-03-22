@@ -35,7 +35,7 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
 }
 .login-imgcontainer {
     text-align: center;
-    margin: 24px 0 12px 0;
+    margin-bottom: 1.5em;
 }
 
 img.avatar {
@@ -57,12 +57,13 @@ body
     background-color: #F3D5BD;
     margin-top: 3em;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: 2em;
-    border-radius: 5px;
+    padding: 2em 3em 3em 3em;
+    border-radius: 0.3em;
 }
 
 .ui.center.aligned.page.grid.login-btn-form{
     margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 .psw{
@@ -72,4 +73,8 @@ body
 .ui.button.login-btn {
     background-color: #DAA520;
     color: white;
+}
+
+.ui.form .field>label {
+    font-size: 1em;!important;
 }
