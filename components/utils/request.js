@@ -11,16 +11,16 @@ class Request {
     const config = {
       method,
       headers: {
-        "content-type": formencode ? "application/x-www-form-urlencoded" : "application/json"
+        "content-type": formencode
+          ? "application/x-www-form-urlencoded"
+          : "application/json"
       },
       credentials: "same-origin" // wichtig für auth !!!
     };
 
-    if(formencode)
-    {
+    if (formencode) {
       config.body = queryString.stringify(body);
-    }
-    else if (config.method !== "GET") {
+    } else if (config.method !== "GET") {
       config.body = JSON.stringify(body);
     } else if (body) {
       customPath = `${path}?${queryString.stringify(body)}`;
@@ -47,7 +47,10 @@ class Request {
   }
 
   callLogin(data) {
-    return this.callFetch("POST","/user/login", data,true);
+    return this.callFetch("POST", "/user/login", data, true);
+  }
+  callRegistration(data) {
+    return this.callFetch("POST", "/user/register", data);
   }
 }
 
