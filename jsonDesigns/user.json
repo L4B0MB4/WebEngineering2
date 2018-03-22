@@ -1,0 +1,6 @@
+{
+  "email": "string",
+  "name": "string",
+  "password": "string",
+  "publicKey": "int"
+}

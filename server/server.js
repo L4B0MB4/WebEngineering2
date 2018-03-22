@@ -8,7 +8,7 @@ const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
-const { saveUser, connect, saveBlockchain, getBlockchain, login, register } = require("./database");
+const { saveUser, connect, saveBlockchain, getBlockchain, login, register, printAllUsers } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
 const bodyParser = require("body-parser");
@@ -153,6 +153,11 @@ app
            console.log("Register...");
            register(req.body.email, req.body.password);
        }
+    });
+
+    exp.get("/api/user/getAllUsers", async (req, res) => {
+      let users = await printAllUsers();
+       res.json(users);
     });
 
     exp.post("/api/user/loginOld", (req, res) => {
