@@ -20,32 +20,37 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
     border-radius: 0px !important;
 }
 
-.left-sidebar{
+.-sidebars{
     background-color:   #C7E1BA !important;
-    height: 100% !important;
+    height: 100% !important; 
+    position: fixed !important;
+    width: inherit !important;
+    margin: inherit !important;
+    padding: 20px !important;
 }
 
 .-feed{
-    background-color: #F6E4CC !important;
+   margin: inherit !important;
+   padding: 30px !important;
 }
 
-.right-sidebar{
-    background-color: #C7E1BA !important;
-    height: 100% !important;
-}
-.login-imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-}
-
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
-}
 .-menu{
-    background-color: #F6E4CC !important;
+    position: fixed !important;
+    width: inherit !important;
+    margin: inherit !important;
+    padding: 0 !important;
 }
 
+.grid-column{
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.active.item{
+    background-color: #F6E4CC !important;
+    border-color: #DAA520 !important;
+}
 
 body
 {
@@ -53,23 +58,20 @@ body
     background-color: #F6E4CC !important;
 }
 
-.ui.form.loginform{
-    background-color: #F3D5BD;
-    margin-top: 3em;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: 2em;
-    border-radius: 5px;
+.-follower{
+    margin-right: 20px !important;
+    display: inline-block !important;
 }
 
-.ui.center.aligned.page.grid.login-btn-form{
-    margin-top: 1.5em;
+.-posts{
+    margin: 10px !important;
+    display: inline-block !important;
 }
 
-.psw{
-    align-self: center;
+.-ansehen{
+    position: initial !important;
 }
 
-.ui.button.login-btn {
-    background-color: #DAA520;
-    color: white;
+.-segment{
+    border-top-color: #DAA520 !important;
 }
