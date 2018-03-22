@@ -38,7 +38,8 @@ class Layout extends Component {
                   </a>
                 </Card.Content>
               </Card>
-              <Menu pointing vertical fluid>
+              <Menu pointing secondary vertical fluid className="-menu"
+              style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "0" }}>
                 <Menu.Item
                   name="profil"
                   active={activeItem === "profil"}
@@ -57,14 +58,14 @@ class Layout extends Component {
             </div>
           </Grid.Column>
           <Grid.Column width={10} style={{ postion: "relative", margin: 0, padding: 0 }} >
-            <div style={{ position: "inital", width: "800px", margin: "inherit", padding: "30px" }}>
+            <div style={{ margin: "inherit", padding: "30px" }}>
               {this.props.children}
             </div>
           </Grid.Column>
 
           <Grid.Column width={3} stretched style={{ postion: "relative", margin: 0, padding: 0 }} >
             <div className='right-sidebar' style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "20px" }}>
-              <Menu pointing vertical fluid>
+              <Menu pointing vertical fluid className="-menu">
                 <Menu.Item
                   name="impressum"
                   active={activeItem === "impressum"}
