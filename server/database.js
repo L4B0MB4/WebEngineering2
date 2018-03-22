@@ -14,36 +14,8 @@ const connect = () => {
     });
   });
 };
-const saveUser = (id, user) =>
-  new Promise((resolve, reject) => {
-    const now = Date.now();
-    db.collection("users").findOne({ _id: id }, {}, (err, res) => {
-      if (err) {
-        reject(err);
-      }
-      if (res !== null) {
-        db
-          .collection("users")
-          .updateOne({ _id: id }, { user, lastUpdate: now }, (e, r) => {
-            if (e) throw e;
-            resolve(user);
-          });
-      } else {
-        db.collection("users").save(
-          {
-            _id: id,
-            user,
-            lastUpdate: now,
-            created: now
-          },
-          { w: 1 },
-          resolve
-        );
-      }
-    });
-  });
 
-const login = (email, password, done) => {
+const login = (email, password) => {
   return new Promise((resolve, reject) => {
     db.collection("users").findOne(
       {
@@ -61,11 +33,10 @@ const login = (email, password, done) => {
       {},
       (err, res) => {
         if (res) {
-          done(null, res);
+          resolve(res);
         } else {
-          done(false);
+          resolve(null);
         }
-        console.log("Successfully logged in: ", res);
       }
     );
   });
@@ -79,7 +50,8 @@ const register = (email, body, httpRes) => {
           email: body.email,
           name: body.name,
           publicKey: body.publicKey,
-          privateKeyHash: body.privateKeyHash
+          privateKey: body.privateKey,
+          password: body.password
         };
         db.collection("users").insertOne(newUser, function(err, res) {
           if (err) throw err;
@@ -149,7 +121,6 @@ const getBlockchain = () =>
 
 module.exports = {
   connect,
-  saveUser,
   getBlockchain,
   saveBlockchain,
   login,

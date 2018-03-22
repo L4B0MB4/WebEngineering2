@@ -4,7 +4,7 @@ import withRedux from "next-redux-wrapper";
 import NodeRSA from "node-rsa";
 import { bindActionCreators } from "redux";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { receiveBlockchainFeed } from "../components/redux/actions/commonActions";
+import { receiveBlockchainFeed, receiveUser } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
 import Layout from "../components/layout.jsx";
@@ -18,7 +18,8 @@ const request = new Request();
 class Index extends Component {
   static async getInitialProps({ store, query, req }) {
     if (req) {
-      store.dispatch(receiveBlockchainFeed(query));
+      store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
+      store.dispatch(receiveUser(query.user));
     } else {
       let res = await request.callgetBlockchainFeed();
       query = {
@@ -34,8 +35,8 @@ class Index extends Component {
     this.hasInit = false;
   }
   componentDidMount() {
-    if (!this.hasInit) {
-      this.blockchainWrapper.init();
+    if (!this.hasInit && this.props.user) {
+      this.blockchainWrapper.init(this.props.user.privateKey);
       this.hasInit = true;
     }
   }
@@ -45,7 +46,6 @@ class Index extends Component {
         <Link prefetch href={"/test"}>
           <a className="whitesmoke">Test !</a>
         </Link>
-
         <ContentForm blockchainWrapper={this.blockchainWrapper} />
         <Divider />
         <OwnFeed blockchainFeed={this.props.blockchainFeed} />
@@ -58,7 +58,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  blockchainFeed: state.commonReducer.payload
+  blockchainFeed: state.commonReducer.blockchainFeed,
+  user: state.commonReducer.user
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);

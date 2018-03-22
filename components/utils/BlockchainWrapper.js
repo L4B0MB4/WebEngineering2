@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import NodeRSA from "node-rsa";
 
 const blockchain = new Blockchain();
-const rsaKeys = new NodeRSA({ b: 128 });
+const rsaKeys = new NodeRSA({ b: 512 });
 
 export default class BlockchainWrapper {
   constructor() {

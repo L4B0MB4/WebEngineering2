@@ -5,7 +5,7 @@ class OwnFeed extends Component {
   render() {
     return (
       <Feed>
-        {this.props.blockchainFeed.map(item => {
+        {this.props.blockchainFeed?this.props.blockchainFeed.map(item => {
           return (
             <Feed.Event key={item.hash}>
               <Feed.Content>
@@ -23,7 +23,7 @@ class OwnFeed extends Component {
               </Feed.Content>
             </Feed.Event>
           );
-        })}
+        }):null}
       </Feed>
     );
   }

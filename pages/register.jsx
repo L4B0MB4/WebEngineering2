@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Layout from "../components/layout.jsx";
 import { Form, Input, Button, TextArea } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { hash } from "../components/utils/utils";
 
 class Register extends Component {
   constructor(props) {
@@ -13,7 +12,6 @@ class Register extends Component {
       keys: {
         pub: this.blockchainWrapper.getPublicKey(),
         priv: this.blockchainWrapper.getPrivateKey(),
-        privateKeyHash: hash(this.blockchainWrapper.getPrivateKey())
       }
     };
   }
@@ -37,6 +35,10 @@ class Register extends Component {
               <label>Email: </label>
               <Input type="text" name="email" placeholder={"E-Mail"} />
             </Form.Field>
+            <Form.Field>
+              <label>Passwort: </label>
+              <Input type="text" name="password" placeholder={"E-Mail"} />
+            </Form.Field>
             <input
               type="text"
               hidden
@@ -46,13 +48,9 @@ class Register extends Component {
             <input
               type="text"
               hidden
-              name="privateKeyHash"
-              value={this.state.keys.privateKeyHash}
+              name="privateKey"
+              value={this.state.keys.priv}
             />
-            <Form.Field>
-              <label>Dein privater Schlüssel | Passwort ! </label>
-              <TextArea rows={8} type="text" value={this.state.keys.priv} />
-            </Form.Field>
             <Button type="submit">Register</Button>
           </Form>
         </Layout>
