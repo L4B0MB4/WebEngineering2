@@ -5,7 +5,7 @@ import { Blockchain } from "../components/utils/blockchain";
 const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
-const rsaKeys = new NodeRSA({ b: 512 });
+const rsaKeys = new NodeRSA({ b: 128 });
 const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const { saveUser, connect, saveBlockchain, getBlockchain, login, register, printAllUsers } = require("./database");
@@ -147,7 +147,7 @@ app
     });
 
     exp.post("/api/user/register", (req, res) => {
-       if(!req.body.password || !req.body.email) {
+       if(!req.body.password || !req.body.email || !req.body.publicKey) {
            console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
        } else {
            console.log("Register...");
