@@ -7,7 +7,8 @@ import {
   Menu,
   Header,
   Grid,
-  Image
+  Image,
+  List
 } from "semantic-ui-react";
 import OwnHeader from "./Header";
 import Link from "next/link";
@@ -68,22 +69,18 @@ class Layout extends Component {
 
           <Grid.Column width={3} stretched className="grid-column">
             <div className='-sidebars'>
-              <Menu pointing vertical className="-menu">
-                <Menu.Item
-                  name="impressum"
-                  active={activeItem === "impressum"}
-                  onClick={this.handleItemClick}
-                >
-                  Impressum
-                </Menu.Item>
-                <Menu.Item
-                  name="kontakt"
-                  active={activeItem === "kontakt"}
-                  onClick={this.handleItemClick}
-                >
-                  Kontakt
-                </Menu.Item>
-              </Menu>
+              <List relaxed className="-list">
+                <List.Item>
+                  <Label as='a' size="big" className="list-item">
+                    <Icon name='mail' />Kontakt
+                  </Label>
+                </List.Item>
+                <List.Item>
+                  <Label as='a' size="big" className="list-item">
+                    <Icon name='registered' />Impressum
+                  </Label>
+                </List.Item>
+              </List>
             </div>
           </Grid.Column>
         </Grid>

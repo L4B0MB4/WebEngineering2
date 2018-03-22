@@ -59,19 +59,27 @@ body
 }
 
 .-follower{
-    margin-right: 20px !important;
-    display: inline-block !important;
+    float: left !important;
 }
 
 .-posts{
-    margin: 10px !important;
-    display: inline-block !important;
+    float: right !important;
 }
 
 .-ansehen{
-    position: initial !important;
+    float: left !important;
 }
 
 .-segment{
     border-top-color: #DAA520 !important;
+}
+
+.-list{
+    position: relative !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.list-item{
+    background-color: #F6E4CC !important;
 }
