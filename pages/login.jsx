@@ -42,8 +42,8 @@ class Login extends Component {
                                 </Form.Field>
 
                                 <Form.Field className="-login-field">
-                                    <label htmlFor="password" className="-login-label" >Privater Schlüssel | Passwort</label>
-                                    <Input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Privater Schlüssel" />
+                                    <label htmlFor="password" className="-login-label" >Passwort</label>
+                                    <Input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
                                 </Form.Field>
 
                                 <Form className="ui center aligned page grid  -login-btn-form">

@@ -76,7 +76,7 @@ class Register extends Component {
                                     type="text"
                                     name="password"
                                     onChange={e => this.setState({ password: e.target.value })}
-                                    placeholder={"E-Mail"}
+                                    placeholder={"Passwort"}
                                 />
                             </Form.Field>
                             <input
