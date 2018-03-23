@@ -15,7 +15,8 @@ const {
   login,
   register,
   printAllUsers,
-  findUsersByPublicKey
+  findUsersByPublicKey,
+  findPublicKeyByUsername
 } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
@@ -67,6 +68,7 @@ io.on("connection", socket => {
       blockchain.chain = test_chain;
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
+      saveBlockchain(blockchain.chain);
     }
   });
   socket.on("get blockchain", () => {
@@ -177,6 +179,14 @@ app
       let users = await printAllUsers();
       res.json(users);
     });
+    
+    exp.post("/api/user/getPublicKey", async (req, res) => {
+      if (!req.body.username) return res.json({type:"error",message:"Benutzername fehlt!"});
+      let user = await findPublicKeyByUsername(req.body.username);
+      res.json(user);
+    });
+
+
     exp.get("*", (req, res) => {
       return handle(req, res);
     });

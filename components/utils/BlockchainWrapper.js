@@ -72,11 +72,11 @@ export default class BlockchainWrapper {
     this.socket.emit("new transaction", transaction);
   }
 
-  newTransaction(data) {
+  newTransaction(type,data) {
     let transaction = this.blockchain.create_transaction(
       this.blockchain.public_adress,
       this.blockchain.public_adress,
-      "content",
+      type,
       data
     );
     this.actions.push({ type: "transaction", transaction });

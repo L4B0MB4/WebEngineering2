@@ -44,23 +44,28 @@ const login = (email, password) => {
 
 const register = (email, body, httpRes) => {
   return new Promise((resolve, reject) => {
-    db.collection("users").findOne({ email: email }, {}, (err, res) => {
-      if (res === null) {
-        var newUser = {
-          email: body.email,
-          name: body.name,
-          publicKey: body.publicKey,
-          privateKey: body.privateKey,
-          password: body.password
-        };
-        db.collection("users").insertOne(newUser, function(err, res) {
-          if (err) throw err;
-          httpRes.json({ type: "success", message: "Erfolgreich registriert" });
-        });
-      } else {
-        httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
-      }
-    });
+    db
+      .collection("users")
+      .findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
+        if (res === null) {
+          var newUser = {
+            email: body.email,
+            name: body.name,
+            publicKey: body.publicKey,
+            privateKey: body.privateKey,
+            password: body.password
+          };
+          db.collection("users").insertOne(newUser, function(err, res) {
+            if (err) throw err;
+            httpRes.json({
+              type: "success",
+              message: "Erfolgreich registriert"
+            });
+          });
+        } else {
+          httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+        }
+      });
   });
 };
 
@@ -123,8 +128,19 @@ const findUsersByPublicKey = publicKeys =>
   new Promise((resolve, reject) => {
     db
       .collection("users")
-      .find({ publicKey: { $in: [...publicKeys] } }, {name :1 , publicKey: 1}).toArray((err, res) => {
-        if(err)reject(err);
+      .find({ publicKey: { $in: [...publicKeys] } }, { name: 1, publicKey: 1 })
+      .toArray((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
+const findPublicKeyByUsername = name =>
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
+        if (err) reject(err);
         resolve(res);
       });
   });
@@ -136,5 +152,6 @@ module.exports = {
   login,
   register,
   printAllUsers,
-  findUsersByPublicKey
+  findUsersByPublicKey,
+  findPublicKeyByUsername
 };

@@ -52,6 +52,9 @@ class Request {
   callRegistration(data) {
     return this.callFetch("POST", "/user/register", data);
   }
+  callGetPublicKey(data) {
+    return this.callFetch("POST", "/user/getPublicKey", data);
+  }
 }
 
 export default Request;
