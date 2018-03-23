@@ -27,7 +27,7 @@ class Index extends Component {
     } else {
       let res = await request.callgetBlockchainFeed();
       query = {
-        blockchainFeed: res.data
+        blockchainFeed: res.data.blockchainFeed
       };
       store.dispatch(receiveBlockchainFeed(query));
     }
@@ -37,14 +37,19 @@ class Index extends Component {
     super(props);
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
-    this.state={}
+    this.state = {};
   }
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
-      this.blockchainWrapper.init(this.props.user.privateKey);
+      this.blockchainWrapper.init(this.props.user.privateKey,this.updateBlockchainFeed);
       this.hasInit = true;
     }
   }
+
+  updateBlockchainFeed = async () => {
+    let res = await request.callgetBlockchainFeed();
+    this.props.receiveBlockchainFeed(res.data);
+  };
 
   handleItemClick = item => {
     this.setState({ activeItem: item });

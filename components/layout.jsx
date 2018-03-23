@@ -36,7 +36,7 @@ class Layout extends Component {
                 </Card.Content>
                 <Card.Content extra>
                   <a>
-                    <Icon name="ansehen" />
+                    <Icon name="users" />
                     10 Ansehen
                   </a>
                 </Card.Content>
