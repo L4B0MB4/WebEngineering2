@@ -132,10 +132,14 @@ app
       blockchain.chain = chain.blockchain;
     }
 
+    exp.get("/index", async (req, res) => {
+      res.redirect("/");
+    });
+
     exp.get("/", ensureAuthenticated, async (req, res) => {
       const query = {
         blockchainFeed: createFeed(req, res, blockchain.chain),
-        user:req.user
+        user: req.user
       };
       return app.render(req, res, "/index", query);
     });

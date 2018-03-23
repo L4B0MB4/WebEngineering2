@@ -14,9 +14,12 @@ import OwnHeader from "./Header";
 import Link from "next/link";
 
 class Layout extends Component {
-  state = { activeItem: "feed" }
+  state = { activeItem: "feed" };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+    this.props.handleItemClick(name);
+  };
 
   render() {
     const { activeItem } = this.state;
@@ -25,7 +28,7 @@ class Layout extends Component {
         <OwnHeader />
         <Grid divided={false} celled="internally" className="own-grid">
           <Grid.Column width={3} stretched className="grid-column">
-            <div className='-sidebars'>
+            <div className="-sidebars">
               <Card>
                 <Image src="../static/bild.jpeg" rounded />
                 <Card.Content>
@@ -39,45 +42,39 @@ class Layout extends Component {
                 </Card.Content>
               </Card>
               <Menu vertical floated fixed="bottom" tabular className="-menu">
-                <Link prefetch href="\profil">
-                  <Menu.Item
-                    name="profil"
-                    active={activeItem === "profil"}
-                    onClick={this.handleItemClick}
-                  >
-                    Profil
+                <Menu.Item
+                  name="profil"
+                  active={activeItem === "profil"}
+                  onClick={this.handleItemClick}
+                >
+                  Profil
                 </Menu.Item>
-                </Link>
-                <Link prefetch href="\index">
-                  <Menu.Item
-                    name="feed"
-                    active={activeItem === "feed"}
-                    onClick={this.handleItemClick}
-                  >
-                    Feed
+                <Menu.Item
+                  name="feed"
+                  active={activeItem === "feed"}
+                  onClick={this.handleItemClick}
+                >
+                  Feed
                 </Menu.Item>
-                </Link>
               </Menu>
             </div>
           </Grid.Column>
 
-          <Grid.Column width={10} stretched className="grid-column" >
-            <div className="-feed">
-              {this.props.children}
-            </div>
+          <Grid.Column width={10} stretched className="grid-column">
+            <div className="-feed">{this.props.children}</div>
           </Grid.Column>
 
           <Grid.Column width={3} stretched className="grid-column">
-            <div className='-sidebars'>
+            <div className="-sidebars">
               <List relaxed className="-list">
                 <List.Item>
-                  <Label as='a' size="big" className="list-item">
-                    <Icon name='mail' />Kontakt
+                  <Label as="a" size="big" className="list-item">
+                    <Icon name="mail" />Kontakt
                   </Label>
                 </List.Item>
                 <List.Item>
-                  <Label as='a' size="big" className="list-item">
-                    <Icon name='registered' />Impressum
+                  <Label as="a" size="big" className="list-item">
+                    <Icon name="registered" />Impressum
                   </Label>
                 </List.Item>
               </List>
@@ -86,7 +83,6 @@ class Layout extends Component {
         </Grid>
       </Fragment>
     );
-
   }
 }
 

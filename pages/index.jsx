@@ -1,10 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import io from "socket.io-client";
 import withRedux from "next-redux-wrapper";
 import NodeRSA from "node-rsa";
 import { bindActionCreators } from "redux";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { receiveBlockchainFeed, receiveUser } from "../components/redux/actions/commonActions";
+import {
+  receiveBlockchainFeed,
+  receiveUser
+} from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
 import Layout from "../components/layout.jsx";
@@ -12,6 +15,7 @@ import ContentForm from "../components/ContentForm";
 import OwnFeed from "../components/OwnFeed";
 import { Divider } from "semantic-ui-react";
 import Request from "../components/utils/request";
+import Profil from "../components/Profil";
 
 const request = new Request();
 
@@ -33,6 +37,7 @@ class Index extends Component {
     super(props);
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
+    this.state={}
   }
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
@@ -40,15 +45,26 @@ class Index extends Component {
       this.hasInit = true;
     }
   }
+
+  handleItemClick = item => {
+    this.setState({ activeItem: item });
+  };
+
   render() {
     return (
-      <Layout>
+      <Layout handleItemClick={this.handleItemClick}>
         <Link prefetch href={"/test"}>
           <a className="whitesmoke">Test !</a>
         </Link>
-        <ContentForm blockchainWrapper={this.blockchainWrapper} />
-        <Divider />
-        <OwnFeed blockchainFeed={this.props.blockchainFeed} />
+        {this.state.activeItem === "profil" ? (
+          <Profil />
+        ) : (
+          <Fragment>
+            <ContentForm blockchainWrapper={this.blockchainWrapper} />
+            <Divider />
+            <OwnFeed blockchainFeed={this.props.blockchainFeed} />
+          </Fragment>
+        )}
       </Layout>
     );
   }
