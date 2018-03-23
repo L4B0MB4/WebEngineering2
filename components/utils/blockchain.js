@@ -83,7 +83,7 @@ export class Blockchain {
   valid_proof(last_proof, proof, last_hash) {
     let guess = `${last_proof}${proof}${last_hash}`;
     let guess_hash = this.hash(guess);
-    return guess_hash.startsWith("0000");
+    return guess_hash.startsWith("0");
   }
 
   valid_chain(chain) {
