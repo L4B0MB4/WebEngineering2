@@ -6,7 +6,7 @@ const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const { createFeed } = require("./utils");
+const { createFeed, handleLogin, mergeUserToBlock } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
   connect,
@@ -14,7 +14,8 @@ const {
   getBlockchain,
   login,
   register,
-  printAllUsers
+  printAllUsers,
+  findUsersByPublicKey
 } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
@@ -138,34 +139,19 @@ app
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
       const query = {
-        blockchainFeed: createFeed(req, res, blockchain.chain),
+        blockchainFeed: await createFeed(req, res, blockchain.chain),
         user: req.user
       };
       return app.render(req, res, "/index", query);
     });
 
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", function(err, user, info) {
-        if (err) {
-          res.json({ type: "error", message: "Fehler beim Login" });
-        }
-        if (!user) {
-          res.json({ type: "error", message: "Fehler beim Login" });
-        }
-        req.logIn(user, function(err) {
-          if (err) {
-            res.json({ type: "error", message: "Fehler beim Login" });
-          }
-          return res.json({
-            type: "success",
-            message: "Erfolgreich eingeloggt"
-          });
-        });
-      })(req, res, next);
+      passport.authenticate("local", (err, user, info)=>handleLogin(err, user, info, req, res))(req, res, next);
     });
 
-    exp.get("/api/blockchain/feed", (req, res) => {
-      res.json(createFeed(req, res, blockchain.chain));
+    exp.get("/api/blockchain/feed", async (req, res) => {
+      let feed = await createFeed(req, res, blockchain.chain);
+      res.json(feed);
     });
 
     exp.get("/api/blockchain/save", (req, res) => {

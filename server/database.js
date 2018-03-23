@@ -58,7 +58,7 @@ const register = (email, body, httpRes) => {
           httpRes.json({ type: "success", message: "Erfolgreich registriert" });
         });
       } else {
-        httpRes.json({type:"error",message:"Email bereits vorhanden!"})
+        httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
       }
     });
   });
@@ -119,11 +119,22 @@ const getBlockchain = () =>
     });
   });
 
+const findUsersByPublicKey = publicKeys =>
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .find({ publicKey: { $in: [...publicKeys] } }, {name :1 , publicKey: 1}).toArray((err, res) => {
+        if(err)reject(err);
+        resolve(res);
+      });
+  });
+
 module.exports = {
   connect,
   getBlockchain,
   saveBlockchain,
   login,
   register,
-  printAllUsers
+  printAllUsers,
+  findUsersByPublicKey
 };
