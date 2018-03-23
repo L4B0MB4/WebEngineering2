@@ -76,47 +76,49 @@ body
 }
 
 .-avatar {
-    width: 40%;!important;
-    border-radius: 50%;!important;
-    margin-left: auto;!important;
-    margin-right: auto;!important;
-    margin-bottom: 2em;!important;
+    width: 40% !important;
+    border-radius: 50% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 2em !important;
 }
 
 .-loginform{
-    background-color: #F3D5BD;!important;
-    margin-top: 3em;!important;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);!important;
-    padding: 2em 3em 3em 3em;!important;
-    border-radius: 0.3em;!important;
+    background-color: #F3D5BD !important;
+    margin-top: 3em !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    padding: 2em 3em 3em 3em !important;
+    border-radius: 0.3em !important;
 }
 
 .ui.center.aligned.page.grid.-login-btn-form{
-    margin-top: 2em;!important;
+    margin-top: 2em !important;
 }
 
 .-psw{
-    align-self: center;!important;
+    align-self: center !important;
 }
 
 .ui.button.-login-btn {
-    background-color: #DAA520;!important;
-    color: white;!important;
-    width: 25%;!important;
+    background-color: #DAA520 !important;
+    color: white !important;
+    width: 25% !important;
 }
 
 .ui.form .field>label {
-    font-size: 1em;!important;
+    font-size: 1em !important;
 }
 
 .div.field.-login-field{
-    margin-top: 2em;!important;
+    margin-top: 2em !important;
 }
 
 .-reg-span{
-    margin-top: 0.9em;!important;
+    margin-top: 0.9em !important;
 }
 
-.-footer-icons{
-
+.follow-button{
+    background-color: #DAA520 !important;
+    z-index: 1 !important;
+    position: fixed !important;
 }
