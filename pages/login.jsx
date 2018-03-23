@@ -1,25 +1,26 @@
 import React, { Component } from "react";
 import Layout from "../components/layout.jsx";
+import { Form, Input, Button } from "semantic-ui-react";
 
 class Login extends Component {
+  render() {
+    return (
+        <Layout>
+          <Form action={"/api/user/login"} method={"POST"}>
+            <Form.Field>
+              <label htmlFor={"name"}>Name: </label>
+              <Input type="text" name="username"placeholder={"Username"} />
+            </Form.Field>
+            <Form.Field>
+              <label htmlFor={"password"}>Passwort: </label>
+              <Input type="text" name="password"  placeholder={"Passwort"} />
+            </Form.Field>
 
-    render() {
-        return (
-            <div>
-                <Layout>
-                    <form action={"/api/user/login"} method={"POST"}>
-                        <label htmlFor={"name"}>Name: </label>
-                        <input type="text" name="name" id={"name"} placeholder={"Name"} ref={"name"} />
-
-                        <label htmlFor={"password"}>Passwort: </label>
-                        <input type="text" name="password" id={"password"} placeholder={"Passwort"} ref={"password"} />
-
-                        <button type="submit" value="Login" />
-                    </form>
-                </Layout>
-            </div>
-        );
-    }
+            <Button type="submit">LogIn</Button>
+          </Form>
+        </Layout>
+    );
+  }
 }
 
 export default Login;

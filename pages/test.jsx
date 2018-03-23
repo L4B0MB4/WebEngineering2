@@ -4,7 +4,7 @@ import withRedux from "next-redux-wrapper";
 import NodeRSA from "node-rsa";
 import { bindActionCreators } from "redux";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { receiveInfo } from "../components/redux/actions/commonActions";
+import { receiveBlockchainFeed } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ const rsaKeys = new NodeRSA({ b: 512 });
 class Test extends Component {
   static getInitialProps({ store, query, req }) {
     if (req) {
-      store.dispatch(receiveInfo(query));
+      store.dispatch(receiveBlockchainFeed(query));
     } else {
     }
   }
@@ -31,15 +31,22 @@ class Test extends Component {
     }
   }
   render() {
-    return <div>Just a test page ! You have full access to the blockchain via the blockchainwrapper !</div>;
+    return (
+      <div>
+        <Link prefetch href={"/"}>
+          <a className="whitesmoke">Test !</a>
+        </Link>Just a test page ! You have full access to the blockchain via the
+        blockchainwrapper !
+      </div>
+    );
   }
 }
 const mapDispatchToProps = dispatch => ({
-  receiveInfo: bindActionCreators(receiveInfo, dispatch)
+  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
 });
 
 const mapStateToProps = state => ({
-  info: state.commonReducer.info.payload
+  blockchainFeed: state.commonReducer.payload
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Test);

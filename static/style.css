@@ -1,0 +1,47 @@
+@font-face {
+font-family: "Moving Skate";
+src: url("fonts/moving_skate-webfont.woff");
+src: url("fonts/moving_skate-webfont.woff2") format("woff2");
+}
+
+.own-grid{
+    min-height: 100%;
+}
+
+.-header{
+    background-color: #628B61 !important;
+    color: #DAA520 !important;
+    font-family: "Moving Skate" !important;
+    font-size: 45px !important;
+    padding: 5px !important;
+    margin-top: -1px !important;
+    position: fixed !important;
+    z-index: 1 !important;
+    border-radius: 0px !important;
+}
+
+.left-sidebar{
+    background-color:   #C7E1BA !important;
+    height: 100% !important;    
+}
+
+.-feed{
+    background-color: #F6E4CC !important;
+}
+
+.right-sidebar{
+    background-color: #C7E1BA !important;
+    height: 100% !important;
+}
+
+.-menu{
+    background-color: #F6E4CC !important;
+}
+
+
+body
+{
+    height:100%;
+    background-color: #F6E4CC !important;
+}
+

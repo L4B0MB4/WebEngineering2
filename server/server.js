@@ -10,8 +10,9 @@ const { createFeed } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const { saveUser, connect, saveBlockchain, getBlockchain, login, register, printAllUsers } = require("./database");
 const bodyParser = require('body-parser');
-var multer = require('multer');
-const upload = multer();
+const passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy;
+const session = require("express-session");
 
 const secrect = {
   value: Math.random()
@@ -29,7 +30,6 @@ const io = socketIO(server);
 
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
-exp.use(upload.array());
 
 io.on("connection", socket => {
   socket.emit("blockchain", blockchain.chain);
@@ -68,26 +68,76 @@ io.on("connection", socket => {
   });
 });
 
+passport.serializeUser(async (user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+passport.use(
+  new LocalStrategy(function(username, password, done) {
+    console.log(username,password)
+    login(username,password,done);
+  })
+);
+
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+exp.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+exp.use(bodyParser.json());
+
+exp.use(
+  session({
+    secret: "RH9eRdcy4aQGxE*ddCeB^K6e?24j-hwc=S8Y",
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+exp.use(passport.initialize());
+exp.use(passport.session());
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+}
 app
   .prepare()
   .then(async () => {
+    exp.use(express.static('./static/'));
     const database = await connect();
-    const bc = await getBlockchain();
-    if(bc !==null)blockchain.chain = bc.blockchain;
+    const chain = await getBlockchain();
+    if(chain!==null)
+    {
+      console.log(chain);
+      blockchain.chain = chain.blockchain;
+    }
+
+
     exp.get("/", async (req, res) => {
       const query = {
-        value: "Hey so schickt man daten von server zu den pages"
+        blockchainFeed:createFeed(req, res, blockchain.chain)
       };
-      await saveUser(1, { name: "testbenutzer", password: "passworthash" });
       return app.render(req, res, "/index", query);
     });
 
-    exp.get("/api/feed", (req, res) => {
+    exp.post(
+      "/api/user/login",
+      passport.authenticate("local", {
+        successRedirect: "/success",
+        failureRedirect: "/login",
+        failureFlash: true
+      })
+    );
+    exp.get("/api/blockchain/feed", (req, res) => {
       res.json(createFeed(req, res, blockchain.chain));
     });
 
@@ -101,10 +151,11 @@ app
            console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
        } else {
            console.log("Register...");
-           register(req.body.password, req.body.email);
+           register(req.body.email, req.body.password);
        }
     });
 
+    exp.post("/api/user/loginOld", (req, res) => {
     exp.get("/api/user/getAllUsers", (req, res) => {
        printAllUsers();
     });
@@ -119,6 +170,12 @@ app
            login(req.body.name, req.body.password);
        }
     });
+
+    exp.get("/success",ensureAuthenticated,(req,res)=>
+    {
+      return handle(req,res);
+    })
+
 
     exp.get("*", (req, res) => {
       return handle(req, res);
