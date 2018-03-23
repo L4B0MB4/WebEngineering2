@@ -58,9 +58,6 @@ class Index extends Component {
   render() {
     return (
       <Layout handleItemClick={this.handleItemClick}>
-        <Link prefetch href={"/test"}>
-          <a className="whitesmoke">Test !</a>
-        </Link>
         {this.state.activeItem === "profil" ? (
           <Profil />
         ) : (
