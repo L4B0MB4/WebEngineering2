@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Layout from "../components/layout.jsx";
-import { Form, Input, Button, TextArea } from "semantic-ui-react";
+import OwnHeader from "../components/Header.jsx";
+import { Grid, Form, Input, Button, TextArea, Image } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
 import {hash} from "../components/utils/utils"
@@ -41,53 +41,63 @@ class Register extends Component {
 
   render() {
     return (
-      <div>
-        <Layout>
-          <Form>
-            <Form.Field>
-              <label>Username: </label>
-              <Input
-                type="text"
-                name="name"
-                id={"name"}
-                onChange={e => this.setState({ name: e.target.value })}
-                placeholder={"Username"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Email: </label>
-              <Input
-                type="text"
-                name="email"
-                onChange={e => this.setState({ email: e.target.value })}
-                placeholder={"E-Mail"}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Passwort: </label>
-              <Input
-                type="text"
-                name="password"
-                onChange={e => this.setState({ password: e.target.value })}
-                placeholder={"E-Mail"}
-              />
-            </Form.Field>
-            <input
-              type="text"
-              hidden
-              name="publicKey"
-              defaultValue={this.state.keys.pub}
-            />
-            <input
-              type="text"
-              hidden
-              name="privateKey"
-              defaultValue={this.state.keys.priv}
-            />
-            <Button onClick={this.handleRegistration}>Register</Button>
-          </Form>
-        </Layout>
-      </div>
+        <div>
+            <OwnHeader/>
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column width={5} />
+                    <Grid.Column width={6}>
+                        <Form className="-loginform">
+
+                            <Image src="/static/golddiggertext.png" alt="Avatar" className="-avatar"/>
+
+                            <Form.Field className="-login-field">
+                                <label>Username</label>
+                                <Input
+                                    type="text"
+                                    name="name"
+                                    id={"name"}
+                                    onChange={e => this.setState({ name: e.target.value })}
+                                    placeholder={"Username"}
+                                />
+                            </Form.Field>
+                            <Form.Field className="-login-field">
+                                <label>E-Mail-Adresse</label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    onChange={e => this.setState({ email: e.target.value })}
+                                    placeholder={"E-Mail"}
+                                />
+                            </Form.Field>
+                            <Form.Field className="-login-field">
+                                <label>Passwort</label>
+                                <Input
+                                    type="text"
+                                    name="password"
+                                    onChange={e => this.setState({ password: e.target.value })}
+                                    placeholder={"E-Mail"}
+                                />
+                            </Form.Field>
+                            <input
+                                type="text"
+                                hidden
+                                name="publicKey"
+                                defaultValue={this.state.keys.pub}
+                            />
+                            <input
+                                type="text"
+                                hidden
+                                name="privateKey"
+                                defaultValue={this.state.keys.priv}
+                            />
+                            <Button className="-login-btn" onClick={this.handleRegistration}>Register</Button>
+                        </Form>
+                    </Grid.Column>
+                    <Grid.Column  width={5}/>
+                </Grid.Row>
+            </Grid>
+        </div>
     );
   }
 }
