@@ -15,7 +15,7 @@ async function createFeed(req, res, blockchain) {
   let users = await findUsersByPublicKey(publicKeys);
   feed = feed.map(block => mergeUserToBlock(block,users));
 
-  return feed;
+  return feed.reverse();
 }
 
 function mergeUserToBlock(block,users)
