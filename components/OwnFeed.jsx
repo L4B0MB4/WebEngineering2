@@ -1,7 +1,26 @@
 import React, { Component } from "react";
-import { Feed, Icon } from "semantic-ui-react";
+import { Button, Feed, Icon } from "semantic-ui-react";
+import Request from "../components/utils/request";
+const request = new Request();
+
 
 class OwnFeed extends Component {
+
+  handleFollow=async(username)=>
+  {
+    let publicKey = (await request.callGetPublicKey({username})).data.publicKey
+    this.props.blockchainWrapper.newTransaction("follow",{following:publicKey});
+  }
+
+  handleLike=async(username,previousHash)=>
+  {
+    let publicKey = (await request.callGetPublicKey({username})).data.publicKey
+    this.props.blockchainWrapper.newTransaction("like",{previousHash,userKey:publicKey});
+  }
+
+
+
+
   render() {
     return (
       <Feed>
@@ -13,6 +32,9 @@ class OwnFeed extends Component {
                 <Feed.Summary>
                 <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date><br/>
                   <a>{item.user.name}</a> posted:
+                  <br/>
+                  <Button onClick={()=>this.handleFollow(item.user.name)}> Follow</Button>
+                  <Button onClick={()=>this.handleLike(item.user.name,item.previousHash)} color="red" > Like</Button>
                 </Feed.Summary>
                 <Feed.Extra text>{item.data}</Feed.Extra>
                 <Feed.Meta>

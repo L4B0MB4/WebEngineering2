@@ -14,7 +14,7 @@ export default class ContentForm extends Component {
         </Form.Field>
         <Button
           type="submit"
-          onClick={()=>this.props.blockchainWrapper.newTransaction(this.state.content)}
+          onClick={()=>this.props.blockchainWrapper.newTransaction("content",this.state.content)}
         >
           Post
         </Button>
