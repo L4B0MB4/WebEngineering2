@@ -26,7 +26,7 @@ class Layout extends Component {
     return (
       <Fragment>
         <OwnHeader />
-        <Grid divided={false} celled="internally" className="own-grid">
+        <Grid divided={false} celled="internally">
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
               <Card>
@@ -47,14 +47,24 @@ class Layout extends Component {
                   active={activeItem === "profil"}
                   onClick={this.handleItemClick}
                 >
-                  Profil
+                  <Icon name="user" />Profil
                 </Menu.Item>
                 <Menu.Item
                   name="feed"
                   active={activeItem === "feed"}
                   onClick={this.handleItemClick}
                 >
-                  Feed
+                  <Icon name="newspaper" />Feed
+                </Menu.Item>
+                <Menu.Item
+                  name="logout"
+                  active={activeItem === "logout"}
+                  onClick={this.handleItemClick}
+                >
+                  <Icon name="power" />Abmelden
+                </Menu.Item>
+                <Menu.Item>
+                  <Input icon='search' placeholder='Suche...' />
                 </Menu.Item>
               </Menu>
             </div>
