@@ -12,6 +12,14 @@ class OwnFeed extends Component {
     this.props.blockchainWrapper.newTransaction("follow",{following:publicKey});
   }
 
+  handleLike=async(username,previousHash)=>
+  {
+    let publicKey = (await request.callGetPublicKey({username})).data.publicKey
+    this.props.blockchainWrapper.newTransaction("like",{previousHash,userKey:publicKey});
+  }
+
+
+
 
   render() {
     return (
@@ -26,6 +34,7 @@ class OwnFeed extends Component {
                   <a>{item.user.name}</a> posted:
                   <br/>
                   <Button onClick={()=>this.handleFollow(item.user.name)}> Follow</Button>
+                  <Button onClick={()=>this.handleLike(item.user.name,item.previousHash)} color="red" > Like</Button>
                 </Feed.Summary>
                 <Feed.Extra text>{item.data}</Feed.Extra>
                 <Feed.Meta>

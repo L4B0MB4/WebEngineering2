@@ -2,10 +2,12 @@ const _ = require("lodash");
 const {findUsersByPublicKey} = require("./database");
 
 async function createFeed(req, res, blockchain) {
-  let feed = blockchain.map(item=>item.transactions[0]);
+  let feed = blockchain.map(item=>{
+    return {...item.transactions[0],previousHash:item.previousHash}
+  });
   feed = _.filter(feed, { value:{type:"content"} });
   feed = feed.map(item=>{
-    let x= {...item.value,recipient:item.recipient};
+    let x= {...item.value,recipient:item.recipient, previousHash:item.previousHash};
     return x;
   });
   feed.slice(Math.max(feed.length - 10, 1))

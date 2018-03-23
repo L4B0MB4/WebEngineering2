@@ -12,10 +12,10 @@ export class Blockchain {
   mine(transaction) {
     let last_block = this.chain[this.chain.length - 1];
     let proof = this.proof_of_work(last_block);
-    let reward = this.create_transaction(0, this.public_adress,"reward", { coins: 1 });
+    let reward = this.create_transaction(0, this.public_adress,"reward", {});
     this.current_transactions.push(...[transaction, reward]);
-    let previous_hash = this.hash(JSON.stringify(last_block));
-    let block = this.new_block(proof, previous_hash);
+    let previousHash = this.hash(JSON.stringify(last_block));
+    let block = this.new_block(proof, previousHash);
     return block;
   }
 
@@ -32,19 +32,18 @@ export class Blockchain {
         type,
         data,
         timestamp,
-        hash:this.hash(JSON.stringify({type,data,timestamp})),
       }
     };
   }
 
-  new_block(proof, previous_hash) {
+  new_block(proof, previousHash) {
     let block = {
       index: this.chain.length,
       timestamp: new Date(Date.now()).toISOString(),
       transactions: this.current_transactions,
       proof,
-      previous_hash: previous_hash
-        ? previous_hash
+      previousHash: previousHash
+        ? previousHash
         : this.hash(this.chain[this.chain.length - 1])
     };
 
@@ -93,7 +92,7 @@ export class Blockchain {
 
     while (current_index < chain.length) {
       let block = chain[current_index];
-      if (block.previous_hash !== this.hash(JSON.stringify(last_block))) {
+      if (block.previousHash !== this.hash(JSON.stringify(last_block))) {
         return false;
       }
 
