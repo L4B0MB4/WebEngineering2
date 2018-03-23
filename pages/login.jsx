@@ -12,7 +12,7 @@ class Login extends Component {
     {
         let user=
         {
-            password:this.state.pw,
+            password:hash(this.state.pw),
             username:this.state.username
         }
         let res =await request.callLogin(user);
@@ -42,9 +42,9 @@ class Login extends Component {
                                     </div>
                                 </div>
                                 <div className="field">
-                                    <label >Privater Schlüssel | Passwort</label>
+                                    <label >Passwort</label>
                                     <div className="ui input">
-                                        <input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Privater Schlüssel" />
+                                        <input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
                                     </div>
                                 </div>
                                 <div className="ui center aligned page grid  login-btn-form">

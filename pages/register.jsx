@@ -3,7 +3,7 @@ import Layout from "../components/layout.jsx";
 import { Form, Input, Button, TextArea } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
-import {hash} from "../components/utils/utils"
+import { hash } from "../components/utils/utils";
 const request = new Request();
 
 class Register extends Component {
@@ -27,7 +27,7 @@ class Register extends Component {
 
   handleRegistration = async () => {
     let user = {
-      password: this.state.password,
+      password: hash(this.state.password),
       name: this.state.name,
       email: this.state.email,
       publicKey: this.state.keys.pub,
@@ -69,7 +69,7 @@ class Register extends Component {
                 type="text"
                 name="password"
                 onChange={e => this.setState({ password: e.target.value })}
-                placeholder={"E-Mail"}
+                placeholder="Passwort"
               />
             </Form.Field>
             <input
