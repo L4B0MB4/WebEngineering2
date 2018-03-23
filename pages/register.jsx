@@ -76,13 +76,13 @@ class Register extends Component {
               type="text"
               hidden
               name="publicKey"
-              value={this.state.keys.pub}
+              defaultValue={this.state.keys.pub}
             />
             <input
               type="text"
               hidden
               name="privateKey"
-              value={this.state.keys.priv}
+              defaultValue={this.state.keys.priv}
             />
             <Button onClick={this.handleRegistration}>Register</Button>
           </Form>

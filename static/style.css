@@ -83,3 +83,30 @@ body
 .list-item{
     background-color: #F6E4CC !important;
 }
+
+.login-imgcontainer {
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.ui.form.loginform{
+    background-color: #F3D5BD;
+    margin-top: 3em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 2em 3em 3em 3em;
+    border-radius: 0.3em;
+}
+
+.ui.center.aligned.page.grid.login-btn-form{
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}   
+.ui.button.login-btn {
+    background-color: #DAA520;
+    color: white;
+}
