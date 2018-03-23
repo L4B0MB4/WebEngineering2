@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import OwnHeader from "../components/Header.jsx";
-import { Grid, Image, Button } from 'semantic-ui-react';
+import { Grid, Image, Button, Form, Input, Label, Icon} from 'semantic-ui-react';
 import Request from "../components/utils/request";
 import {hash} from "../components/utils/utils"
 
@@ -31,31 +31,33 @@ class Login extends Component {
                     <Grid.Row>
                         <Grid.Column width={5} />
                         <Grid.Column width={6}>
-                            <div className="ui form loginform">
-                                <div className="login-imgcontainer">
-                                    <img src="/static/golddiggertext.png" alt="Avatar" className="avatar"/>
-                                </div>
-                                <div className="field">
-                                    <label>E-Mail-Adresse</label>
-                                    <div className="ui input">
-                                        <input type="text" onChange={(e)=>this.setState({username:e.target.value})} name="username" placeholder="E-Mail" />
-                                    </div>
-                                </div>
-                                <div className="field">
-                                    <label >Passwort</label>
-                                    <div className="ui input">
-                                        <input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
-                                    </div>
-                                </div>
-                                <div className="ui center aligned page grid  login-btn-form">
-                                    <Button className="login-btn" onClick={this.handleLogin}>Login</Button>
-                                </div>
-                            </div>
+
+                            <Form className="-loginform">
+
+                                <Image src="/static/golddiggertext.png" alt="Avatar" className="-avatar"/>
+
+                                <Form.Field className="-login-field">
+                                    <label className="-login-label">E-Mail-Adresse</label>
+                                        <Input type="text" onChange={(e)=>this.setState({username:e.target.value})} name="username" placeholder="E-Mail" />
+                                </Form.Field>
+
+                                <Form.Field className="-login-field">
+                                    <label htmlFor="password" className="-login-label" >Passwort</label>
+                                    <Input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
+                                </Form.Field>
+
+                                <Form className="ui center aligned page grid  -login-btn-form">
+                                    <Button className="-login-btn" onClick={this.handleLogin}>Login</Button>
+                                    <span className="-psw"><a href="#">Passwort vergessen?</a></span>
+                                    <span className="-reg-span"><a href="#">Noch nicht registriert? Jetzt registrieren</a></span>
+                                </Form>
+                            </Form>
                         </Grid.Column>
                         <Grid.Column  width={5}/>
                     </Grid.Row>
                 </Grid>
             </div>
+
         );
     }
 }
