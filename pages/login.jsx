@@ -12,7 +12,7 @@ class Login extends Component {
     {
         let user=
         {
-            password:this.state.pw,
+            password:hash(this.state.pw),
             username:this.state.username
         }
         let res =await request.callLogin(user);

@@ -1,0 +1,14 @@
+
+{
+    "recipient":"public key",
+    "sender":"public key",
+    "value": 
+    {
+        "type" :"z.B. reward|content|like usw",
+        "data":{//frei wählbar pro type
+        },
+        "timestamp":"timestamp",
+        "hash": "hash von type+date+timestamp"
+    }
+    
+}

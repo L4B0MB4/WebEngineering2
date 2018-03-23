@@ -3,7 +3,7 @@ import OwnHeader from "../components/Header.jsx";
 import { Grid, Form, Input, Button, TextArea, Image } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
-import {hash} from "../components/utils/utils"
+import { hash } from "../components/utils/utils";
 const request = new Request();
 
 class Register extends Component {
@@ -27,7 +27,7 @@ class Register extends Component {
 
   handleRegistration = async () => {
     let user = {
-      password: this.state.password,
+      password: hash(this.state.password),
       name: this.state.name,
       email: this.state.email,
       publicKey: this.state.keys.pub,
