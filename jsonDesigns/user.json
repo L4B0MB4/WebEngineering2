@@ -1,6 +1,7 @@
 {
   "email": "string",
   "name": "string",
-  "password": "string",
-  "publicKey": "int"
+  "password":"hash",
+  "privateKey": "string",
+  "publicKey": "string"
 }

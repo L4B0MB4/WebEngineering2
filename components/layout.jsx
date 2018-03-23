@@ -8,26 +8,26 @@ import {
   Header,
   Grid,
   Image,
-  Sticky,
-  Segment
+  List
 } from "semantic-ui-react";
-//import ".././static/style.css"
 import OwnHeader from "./Header";
+import Link from "next/link";
 
 class Layout extends Component {
-  state = { active: true, activeItem: "inbox" };
+  state = { activeItem: "feed" }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
   render() {
-    const { activeItem, active } = this.state;
+    const { activeItem } = this.state;
     return (
       <Fragment>
         <OwnHeader />
-        <Grid celled="internally">
-          <Grid.Column width={3} stretched style={{ postion: "relative", margin: 0, padding: 0 }} >
-            <div className='left-sidebar' style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "20px" }}>
+        <Grid divided={false} celled="internally" className="own-grid">
+          <Grid.Column width={3} stretched className="grid-column">
+            <div className='-sidebars'>
               <Card>
-                <Image src="../static/bild.jpeg" />
+                <Image src="../static/bild.jpeg" rounded />
                 <Card.Content>
                   <Card.Header>Name</Card.Header>
                 </Card.Content>
@@ -38,49 +38,49 @@ class Layout extends Component {
                   </a>
                 </Card.Content>
               </Card>
-              <Menu pointing secondary vertical fluid className="-menu"
-              style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "0" }}>
-                <Menu.Item
-                  name="profil"
-                  active={activeItem === "profil"}
-                  onClick={this.handleItemClick}
-                >
-                  Profil
+              <Menu vertical floated fixed="bottom" tabular className="-menu">
+                <Link prefetch href="\profil">
+                  <Menu.Item
+                    name="profil"
+                    active={activeItem === "profil"}
+                    onClick={this.handleItemClick}
+                  >
+                    Profil
                 </Menu.Item>
-                <Menu.Item
-                  name="feed"
-                  active={activeItem === "feed"}
-                  onClick={this.handleItemClick}
-                >
-                  Feed
+                </Link>
+                <Link prefetch href="\index">
+                  <Menu.Item
+                    name="feed"
+                    active={activeItem === "feed"}
+                    onClick={this.handleItemClick}
+                  >
+                    Feed
                 </Menu.Item>
+                </Link>
               </Menu>
             </div>
           </Grid.Column>
-          <Grid.Column width={10} style={{ postion: "relative", margin: 0, padding: 0 }} >
-            <div style={{ margin: "inherit", padding: "30px" }}>
+
+          <Grid.Column width={10} stretched className="grid-column" >
+            <div className="-feed">
               {this.props.children}
             </div>
           </Grid.Column>
 
-          <Grid.Column width={3} stretched style={{ postion: "relative", margin: 0, padding: 0 }} >
-            <div className='right-sidebar' style={{ position: "fixed", width: "inherit", margin: "inherit", padding: "20px" }}>
-              <Menu pointing vertical fluid className="-menu">
-                <Menu.Item
-                  name="impressum"
-                  active={activeItem === "impressum"}
-                  onClick={this.handleItemClick}
-                >
-                  Impressum
-                </Menu.Item>
-                <Menu.Item
-                  name="kontakt"
-                  active={activeItem === "kontakt"}
-                  onClick={this.handleItemClick}
-                >
-                  Kontakt
-                </Menu.Item>
-              </Menu>
+          <Grid.Column width={3} stretched className="grid-column">
+            <div className='-sidebars'>
+              <List relaxed className="-list">
+                <List.Item>
+                  <Label as='a' size="big" className="list-item">
+                    <Icon name='mail' />Kontakt
+                  </Label>
+                </List.Item>
+                <List.Item>
+                  <Label as='a' size="big" className="list-item">
+                    <Icon name='registered' />Impressum
+                  </Label>
+                </List.Item>
+              </List>
             </div>
           </Grid.Column>
         </Grid>

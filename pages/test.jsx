@@ -8,8 +8,6 @@ import { receiveBlockchainFeed } from "../components/redux/actions/commonActions
 import initStore from "../components/redux/store";
 import Link from "next/link";
 
-const rsaKeys = new NodeRSA({ b: 512 });
-
 class Test extends Component {
   static getInitialProps({ store, query, req }) {
     if (req) {

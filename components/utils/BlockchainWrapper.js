@@ -10,10 +10,24 @@ export default class BlockchainWrapper {
   constructor() {
     this.blockchain = blockchain;
     this.actions = [];
+    this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
   }
 
-  init() {
+  getPublicKey=()=>
+  {
+    return this.blockchain.public_adress;
+  }
+
+  getPrivateKey=()=>
+  {
+    return this.blockchain.private_adress;
+  }
+
+  init(priv) {
+    rsaKeys.importKey(priv);
     this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
     this.socket = io({ endpoint: "http://localhost:3000" });
     this.socket.emit("init", { message: "init" });
     this.socket.on("blockchain", data => {
@@ -23,14 +37,14 @@ export default class BlockchainWrapper {
     this.socket.on("mine", transaction => {
       this.actions.push({ type: "mine", transaction });
       this.socket.emit("get blockchain");
-      console.log("mine")
-      console.log(transaction)
+      console.log("mine");
+      console.log(transaction);
     });
     this.socket.on("get blockchain", chain => {
       this.blockchain.chain = chain;
       this.runAction();
-      console.log("get blockchain")
-      console.log(chain)
+      console.log("get blockchain");
+      console.log(chain);
     });
 
     this.socket.on("solve transaction code", code => {

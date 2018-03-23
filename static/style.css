@@ -20,37 +20,78 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
     border-radius: 0px !important;
 }
 
-.left-sidebar{
+.-sidebars{
     background-color:   #C7E1BA !important;
     height: 100% !important;
+    position: fixed !important;
+    width: inherit !important;
+    margin: inherit !important;
+    padding: 20px !important;
 }
 
 .-feed{
-    background-color: #F6E4CC !important;
+   margin: inherit !important;
+   padding: 30px !important;
 }
 
-.right-sidebar{
-    background-color: #C7E1BA !important;
-    height: 100% !important;
-}
-.login-imgcontainer {
-    text-align: center;
-    margin-bottom: 1.5em;
-}
-
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
-}
 .-menu{
-    background-color: #F6E4CC !important;
+    position: fixed !important;
+    width: inherit !important;
+    margin: inherit !important;
+    padding: 0 !important;
 }
 
+.grid-column{
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.active.item{
+    background-color: #F6E4CC !important;
+    border-color: #DAA520 !important;
+}
 
 body
 {
     height:100%;
     background-color: #F6E4CC !important;
+}
+
+.-follower{
+    float: left !important;
+}
+
+.-posts{
+    float: right !important;
+}
+
+.-ansehen{
+    float: left !important;
+}
+
+.-segment{
+    border-top-color: #DAA520 !important;
+}
+
+.-list{
+    position: relative !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.list-item{
+    background-color: #F6E4CC !important;
+}
+
+.login-imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
 }
 
 .ui.form.loginform{
