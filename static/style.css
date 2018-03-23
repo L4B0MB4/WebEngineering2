@@ -35,10 +35,12 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
 }
 
 .-menu{
-    position: fixed !important;
     width: inherit !important;
     margin: inherit !important;
-    padding: 0 !important;
+    position: fixed !important;
+    top: 75% !important;
+    transform: translateY(-25%) !important;
+    border-top: none !important;
 }
 
 .grid-column{
@@ -58,30 +60,19 @@ body
     background-color: #F6E4CC !important;
 }
 
-.-follower{
-    float: left !important;
-}
-
-.-posts{
-    float: right !important;
-}
-
-.-ansehen{
-    float: left !important;
-}
-
 .-segment{
     border-top-color: #DAA520 !important;
 }
 
 .-list{
     position: relative !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    top: 70% !important;
+    transform: translateY(-30%) !important;
 }
 
 .list-item{
     background-color: #F6E4CC !important;
+    width: 80% !important;
 }
 
 .login-imgcontainer {
