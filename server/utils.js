@@ -51,8 +51,24 @@ function handleLogin (err, user, info, req, res) {
     });
   });
 }
+
+
+function broadcastOrEmit(socket,type,data,socketcount)
+{
+  if(socketcount<2)
+  {
+    socket.emit(type,data);
+  }
+  else{
+    socket.broadcast.emit(type,data);
+  }
+}
+
+
+
 module.exports = {
   createFeed,
   handleLogin,
-  mergeUserToBlock
+  mergeUserToBlock,
+  broadcastOrEmit
 };

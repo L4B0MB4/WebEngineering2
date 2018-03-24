@@ -6,7 +6,12 @@ const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const { createFeed, handleLogin, mergeUserToBlock } = require("./utils");
+const {
+  createFeed,
+  handleLogin,
+  mergeUserToBlock,
+  broadcastOrEmit
+} = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
   connect,
@@ -32,6 +37,8 @@ function setCurrentSecret() {
   secret.value = Math.random();
 }
 
+var socketsConnected = 0;
+
 setInterval(setCurrentSecret, 5000);
 
 const server = http.createServer(exp);
@@ -43,6 +50,7 @@ exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
 
 io.on("connection", socket => {
+  socketsConnected++;
   socket.emit("blockchain", blockchain.chain);
 
   socket.on("get transaction code", publicKey => {
@@ -57,7 +65,7 @@ io.on("connection", socket => {
       recipient: data.recipient,
       value: data.value
     };
-    socket.broadcast.emit("mine", transaction);
+    broadcastOrEmit(socket, "mine", transaction, socketsConnected);
   });
 
   socket.on("new block", block => {
@@ -76,7 +84,7 @@ io.on("connection", socket => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    socketsConnected--;
   });
 });
 
