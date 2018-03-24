@@ -135,6 +135,10 @@ body
 {
     padding:10px;
 }
+.-text-right
+{
+    text-align: right;
+}
 
 h1{
     margin: 0 !important;
