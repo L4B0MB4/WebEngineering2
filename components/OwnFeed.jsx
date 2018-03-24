@@ -24,7 +24,18 @@ class OwnFeed extends Component {
                 <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date><br/>
                   <a>{item.user.name}</a> posted:
                   <br/>
-                  <Button onClick={()=>this.handleLike(item.user.name,item.previousHash)} color="red" > Like</Button>
+                  <Button size="mini" animated="fade" onClick={()=>this.handleFollow(item.user.name)}>
+                    <Button.Content visible>
+                      <Icon name="add user" />
+                    </Button.Content>
+                    <Button.Content hidden>Follow</Button.Content>
+                  </Button>
+                  <Button className="like-button" size="mini" animated="fade" onClick={()=>this.handleLike(item.user.name,item.previousHash)} >
+                    <Button.Content visible>
+                      <Icon name="heart" />
+                    </Button.Content>
+                    <Button.Content hidden>Like</Button.Content>
+                  </Button>
                 </Feed.Summary>
                 <Feed.Extra text>{item.data}</Feed.Extra>
                 <Feed.Meta>

@@ -120,7 +120,11 @@ body
 .follow-button{
     background-color: #DAA520 !important;
     z-index: 1 !important;
-    position: fixed !important;
+    float: right !important;
+}
+
+.like-button{
+    background-color: #DAA520 !important;
 }
 
 .-full-width
@@ -130,4 +134,9 @@ body
 .-padding-10 
 {
     padding:10px;
+}
+
+h1{
+    margin: 0 !important;
+    display: inline-block !important;
 }
