@@ -59,10 +59,8 @@ class VisitorPage extends Component {
         <Layout relPath="../">
           <Grid className="own-grid">
             <Grid.Row>
-              <Grid.Column width={14}>
+            <div className="-full-width -padding-10">
                 <h1>Name, Gesamtansehen</h1>
-              </Grid.Column>
-              <Grid.Column width={2}>
                 <Button
                   animated="fade"
                   className="follow-button"
@@ -73,7 +71,7 @@ class VisitorPage extends Component {
                   </Button.Content>
                   <Button.Content hidden>Follow</Button.Content>
                 </Button>
-              </Grid.Column>
+              </div>
             </Grid.Row>
 
             <Grid.Row>

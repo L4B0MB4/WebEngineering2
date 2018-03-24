@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import OwnHeader from "../components/Header.jsx";
 import { Grid, Image, Button, Form, Input, Label, Icon} from 'semantic-ui-react';
+import Link from "next/link";
 import Request from "../components/utils/request";
 import {hash} from "../components/utils/utils"
 
@@ -49,7 +50,7 @@ class Login extends Component {
                                 <Form className="ui center aligned page grid  -login-btn-form">
                                     <Button className="-login-btn" onClick={this.handleLogin}>Login</Button>
                                     <span className="-psw"><a href="#">Passwort vergessen?</a></span>
-                                    <span className="-reg-span"><a href="#">Noch nicht registriert? Jetzt registrieren</a></span>
+                                    <span className="-reg-span"><Link prefetch href="/register"><a>Noch nicht registriert? Jetzt registrieren</a></Link></span>
                                 </Form>
                             </Form>
                         </Grid.Column>
