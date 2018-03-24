@@ -147,8 +147,22 @@ app
       return app.render(req, res, "/index", query);
     });
 
+    exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
+      let query = {
+        ...req.params
+      };
+      let visitedUser = await findPublicKeyByUsername(query.username);
+      query = {
+        user: req.user,
+        visitedUser
+      };
+      return app.render(req, res, "/visitorpage", query);
+    });
+
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info)=>handleLogin(err, user, info, req, res))(req, res, next);
+      passport.authenticate("local", (err, user, info) =>
+        handleLogin(err, user, info, req, res)
+      )(req, res, next);
     });
 
     exp.get("/api/blockchain/feed", async (req, res) => {
@@ -179,13 +193,13 @@ app
       let users = await printAllUsers();
       res.json(users);
     });
-    
+
     exp.post("/api/user/getPublicKey", async (req, res) => {
-      if (!req.body.username) return res.json({type:"error",message:"Benutzername fehlt!"});
+      if (!req.body.username)
+        return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
-
 
     exp.get("*", (req, res) => {
       return handle(req, res);

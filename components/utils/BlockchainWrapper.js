@@ -14,6 +14,13 @@ export default class BlockchainWrapper {
     this.blockchain.private_adress = rsaKeys.exportKey("private");
   }
 
+  newKeys =()=>
+  {
+    rsaKeys.generateKeyPair(512);
+    this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
+  }
+
   getPublicKey=()=>
   {
     return this.blockchain.public_adress;
@@ -45,7 +52,7 @@ export default class BlockchainWrapper {
       this.runAction();
       console.log("get blockchain");
       console.log(chain);
-      onUpdate();
+      if(onUpdate)onUpdate();
     });
 
     this.socket.on("solve transaction code", code => {

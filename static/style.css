@@ -122,3 +122,12 @@ body
     z-index: 1 !important;
     position: fixed !important;
 }
+
+.-full-width
+{
+    width:100%;
+}
+.-padding-10 
+{
+    padding:10px;
+}

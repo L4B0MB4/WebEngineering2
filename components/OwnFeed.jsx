@@ -6,20 +6,11 @@ const request = new Request();
 
 class OwnFeed extends Component {
 
-  handleFollow=async(username)=>
-  {
-    let publicKey = (await request.callGetPublicKey({username})).data.publicKey
-    this.props.blockchainWrapper.newTransaction("follow",{following:publicKey});
-  }
-
   handleLike=async(username,previousHash)=>
   {
     let publicKey = (await request.callGetPublicKey({username})).data.publicKey
     this.props.blockchainWrapper.newTransaction("like",{previousHash,userKey:publicKey});
   }
-
-
-
 
   render() {
     return (

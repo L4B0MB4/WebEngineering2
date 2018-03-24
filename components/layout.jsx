@@ -25,7 +25,7 @@ class Layout extends Component {
     const { activeItem } = this.state;
     return (
       <Fragment>
-        <OwnHeader />
+        <OwnHeader relPath={this.props.relPath} />
         <Grid divided={false} celled="internally">
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
