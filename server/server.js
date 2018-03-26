@@ -204,8 +204,8 @@ app
       res.json(user);
     });
 
-    exp.get("/api/test", (req, res) => {
-      res.json(getLikesByPreviousHash(blockchain.chain));
+    exp.get("/api/test", async (req, res) => {
+      res.json(await getLikesByPreviousHash(blockchain.chain));
     });
 
     exp.get("*", (req, res) => {

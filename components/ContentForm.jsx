@@ -36,7 +36,7 @@ export default class ContentForm extends Component {
           <label>Post something!</label>
           <TextArea
             placeholder="Content"
-            value={this.isSuccessfull()?"":null}
+            value={this.isSuccessfull()?"":undefined}
             onChange={e => this.setState({ content: e.target.value })}
           />
         </Form.Field>
