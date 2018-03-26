@@ -66,9 +66,20 @@ function broadcastOrEmit(socket,type,data,socketcount)
 
 
 
+function getLikesByPreviousHash(blockchain, hash ="9924f646e3438ff6c80f88a5878b959c55e840a66a74d088a864e2c89469cda5")
+{
+  blockchain = blockchain.map(item=>{
+    return {...item.transactions[0],previousHash:item.previousHash}
+  });
+  let arr = _.filter(blockchain,{value:{type:"like",data:{previousHash:hash}}})
+  return  arr;
+}
+
+
 module.exports = {
   createFeed,
   handleLogin,
   mergeUserToBlock,
-  broadcastOrEmit
+  broadcastOrEmit,
+  getLikesByPreviousHash
 };

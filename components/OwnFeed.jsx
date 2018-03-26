@@ -18,7 +18,7 @@ class OwnFeed extends Component {
         {this.props.blockchainFeed?this.props.blockchainFeed.map(item => {
           if(item.user==undefined)return null;
           return (
-            <Feed.Event key={item.hash}>
+            <Feed.Event key={item.timestamp}>
               <Feed.Content>
                 <Feed.Summary>
                 <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date><br/>

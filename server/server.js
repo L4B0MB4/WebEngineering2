@@ -10,7 +10,8 @@ const {
   createFeed,
   handleLogin,
   mergeUserToBlock,
-  broadcastOrEmit
+  broadcastOrEmit,
+  getLikesByPreviousHash
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -32,19 +33,13 @@ const flash = require("connect-flash");
 const secret = {
   value: Math.random()
 };
-
 function setCurrentSecret() {
   secret.value = Math.random();
 }
-
 var socketsConnected = 0;
-
 setInterval(setCurrentSecret, 5000);
-
 const server = http.createServer(exp);
-
 const io = socketIO(server);
-
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
@@ -68,7 +63,7 @@ io.on("connection", socket => {
     broadcastOrEmit(socket, "mine", transaction, socketsConnected);
   });
 
-  socket.on("new block", block => {
+  socket.on("new block", async block => {
     let test_chain = [];
     test_chain.push(...blockchain.chain);
     test_chain.push(block);
@@ -76,7 +71,7 @@ io.on("connection", socket => {
       blockchain.chain = test_chain;
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
-      saveBlockchain(blockchain.chain);
+      await saveBlockchain(blockchain.chain);
     }
   });
   socket.on("get blockchain", () => {
@@ -207,6 +202,10 @@ app
         return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
+    });
+
+    exp.get("/api/test", (req, res) => {
+      res.json(getLikesByPreviousHash(blockchain.chain));
     });
 
     exp.get("*", (req, res) => {

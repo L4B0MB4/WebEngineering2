@@ -1,4 +1,4 @@
-const mongoUrl = "mongodb://localhost:27017/local";
+const mongoUrl = "mongodb://127.0.0.1:27017/local";
 const { MongoClient } = require("mongodb");
 let db;
 
