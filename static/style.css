@@ -102,7 +102,7 @@ body
 .ui.button.-login-btn {
     background-color: #DAA520 !important;
     color: white !important;
-    width: 25% !important;
+    width: 64px !important;
 }
 
 .ui.form .field>label {
