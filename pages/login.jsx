@@ -47,7 +47,7 @@ class Login extends Component {
                                     <Input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
                                 </Form.Field>
 
-                                <div className="ui center aligned page grid  -login-btn-form">
+                                <div className="ui center aligned page grid -login-btn-form">
                                     <Button className="-login-btn" onClick={this.handleLogin}>Login</Button>
                                     <span className="-psw"><a href="#">Passwort vergessen?</a></span>
                                     <span className="-reg-span"><Link prefetch href="/register"><a>Noch nicht registriert? Jetzt registrieren</a></Link></span>
