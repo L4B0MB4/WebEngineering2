@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-const hash = (block) => {
+const hash = block => {
   return crypto
     .createHash("sha256")
     .update(block)
@@ -11,8 +11,8 @@ const getDate = timestamp => {
   let d = new Date(timestamp);
   let hrs = d.getHours();
   let mins = d.getMinutes();
-  let days = d.getDay();
-  let mnth = d.getMonth();
+  let days = d.getDate();
+  let mnth = d.getMonth() + 1;
   let year = d.getFullYear();
   if (hrs < 10) hrs = "0" + hrs;
   if (mins < 10) mins = "0" + mins;

@@ -26,7 +26,7 @@ export class Blockchain {
   }
 
   create_transaction(sender, type, data) {
-    let timestamp = new Date().getTime();
+    let timestamp = Date.now();
     return {
       sender,
       type,
@@ -41,9 +41,7 @@ export class Blockchain {
       timestamp: new Date(Date.now()).toISOString(),
       transactions: this.current_transactions,
       proof,
-      previousHash: previousHash
-        ? previousHash
-        : this.hash(this.chain[this.chain.length - 1])
+      previousHash: previousHash ? previousHash : this.hash(this.chain[this.chain.length - 1])
     };
 
     this.current_transactions = [];
@@ -91,13 +89,7 @@ export class Blockchain {
         return false;
       }
 
-      if (
-        !this.valid_proof(
-          last_block.proof,
-          block.proof,
-          this.hash(JSON.stringify(last_block))
-        )
-      ) {
+      if (!this.valid_proof(last_block.proof, block.proof, this.hash(JSON.stringify(last_block)))) {
         return false;
       }
 
