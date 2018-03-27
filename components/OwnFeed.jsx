@@ -40,7 +40,7 @@ class OwnFeed extends Component {
                       <Link prefetch href={"/visit/" + item.user.name}>
                         <a>{item.user.name}</a>
                       </Link>{" "}
-                      posted:
+                      {item.shared ? "shared" : "posted"}:
                       <br />
                       <Button size="mini" animated="fade" onClick={() => this.handleFollow(item.user.name)}>
                         <Button.Content visible>
