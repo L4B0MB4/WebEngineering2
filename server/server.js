@@ -13,7 +13,8 @@ const {
   broadcastOrEmit,
   getLikesByPreviousHash,
   getContentOfUser,
-  getFollower
+  getFollower,
+  getAnsehen
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -158,6 +159,8 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
+      let Ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
+      visitedUser.ansehen = Ansehen;
       query = {
         user: req.user,
         visitedUser
@@ -184,6 +187,11 @@ app
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
       res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
 
     exp.post("/api/user/register", (req, res) => {

@@ -98,7 +98,6 @@ async function getContentOfUser(blockchain, publicKey) {
     feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
   }
   return feed.reverse();
-  return feed;
 }
 
 async function getFollower(blockchain, publicKey) {
@@ -118,9 +117,10 @@ async function getFollower(blockchain, publicKey) {
 function getAnsehen(blockchain, publicKey) {
   const transactions = blockchain.map(item => item.transactions[0]);
   const rewardTransactions = blockchain.map(item => item.transactions[1]);
-  let likes = _.filter(transactions, { type: "like", userKey: publicKey });
+  let likes = _.filter(transactions, { type: "like", data: { userKey: publicKey } });
   //let shares = _.filter(transactions, { type: "like" });
-  let miningRewards = _.filter(transactions, { userKey: publicKey });
+  let miningRewards = _.filter(rewardTransactions, { data: { userKey: publicKey } });
+  return likes.length + miningRewards.length;
 }
 
 module.exports = {
@@ -130,5 +130,6 @@ module.exports = {
   broadcastOrEmit,
   getLikesByPreviousHash,
   getContentOfUser,
-  getFollower
+  getFollower,
+  getAnsehen
 };
