@@ -35,7 +35,6 @@ class VisitorPage extends Component {
     } else {
     }
     let { data } = await request.callGetUserContent(query.visitedUser.name);
-    console.log(data);
     store.dispatch(receiveVisitedUserContent(data));
     return {};
   }
@@ -54,7 +53,7 @@ class VisitorPage extends Component {
   }
 
   handleFollow = async username => {
-    let publicKey = (await request.callGetPublicKey({ username })).data
+    let publicKey = (await new Request().callGetPublicKey({ username })).data
       .publicKey;
     this.blockchainWrapper.newTransaction("follow", {
       following: publicKey
@@ -62,7 +61,6 @@ class VisitorPage extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <Fragment>
         <Layout relPath="../">
