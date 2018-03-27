@@ -62,7 +62,7 @@ export default class BlockchainWrapper {
   addToWatignTransactions(transaction) {
     this.waitForTransaction.push(transaction);
   }
-  
+
   isEquivalent(a, b) {
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
@@ -135,5 +135,23 @@ export default class BlockchainWrapper {
     );
     this.actions.push({ type: "transaction", transaction, callback });
     this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
+  }
+
+  alreadyLiked(previousHash, userKey) {
+    for (let i = 0; i < this.blockchain.chain.length; i++) {
+      let block = this.blockchain.chain[i];
+      if (block.transactions.length > 0) {
+        let tr = block.transactions[0].value;
+        if (
+          tr.type === "like" &&
+          tr.data.previousHash === previousHash &&
+          tr.data.userKey === userKey &&
+          block.transactions[0].sender === this.blockchain.public_adress
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

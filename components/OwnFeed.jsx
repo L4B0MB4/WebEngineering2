@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import { Button, Feed, Icon } from "semantic-ui-react";
 import Request from "../components/utils/request";
+import Link from "next/link";
 const request = new Request();
 
 class OwnFeed extends Component {
   handleLike = async (username, previousHash) => {
     let publicKey = (await request.callGetPublicKey({ username })).data
       .publicKey;
-    this.props.blockchainWrapper.newTransaction("like", {
-      previousHash,
-      userKey: publicKey
-    });
+    if (!this.props.blockchainWrapper.alreadyLiked(previousHash, publicKey)) {
+      this.props.blockchainWrapper.newTransaction("like", {
+        previousHash,
+        userKey: publicKey
+      });
+    }
   };
 
   render() {
@@ -25,7 +28,10 @@ class OwnFeed extends Component {
                     <Feed.Summary>
                       <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date>
                       <br />
-                      <a>{item.user.name}</a> posted:
+                      <Link prefetch href={"/visit/" + item.user.name}>
+                        <a>{item.user.name}</a>
+                      </Link>{" "}
+                      posted:
                       <br />
                       <Button
                         size="mini"
