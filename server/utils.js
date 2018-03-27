@@ -123,11 +123,33 @@ async function getContentOfUser(blockchain, publicKey) {
   return feed;
 }
 
+
+async function getFollower(blockchain,publicKey)
+{
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  feed = _.filter(feed, { value: { type: "follow", data:{following:publicKey} } });
+  feed = feed.map(item => {
+    let x = {
+      ...item.value,
+      recipient: item.recipient,
+      previousHash: item.previousHash
+    };
+    return x;
+  });
+  let publicKeys = feed.map(item => item.recipient);
+  let users = await findUsersByPublicKey(publicKeys);
+  feed = feed.map(block => mergeUserToBlock(block, users));
+  return feed;
+}
+
 module.exports = {
   createFeed,
   handleLogin,
   mergeUserToBlock,
   broadcastOrEmit,
   getLikesByPreviousHash,
-  getContentOfUser
+  getContentOfUser,
+  getFollower
 };

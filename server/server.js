@@ -12,7 +12,8 @@ const {
   mergeUserToBlock,
   broadcastOrEmit,
   getLikesByPreviousHash,
-  getContentOfUser
+  getContentOfUser,
+  getFollower
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -215,7 +216,9 @@ app
     });
 
     exp.get("/api/test", async (req, res) => {
-      res.json(await getLikesByPreviousHash(blockchain.chain));
+      if(!req.query.username) return res.json({})
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getFollower(blockchain.chain,visitedUser.publicKey));
     });
 
     exp.get("*", (req, res) => {
