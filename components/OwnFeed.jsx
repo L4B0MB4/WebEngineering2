@@ -2,19 +2,27 @@ import React, { Component } from "react";
 import { Button, Feed, Icon } from "semantic-ui-react";
 import Request from "../components/utils/request";
 import Link from "next/link";
-import {getDate} from"../components/utils/utils";
+import { getDate } from "../components/utils/utils";
 const request = new Request();
 
 class OwnFeed extends Component {
   handleLike = async (username, previousHash) => {
-    let publicKey = (await request.callGetPublicKey({ username })).data
-      .publicKey;
+    let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
     if (!this.props.blockchainWrapper.alreadyLiked(previousHash, publicKey)) {
       this.props.blockchainWrapper.newTransaction("like", {
         previousHash,
         userKey: publicKey
       });
     }
+  };
+
+  handleShare = async (username, item) => {
+    if (item.shared) return;
+    let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
+    this.props.blockchainWrapper.newTransaction("share", {
+      previousHash: item.previousHash,
+      userKey: publicKey
+    });
   };
 
   render() {
@@ -34,11 +42,7 @@ class OwnFeed extends Component {
                       </Link>{" "}
                       posted:
                       <br />
-                      <Button
-                        size="mini"
-                        animated="fade"
-                        onClick={() => this.handleFollow(item.user.name)}
-                      >
+                      <Button size="mini" animated="fade" onClick={() => this.handleFollow(item.user.name)}>
                         <Button.Content visible>
                           <Icon name="add user" />
                         </Button.Content>
@@ -48,14 +52,17 @@ class OwnFeed extends Component {
                         className="like-button"
                         size="mini"
                         animated="fade"
-                        onClick={() =>
-                          this.handleLike(item.user.name, item.previousHash)
-                        }
-                      >
+                        onClick={() => this.handleLike(item.user.name, item.previousHash)}>
                         <Button.Content visible>
                           <Icon name="heart" />
                         </Button.Content>
                         <Button.Content hidden>Like</Button.Content>
+                      </Button>
+                      <Button className="share-button" size="mini" animated="fade" onClick={() => this.handleShare(item.user.name, item)}>
+                        <Button.Content visible>
+                          <Icon name="share" />
+                        </Button.Content>
+                        <Button.Content hidden>Share</Button.Content>
                       </Button>
                     </Feed.Summary>
                     <Feed.Extra text>{item.data}</Feed.Extra>
@@ -73,7 +80,6 @@ class OwnFeed extends Component {
       </Feed>
     );
   }
-
 }
 
 export default OwnFeed;

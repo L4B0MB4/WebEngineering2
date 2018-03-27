@@ -14,7 +14,8 @@ const {
   getLikesByPreviousHash,
   getContentOfUser,
   getFollower,
-  getAnsehen
+  getAnsehen,
+  hasEnoughAnsehen
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -57,14 +58,16 @@ io.on("connection", socket => {
     socket.emit("solve transaction code", encrypted);
   });
 
-  socket.on("new transaction", data => {
+  socket.on("new transaction", async data => {
     const transaction = {
       sender: data.sender,
       type: data.type,
       data: data.data,
       timestamp: data.timestamp
     };
-    broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    if ((data.type === "share" && hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    }
   });
 
   socket.on("new block", async block => {

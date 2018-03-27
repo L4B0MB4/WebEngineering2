@@ -2,10 +2,13 @@ const _ = require("lodash");
 const { findUsersByPublicKey } = require("./database");
 
 async function createFeed(req, res, blockchain) {
-  let feed = blockchain.map(item => {
+  let filtered = blockchain.map(item => {
     return { ...item.transactions[0], previousHash: item.previousHash };
   });
-  feed = _.filter(feed, { type: "content" });
+  const feedshares = getShares(blockchain, filtered);
+  let feed = _.filter(filtered, { type: "content" });
+  feed.push(...feedshares);
+  feed.sort(sortByTimestamp);
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
@@ -88,11 +91,46 @@ function mergeUserToTransaction(block, users) {
   return block;
 }
 
-async function getContentOfUser(blockchain, publicKey) {
-  let feed = blockchain.map(item => {
+function getBlockByPreviousHash(blockchain, hash) {
+  let x = blockchain.map(item => {
     return { ...item.transactions[0], previousHash: item.previousHash };
   });
-  feed = _.filter(feed, { type: "content", sender: publicKey });
+  x = _.filter(x, { previousHash: hash });
+  if (x.length > 0) return x[0];
+  else return null;
+}
+
+function getShares(blockchain, filteredchain) {
+  let feedshares = _.filter(filteredchain, { type: "share" });
+  feedshares = feedshares.map(item => {
+    return {
+      ...item,
+      type: "content",
+      data: getBlockByPreviousHash(blockchain, item.data.previousHash).data,
+      shared: true
+    };
+  });
+  return feedshares;
+}
+
+function sortByTimestamp(a, b) {
+  if (a.timestamp > b.timestamp) {
+    return 1;
+  }
+  if (a.timestamp < b.timestamp) {
+    return -1;
+  }
+  return 0;
+}
+
+async function getContentOfUser(blockchain, publicKey) {
+  let filtered = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  let feed = _.filter(filtered, { type: "content", sender: publicKey });
+  const feedshares = _.filter(getShares(blockchain, filtered), { sender: publicKey });
+  feed.push(...feedshares);
+  feed.sort(sortByTimestamp);
   feed.slice(Math.max(feed.length - 20, 1));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
@@ -118,9 +156,15 @@ function getAnsehen(blockchain, publicKey) {
   const transactions = blockchain.map(item => item.transactions[0]);
   const rewardTransactions = blockchain.map(item => item.transactions[1]);
   let likes = _.filter(transactions, { type: "like", data: { userKey: publicKey } });
-  //let shares = _.filter(transactions, { type: "like" });
   let miningRewards = _.filter(rewardTransactions, { data: { userKey: publicKey } });
-  return likes.length + miningRewards.length;
+  let foreignshares = _.filter(transactions, { type: "share", data: { userKey: publicKey } });
+  let ownshares = _.filter(transactions, { type: "share", sender: publicKey });
+  return likes.length + miningRewards.length + foreignshares.length - ownshares.length;
+}
+
+function hasEnoughAnsehen(blockchain, publicKey, amount) {
+  let ansehen = getAnsehen(blockchain, publicKey);
+  return ansehen >= amount;
 }
 
 module.exports = {
@@ -131,5 +175,6 @@ module.exports = {
   getLikesByPreviousHash,
   getContentOfUser,
   getFollower,
-  getAnsehen
+  getAnsehen,
+  hasEnoughAnsehen
 };
