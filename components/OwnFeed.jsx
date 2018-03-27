@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Feed, Icon } from "semantic-ui-react";
 import Request from "../components/utils/request";
 import Link from "next/link";
+import {getDate} from"../components/utils/utils";
 const request = new Request();
 
 class OwnFeed extends Component {
@@ -26,7 +27,7 @@ class OwnFeed extends Component {
                 <Feed.Event key={item.timestamp}>
                   <Feed.Content>
                     <Feed.Summary>
-                      <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date>
+                      <Feed.Date>{getDate(item.timestamp)}</Feed.Date>
                       <br />
                       <Link prefetch href={"/visit/" + item.user.name}>
                         <a>{item.user.name}</a>
@@ -73,19 +74,6 @@ class OwnFeed extends Component {
     );
   }
 
-  getDate = timestamp => {
-    let d = new Date(timestamp);
-    let hrs = d.getHours();
-    let mins = d.getMinutes();
-    let days = d.getDay();
-    let mnth = d.getMonth();
-    let year = d.getFullYear();
-    if (hrs < 10) hrs = "0" + hrs;
-    if (mins < 10) mins = "0" + mins;
-    if (days < 10) days = "0" + days;
-    if (mnth < 10) mnth = "0" + mnth;
-    return hrs + ":" + mins + " " + days + "." + mnth + "." + year;
-  };
 }
 
 export default OwnFeed;

@@ -12,7 +12,8 @@ import {
 } from "semantic-ui-react";
 import {
   receiveUser,
-  receiveVisitedUser
+  receiveVisitedUser,
+  receiveVisitedUserContent
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -20,15 +21,22 @@ import withRedux from "next-redux-wrapper";
 import initStore from "../components/redux/store";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
-const request = new Request();
+import {getDate} from"../components/utils/utils";
 
+var request;
 class VisitorPage extends Component {
   static async getInitialProps({ store, query, req }) {
+    const baseUrl = `${req.protocol}://${req.get("Host")}`;
+    request = new Request(baseUrl);
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
+      //
     } else {
     }
+    let { data } = await request.callGetUserContent(query.visitedUser.name);
+    console.log(data);
+    store.dispatch(receiveVisitedUserContent(data));
     return {};
   }
 
@@ -54,12 +62,13 @@ class VisitorPage extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <Fragment>
         <Layout relPath="../">
           <Grid className="own-grid">
             <Grid.Row>
-            <div className="-full-width -padding-10">
+              <div className="-full-width -padding-10">
                 <h1>Name, Gesamtansehen</h1>
                 <Button
                   animated="fade"
@@ -115,60 +124,50 @@ class VisitorPage extends Component {
                   <h3>Posts</h3>
                   <Segment raised compact className="-full-width -segment">
                     <Feed>
-                      <Feed.Event>
-                        <Feed.Label>
-                          <img src="../static/bild.jpeg" />
-                        </Feed.Label>
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <Feed.User>Lars Bommersbach</Feed.User> as a
-                            friend
-                            <Feed.Date>1 Hour Ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />4 Likes
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
-                      <Feed.Event>
-                        <Feed.Label image="../static/bild.jpeg" />
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <a>2 new illustrations</a>
-                            <Feed.Date>4 days ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Extra images>
-                            <a>
-                              <img src="../static/bild.jpeg" />
-                            </a>
-                            <a>
-                              <img src="../static/bild.jpeg" />
-                            </a>
-                          </Feed.Extra>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />1 Like
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
-                      <Feed.Event>
-                        <Feed.Label image="../static/bild.jpeg" />
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <Feed.User>Tino Metzger</Feed.User> as a
-                            friend
-                            <Feed.Date>2 Days Ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />8 Likes
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
+                      {this.props.userContent
+                        ? this.props.userContent.map(item => {
+                          if(!this.props.visitedUser)return null;
+                            return (
+                              <Feed.Event key={item.timestamp}>
+                                <Feed.Content>
+                                  <Feed.Summary>
+                                    <Feed.Date>
+                                      {getDate(item.timestamp)}
+                                    </Feed.Date>
+                                    <br />
+                                    <a>{this.props.visitedUser.name}</a> posted:
+                                    <br />
+                                    <Button
+                                      className="like-button"
+                                      size="mini"
+                                      animated="fade"
+                                      onClick={() =>
+                                        this.handleLike(
+                                          this.props.visitedUser.name,
+                                          item.previousHash
+                                        )
+                                      }
+                                    >
+                                      <Button.Content visible>
+                                        <Icon name="heart" />
+                                      </Button.Content>
+                                      <Button.Content hidden>
+                                        Like
+                                      </Button.Content>
+                                    </Button>
+                                  </Feed.Summary>
+                                  <Feed.Extra text>{item.data}</Feed.Extra>
+                                  <Feed.Meta>
+                                    <Feed.Like>
+                                      <Icon name="like" />
+                                      {item.likes.length} Likes
+                                    </Feed.Like>
+                                  </Feed.Meta>
+                                </Feed.Content>
+                              </Feed.Event>
+                            );
+                          })
+                        : null}
                     </Feed>
                     <Pagination
                       size="mini"
@@ -216,7 +215,8 @@ const mapDispatchToProps = dispatch => ({});
 
 const mapStateToProps = state => ({
   user: state.commonReducer.user,
-  visitedUser: state.commonReducer.visitedUser
+  visitedUser: state.commonReducer.visitedUser,
+  userContent: state.commonReducer.userContent
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(

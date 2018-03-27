@@ -25,7 +25,7 @@ class Request {
     } else if (body) {
       customPath = `${path}?${queryString.stringify(body)}`;
     }
-
+    console.log(`${this.url ? this.url : ""}/api${customPath}`)
     try {
       const res = await fetch(
         `${this.url ? this.url : ""}/api${customPath}`,
@@ -54,6 +54,9 @@ class Request {
   }
   callGetPublicKey(data) {
     return this.callFetch("POST", "/user/getPublicKey", data);
+  }
+  callGetUserContent(username) {
+    return this.callFetch("GET", "/blockchain/getUserFeed", { username });
   }
 }
 

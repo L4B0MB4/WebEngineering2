@@ -11,7 +11,8 @@ const {
   handleLogin,
   mergeUserToBlock,
   broadcastOrEmit,
-  getLikesByPreviousHash
+  getLikesByPreviousHash,
+  getContentOfUser
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -172,6 +173,15 @@ app
       let feed = await createFeed(req, res, blockchain.chain);
       res.json(feed);
     });
+    
+
+    exp.get("/api/blockchain/getUserFeed", async (req, res) => {
+      if(!req.query.username) return res.json({})
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const feed = await getContentOfUser(blockchain.chain,visitedUser.publicKey);
+      res.json(feed);
+    });
+
 
     exp.get("/api/blockchain/save", (req, res) => {
       saveBlockchain(blockchain.chain);

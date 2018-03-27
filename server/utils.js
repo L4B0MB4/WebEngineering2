@@ -99,10 +99,35 @@ function mergeUserToTransaction(block, users) {
   return block;
 }
 
+async function getContentOfUser(blockchain, publicKey) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  feed = _.filter(feed, { value: { type: "content" }, recipient:publicKey });
+  feed = feed.map(item => {
+    let x = {
+      ...item.value,
+      recipient: item.recipient,
+      previousHash: item.previousHash
+    };
+    return x;
+  });
+  feed.slice(Math.max(feed.length - 20, 1));
+  for (let i = 0; i < feed.length; i++) {
+    feed[i].likes = await getLikesByPreviousHash(
+      blockchain,
+      feed[i].previousHash
+    );
+  }
+  return feed.reverse();
+  return feed;
+}
+
 module.exports = {
   createFeed,
   handleLogin,
   mergeUserToBlock,
   broadcastOrEmit,
-  getLikesByPreviousHash
+  getLikesByPreviousHash,
+  getContentOfUser
 };
