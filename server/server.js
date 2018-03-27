@@ -59,8 +59,9 @@ io.on("connection", socket => {
   socket.on("new transaction", data => {
     const transaction = {
       sender: data.sender,
-      recipient: data.recipient,
-      value: data.value
+      type: data.type,
+      data: data.data,
+      timestamp: data.timestamp
     };
     broadcastOrEmit(socket, "mine", transaction, socketsConnected);
   });
@@ -165,9 +166,7 @@ app
     });
 
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info) =>
-        handleLogin(err, user, info, req, res)
-      )(req, res, next);
+      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
     });
 
     exp.get("/api/blockchain/feed", async (req, res) => {
@@ -178,10 +177,7 @@ app
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
-      const feed = await getContentOfUser(
-        blockchain.chain,
-        visitedUser.publicKey
-      );
+      const feed = await getContentOfUser(blockchain.chain, visitedUser.publicKey);
       res.json(feed);
     });
     exp.get("/api/blockchain/getUserFollower", async (req, res) => {
@@ -191,13 +187,7 @@ app
     });
 
     exp.post("/api/user/register", (req, res) => {
-      if (
-        !req.body.name ||
-        !req.body.email ||
-        !req.body.publicKey ||
-        !req.body.privateKey ||
-        !req.body.password
-      ) {
+      if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
         res.json({ type: "error", message: "Bitte alles ausfüllen!" });
       } else {
         register(req.body.email, req.body, res);
@@ -210,8 +200,7 @@ app
     });
 
     exp.post("/api/user/getPublicKey", async (req, res) => {
-      if (!req.body.username)
-        return res.json({ type: "error", message: "Benutzername fehlt!" });
+      if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
     });

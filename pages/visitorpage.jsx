@@ -1,15 +1,5 @@
 import React, { Component, Fragment } from "react";
-import {
-  Image,
-  Item,
-  Segment,
-  Feed,
-  Icon,
-  Label,
-  Grid,
-  Pagination,
-  Button
-} from "semantic-ui-react";
+import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button } from "semantic-ui-react";
 import {
   receiveUser,
   receiveVisitedUser,
@@ -22,7 +12,7 @@ import withRedux from "next-redux-wrapper";
 import initStore from "../components/redux/store";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
-import {getDate} from"../components/utils/utils";
+import { getDate } from "../components/utils/utils";
 
 var request;
 class VisitorPage extends Component {
@@ -55,8 +45,7 @@ class VisitorPage extends Component {
   }
 
   handleFollow = async username => {
-    let publicKey = (await new Request().callGetPublicKey({ username })).data
-      .publicKey;
+    let publicKey = (await new Request().callGetPublicKey({ username })).data.publicKey;
     this.blockchainWrapper.newTransaction("follow", {
       following: publicKey
     });
@@ -70,11 +59,7 @@ class VisitorPage extends Component {
             <Grid.Row>
               <div className="-full-width -padding-10">
                 <h1>Name, Gesamtansehen</h1>
-                <Button
-                  animated="fade"
-                  className="follow-button"
-                  onClick={() => this.handleFollow(this.props.visitedUser.name)}
-                >
+                <Button animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
                   <Button.Content visible>
                     <Icon name="add user" size="large" />
                   </Button.Content>
@@ -89,26 +74,21 @@ class VisitorPage extends Component {
                   <h3>Follower</h3>
                   <Segment raised compact className="-full-width -segment">
                     <Item.Group>
-                      {this.props.followers?this.props.followers.map(follower=>
-                      {
-                        if(!follower.user)return null;
-                        return(
-                          <Item>
-                          <Item.Image size="tiny" src="../static/bild.jpeg" />
-                          <Item.Content verticalAlign="middle">
-                            <Item.Header>{follower.user.name}</Item.Header>
-                          </Item.Content>
-                        </Item>
-                        )
-                      }):null}
+                      {this.props.followers
+                        ? this.props.followers.map(follower => {
+                            if (!follower.user) return null;
+                            return (
+                              <Item key={follower.user.name}>
+                                <Item.Image size="tiny" src="../static/bild.jpeg" />
+                                <Item.Content verticalAlign="middle">
+                                  <Item.Header>{follower.user.name}</Item.Header>
+                                </Item.Content>
+                              </Item>
+                            );
+                          })
+                        : null}
                     </Item.Group>
-                    <Pagination
-                      size="mini"
-                      siblingRange="0"
-                      boundaryRange="0"
-                      defaultActivePage={1}
-                      totalPages={10}
-                    />
+                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
                   </Segment>
                 </div>
               </Grid.Column>
@@ -120,35 +100,15 @@ class VisitorPage extends Component {
                     <Feed>
                       {this.props.userContent
                         ? this.props.userContent.map(item => {
-                          if(!this.props.visitedUser)return null;
+                            if (!this.props.visitedUser) return null;
                             return (
                               <Feed.Event key={item.timestamp}>
                                 <Feed.Content>
                                   <Feed.Summary>
-                                    <Feed.Date>
-                                      {getDate(item.timestamp)}
-                                    </Feed.Date>
+                                    <Feed.Date>{getDate(item.timestamp)}</Feed.Date>
                                     <br />
                                     <a>{this.props.visitedUser.name}</a> posted:
                                     <br />
-                                    <Button
-                                      className="like-button"
-                                      size="mini"
-                                      animated="fade"
-                                      onClick={() =>
-                                        this.handleLike(
-                                          this.props.visitedUser.name,
-                                          item.previousHash
-                                        )
-                                      }
-                                    >
-                                      <Button.Content visible>
-                                        <Icon name="heart" />
-                                      </Button.Content>
-                                      <Button.Content hidden>
-                                        Like
-                                      </Button.Content>
-                                    </Button>
                                   </Feed.Summary>
                                   <Feed.Extra text>{item.data}</Feed.Extra>
                                   <Feed.Meta>
@@ -163,13 +123,7 @@ class VisitorPage extends Component {
                           })
                         : null}
                     </Feed>
-                    <Pagination
-                      size="mini"
-                      siblingRange="0"
-                      boundaryRange="0"
-                      defaultActivePage={1}
-                      totalPages={4}
-                    />
+                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
                   </Segment>
                 </div>
               </Grid.Column>
@@ -214,6 +168,4 @@ const mapStateToProps = state => ({
   followers: state.commonReducer.followers
 });
 
-export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(
-  VisitorPage
-);
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(VisitorPage);
