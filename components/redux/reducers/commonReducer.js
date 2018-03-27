@@ -10,6 +10,8 @@ const commonReducer = (state = {}, action) => {
       return Object.assign({}, state, { visitedUser: action.payload });
     case actionTypes.RECEIVE_VISITED_USER_CONTENT:
         return Object.assign({}, state, { userContent: action.payload });
+    case actionTypes.RECEIVE_VISITED_USER_FOLLOWER:
+            return Object.assign({}, state, { followers: action.payload });
     default:
       return state;
   }

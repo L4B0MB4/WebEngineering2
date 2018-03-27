@@ -174,19 +174,20 @@ app
       let feed = await createFeed(req, res, blockchain.chain);
       res.json(feed);
     });
-    
 
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
-      if(!req.query.username) return res.json({})
+      if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
-      const feed = await getContentOfUser(blockchain.chain,visitedUser.publicKey);
+      const feed = await getContentOfUser(
+        blockchain.chain,
+        visitedUser.publicKey
+      );
       res.json(feed);
     });
-
-
-    exp.get("/api/blockchain/save", (req, res) => {
-      saveBlockchain(blockchain.chain);
-      res.json(blockchain.chain);
+    exp.get("/api/blockchain/getUserFollower", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
     });
 
     exp.post("/api/user/register", (req, res) => {
@@ -214,13 +215,6 @@ app
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
-
-    exp.get("/api/test", async (req, res) => {
-      if(!req.query.username) return res.json({})
-      const visitedUser = await findPublicKeyByUsername(req.query.username);
-      res.json(await getFollower(blockchain.chain,visitedUser.publicKey));
-    });
-
     exp.get("*", (req, res) => {
       return handle(req, res);
     });

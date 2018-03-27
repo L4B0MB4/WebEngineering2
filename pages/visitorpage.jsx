@@ -13,7 +13,8 @@ import {
 import {
   receiveUser,
   receiveVisitedUser,
-  receiveVisitedUserContent
+  receiveVisitedUserContent,
+  receiveVisitedUserFollower
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -31,11 +32,12 @@ class VisitorPage extends Component {
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
-      //
     } else {
     }
     let { data } = await request.callGetUserContent(query.visitedUser.name);
     store.dispatch(receiveVisitedUserContent(data));
+    data = (await request.callGetUserFollower(query.visitedUser.name)).data;
+    store.dispatch(receiveVisitedUserFollower(data));
     return {};
   }
 
@@ -87,24 +89,18 @@ class VisitorPage extends Component {
                   <h3>Follower</h3>
                   <Segment raised compact className="-full-width -segment">
                     <Item.Group>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Tino Metzger</Item.Header>
-                        </Item.Content>
-                      </Item>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Felix Waldbach</Item.Header>
-                        </Item.Content>
-                      </Item>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Lars Bommersbach</Item.Header>
-                        </Item.Content>
-                      </Item>
+                      {this.props.followers?this.props.followers.map(follower=>
+                      {
+                        if(!follower.user)return null;
+                        return(
+                          <Item>
+                          <Item.Image size="tiny" src="../static/bild.jpeg" />
+                          <Item.Content verticalAlign="middle">
+                            <Item.Header>{follower.user.name}</Item.Header>
+                          </Item.Content>
+                        </Item>
+                        )
+                      }):null}
                     </Item.Group>
                     <Pagination
                       size="mini"
@@ -214,7 +210,8 @@ const mapDispatchToProps = dispatch => ({});
 const mapStateToProps = state => ({
   user: state.commonReducer.user,
   visitedUser: state.commonReducer.visitedUser,
-  userContent: state.commonReducer.userContent
+  userContent: state.commonReducer.userContent,
+  followers: state.commonReducer.followers
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(

@@ -58,6 +58,9 @@ class Request {
   callGetUserContent(username) {
     return this.callFetch("GET", "/blockchain/getUserFeed", { username });
   }
+  callGetUserFollower(username) {
+    return this.callFetch("GET", "/blockchain/getUserFollower", { username });
+  }
 }
 
 export default Request;
