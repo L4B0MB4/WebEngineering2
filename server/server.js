@@ -201,7 +201,7 @@ app
 
         exp.post("/api/user/register", (req, res) => {
             if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
-                res.json({ type: "error", message: "Bitte alles ausfüllen!" });
+                return res.json({ type: "error", message: "Bitte alles ausfüllen!" });
             } else {
                 register(req.body.email, req.body, res);
             }

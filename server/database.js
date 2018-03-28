@@ -55,13 +55,13 @@ const register = (email, body, httpRes) => {
                 };
                 db.collection("users").insertOne(newUser, function(err, res) {
                     if (err) throw err;
-                    httpRes.json({
+                    return httpRes.json({
                         type: "success",
                         message: "Erfolgreich registriert"
                     });
                 });
             } else {
-                httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+                return httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
             }
         });
     });
