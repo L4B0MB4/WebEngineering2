@@ -105,6 +105,12 @@ body
     width: 64px !important;
 }
 
+.ui.button.-register-btn {
+    background-color: #DAA520 !important;
+    color: white !important;
+    width: auto !important;
+}
+
 .ui.form .field>label {
     font-size: 1em !important;
 }

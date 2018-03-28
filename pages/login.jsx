@@ -18,14 +18,9 @@ class Login extends Component {
         }
         let res =await request.callLogin(user);
         if(res.data.type==="success")
-
         {
             window.location.replace("/");
-        }  else {
-            window.getElementsByTagName("Message")[0].setAttribute("hidden", false);
-            window.location.replace("/");
         }
-
     }
 
     render() {
@@ -40,11 +35,6 @@ class Login extends Component {
                             <Form className="-loginform">
 
                                 <Image src="/static/golddiggertext.png" alt="Avatar" className="-avatar"/>
-
-                                <Message warning hidden="true">
-                                    <Message.Header>Login fehlgeschlagen!</Message.Header>
-                                    <p>Bitte überprüfen Sie Ihre E-Mail-Adresse und ihr Passwort.</p>
-                                </Message>
 
                                 <Form.Field className="-login-field">
                                     <label className="-login-label">E-Mail-Adresse</label>

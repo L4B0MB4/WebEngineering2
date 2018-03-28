@@ -105,7 +105,7 @@ class Register extends Component {
                   value={this.state.keys.priv}
                 />
                 <Button
-                  className="-login-btn"
+                  className="-register-btn"
                   onClick={this.handleRegistration}
                 >
                   Register
