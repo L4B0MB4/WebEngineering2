@@ -55,7 +55,7 @@ class Index extends Component {
 
   render() {
     return (
-      <Layout handleItemClick={this.handleItemClick}>
+      <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.props.blockchainWrapper}>
         {this.state.activeItem === "profil" ? (
           <Profil />
         ) : (

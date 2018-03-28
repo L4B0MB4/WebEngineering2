@@ -64,6 +64,12 @@ body
     border-top-color: #DAA520 !important;
 }
 
+.obere-list{
+    position: relative !important;
+    top: 10% !important;
+    transform: translateY(-90%) !important;
+}
+
 .-list{
     position: relative !important;
     top: 70% !important;
@@ -73,6 +79,12 @@ body
 .list-item{
     background-color: #F6E4CC !important;
     width: 80% !important;
+}
+
+.mine-button{
+    background-color: #F6E4CC !important;
+    width: 100% !important;
+    color: #DAA520 !important;
 }
 
 .-avatar {
