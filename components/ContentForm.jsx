@@ -51,7 +51,7 @@ export default class ContentForm extends Component {
           />
         </Form.Field>
         <Form.Field>
-          <Input type="file" onChange={e => this.onSelectFiles(e.target.files)} />
+          <Input type="file" onChange={e => this.onSelectFiles(e.target.files)} className="upload" />
         </Form.Field>
         <Form.Field className="-text-right">
           <Button

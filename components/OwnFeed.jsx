@@ -71,7 +71,9 @@ class OwnFeed extends Component {
 
                   <div className="right-div">
                     <Feed.Extra text className="-post">
-                      {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} /> : null}
+                      <Feed.Extra images>
+                        <a>{item.data.picture ? <img src={"/api/picture/" + item.data.picture} /> : null}</a>
+                      </Feed.Extra>
                       <br />
                       {item.data.text ? item.data.text : null}
                       <br />
