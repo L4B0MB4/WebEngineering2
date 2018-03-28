@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import OwnHeader from "../components/Header.jsx";
-import { Grid, Image, Button, Form, Input, Label, Icon} from 'semantic-ui-react';
+import { Grid, Image, Button, Form, Input, Label, Icon, Message} from 'semantic-ui-react';
 import Link from "next/link";
 import Request from "../components/utils/request";
 import {hash} from "../components/utils/utils"
@@ -18,7 +18,11 @@ class Login extends Component {
         }
         let res =await request.callLogin(user);
         if(res.data.type==="success")
+
         {
+            window.location.replace("/");
+        }  else {
+            window.getElementsByTagName("Message")[0].setAttribute("hidden", false);
             window.location.replace("/");
         }
 
@@ -36,6 +40,11 @@ class Login extends Component {
                             <Form className="-loginform">
 
                                 <Image src="/static/golddiggertext.png" alt="Avatar" className="-avatar"/>
+
+                                <Message warning hidden="true">
+                                    <Message.Header>Login fehlgeschlagen!</Message.Header>
+                                    <p>Bitte überprüfen Sie Ihre E-Mail-Adresse und ihr Passwort.</p>
+                                </Message>
 
                                 <Form.Field className="-login-field">
                                     <label className="-login-label">E-Mail-Adresse</label>

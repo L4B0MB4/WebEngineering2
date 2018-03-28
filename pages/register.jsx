@@ -84,7 +84,7 @@ class Register extends Component {
                 <Form.Field className="-login-field">
                   <label>Passwort</label>
                   <Input
-                    type="text"
+                    type="password"
                     name="password"
                     onChange={e => this.setState({ password: e.target.value })}
                     placeholder={"Passwort"}
