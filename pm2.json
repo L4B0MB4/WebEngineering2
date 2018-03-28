@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "webe2",
+      "script": "npm",
+      "args": "start"
+    }
+  ]
+}

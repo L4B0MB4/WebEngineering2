@@ -5,7 +5,7 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
 }
 
 .own-grid{
-    min-height: 100%;
+    min-height: 100% !important;
 }
 
 .-header{
@@ -16,7 +16,7 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
     padding: 5px !important;
     margin-top: -1px !important;
     position: fixed !important;
-    z-index: 1 !important;
+    z-index: 2 !important;
     border-radius: 0px !important;
 }
 
@@ -62,6 +62,7 @@ body
 
 .-segment{
     border-top-color: #DAA520 !important;
+    width: 100% !important;
 }
 
 .obere-list{
@@ -139,10 +140,20 @@ body
     background-color: #DAA520 !important;
     z-index: 1 !important;
     float: right !important;
+    margin-right: 10px !important;
 }
 
 .like-button{
     background-color: #DAA520 !important;
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 10px !important;
+}
+
+.share-button{
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 70px !important;
 }
 
 .-full-width
@@ -161,4 +172,22 @@ body
 h1{
     margin: 0 !important;
     display: inline-block !important;
+}
+
+.left-div{
+    width: 30% !important;
+    border-right: 1px solid !important;
+    border-right-color: lightgray !important;
+}
+
+.right-div{
+    position: absolute !important;
+    right: 10px !important;
+    top: 10px !important;
+    width: 65% !important;
+    height: 100% !important;
+}
+
+.-post{
+    height: 100% !important;
 }
