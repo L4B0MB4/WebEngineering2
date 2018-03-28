@@ -133,7 +133,6 @@ body {
   background-color: #daa520 !important;
   z-index: 1 !important;
   float: right !important;
-  margin-right: 10px !important;
 }
 
 .like-button {
@@ -166,17 +165,25 @@ h1 {
 
 .left-div {
   float: left;
-  width: 30% !important;
-  border-right: 1px solid !important;
-  border-right-color: lightgray !important;
+  width: 25% !important;
 }
 
 .right-div {
   float: right;
-  width: 65% !important;
+  width: 70% !important;
   height: 100% !important;
+  border-left: 1px solid !important;
+  border-left-color: lightgray !important;
 }
 
 .-post {
   height: 100% !important;
+  margin: 15px !important;
+  margin-right: 25px !important;
+}
+
+.dropdown{
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
 }
