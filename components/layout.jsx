@@ -25,13 +25,16 @@ class Layout extends Component {
 
   isReadyToMine = () => { 
     if(this.props.blockchainWrapper){
-      this.setState({isReadyToMine:true})
+      this.setState({ isReadyToMine: true })
     }
   };
 
+  componentWillMount()
+  {
+    this.isReadyToMine();
+  }
+
   render() {
-    console.log(this.props);
-    console.log(this.state.isReadyToMine)
     const { activeItem } = this.state;
     return (
       <Fragment>

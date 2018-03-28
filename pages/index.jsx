@@ -50,6 +50,7 @@ class Index extends Component {
         this.setState({ activeItem: item });
     };
 
+<<<<<<< HEAD
     render() {
         return (
             <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.props.blockchainWrapper}>
@@ -65,6 +66,23 @@ class Index extends Component {
             </Layout>
         );
     }
+=======
+  render() {
+    return (
+      <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.blockchainWrapper}>
+        {this.state.activeItem === "profil" ? (
+          <Profil />
+        ) : (
+          <Fragment>
+            <ContentForm blockchainWrapper={this.blockchainWrapper} />
+            <Divider />
+            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
+          </Fragment>
+        )}
+      </Layout>
+    );
+  }
+>>>>>>> 2dbed645ebfcaee9ab313dc1cf283ce175bc8901
 }
 const mapDispatchToProps = (dispatch) => ({
     receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
