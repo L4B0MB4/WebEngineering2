@@ -8,10 +8,12 @@ import {
   Header,
   Grid,
   Image,
-  List
+  List,
+  Button
 } from "semantic-ui-react";
 import OwnHeader from "./Header";
 import Link from "next/link";
+import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 
 class Layout extends Component {
   state = { activeItem: "feed" };
@@ -21,7 +23,15 @@ class Layout extends Component {
     this.props.handleItemClick(name);
   };
 
+  isReadyToMine = () => { 
+    if(this.props.blockchainWrapper){
+      this.setState({isReadyToMine:true})
+    }
+  };
+
   render() {
+    console.log(this.props);
+    console.log(this.state.isReadyToMine)
     const { activeItem } = this.state;
     return (
       <Fragment>
@@ -76,6 +86,13 @@ class Layout extends Component {
 
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
+              <List relaxed className="obere-list">
+                <List.Item>
+                  <Button id="mine" as="a" size="big" className="mine-button" disabled={!this.state.isReadyToMine}>
+                    <Icon name="diamond" />Ready to mine
+                  </Button>
+                </List.Item>
+              </List>
               <List relaxed className="-list">
                 <List.Item>
                   <Label as="a" size="big" className="list-item">
