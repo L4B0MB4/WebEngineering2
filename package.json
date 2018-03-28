@@ -2,12 +2,12 @@
   "name": "blockchain",
   "version": "1.0.0",
   "scripts": {
-    "old-babel-node": "babel-node --presets=es2017,react",
+    "dev-babel-node": "babel-node --presets=es2017,react",
     "old-start": "nodemon --exec npm run babel-node -- ./src/main.js",
     "old-build": "babel src -d dist",
-    "dev": "npm run babel-node -- ./server/server",
+    "dev": "npm run dev-babel-node -- ./server/server",
     "build": "babel ./server/ -s -d dist && next build",
-    "start": "babel-node bin/production"
+    "start": "NODE_ENV=production node dist/server.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
