@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socketIO = require("socket.io");
-import { Blockchain } from "../components/utils/blockchain";
+import { Blockchain } from "./blockchain";
 const blockchain = new Blockchain();
 const exp = express();
 const fileUpload = require("express-fileupload");
