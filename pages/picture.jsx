@@ -19,13 +19,8 @@ class VisitorPage extends Component {
     render() {
         return (
             <Fragment>
-<<<<<<< HEAD
                 <Layout relPath="../" blockchainWrapper={this.props.blockchainWrapper}>
                     <form ref="uploadForm" id="uploadForm" action="/api/upload" method="post" encType="multipart/form-data">
-=======
-                <Layout relPath="../" blockchainWrapper={this.blockchainWrapper}>
-                    <form ref="uploadForm" id="uploadForm" action="/upload" method="post" encType="multipart/form-data">
->>>>>>> 2dbed645ebfcaee9ab313dc1cf283ce175bc8901
                         <input type="file" name="sampleFile" />
                         <input type="submit" value="Upload!" />
                     </form>
