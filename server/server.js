@@ -11,7 +11,11 @@ const {
   handleLogin,
   mergeUserToBlock,
   broadcastOrEmit,
-  getLikesByPreviousHash
+  getLikesByPreviousHash,
+  getContentOfUser,
+  getFollower,
+  getAnsehen,
+  hasEnoughAnsehen
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -54,13 +58,16 @@ io.on("connection", socket => {
     socket.emit("solve transaction code", encrypted);
   });
 
-  socket.on("new transaction", data => {
+  socket.on("new transaction", async data => {
     const transaction = {
       sender: data.sender,
-      recipient: data.recipient,
-      value: data.value
+      type: data.type,
+      data: data.data,
+      timestamp: data.timestamp
     };
-    broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    if ((data.type === "share" && hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    }
   });
 
   socket.on("new block", async block => {
@@ -155,6 +162,8 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
+      let Ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
+      visitedUser.ansehen = Ansehen;
       query = {
         user: req.user,
         visitedUser
@@ -163,9 +172,7 @@ app
     });
 
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info) =>
-        handleLogin(err, user, info, req, res)
-      )(req, res, next);
+      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
     });
 
     exp.get("/api/blockchain/feed", async (req, res) => {
@@ -173,19 +180,25 @@ app
       res.json(feed);
     });
 
-    exp.get("/api/blockchain/save", (req, res) => {
-      saveBlockchain(blockchain.chain);
-      res.json(blockchain.chain);
+    exp.get("/api/blockchain/getUserFeed", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const feed = await getContentOfUser(blockchain.chain, visitedUser.publicKey);
+      res.json(feed);
+    });
+    exp.get("/api/blockchain/getUserFollower", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
 
     exp.post("/api/user/register", (req, res) => {
-      if (
-        !req.body.name ||
-        !req.body.email ||
-        !req.body.publicKey ||
-        !req.body.privateKey ||
-        !req.body.password
-      ) {
+      if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
         res.json({ type: "error", message: "Bitte alles ausfüllen!" });
       } else {
         register(req.body.email, req.body, res);
@@ -198,16 +211,10 @@ app
     });
 
     exp.post("/api/user/getPublicKey", async (req, res) => {
-      if (!req.body.username)
-        return res.json({ type: "error", message: "Benutzername fehlt!" });
+      if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
-
-    exp.get("/api/test", async (req, res) => {
-      res.json(await getLikesByPreviousHash(blockchain.chain));
-    });
-
     exp.get("*", (req, res) => {
       return handle(req, res);
     });

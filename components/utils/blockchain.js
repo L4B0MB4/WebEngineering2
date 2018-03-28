@@ -12,7 +12,9 @@ export class Blockchain {
   mine(transaction) {
     let last_block = this.chain[this.chain.length - 1];
     let proof = this.proof_of_work(last_block);
-    let reward = this.create_transaction(0, this.public_adress,"reward", {});
+    let reward = this.create_transaction(0, "reward", {
+      userKey: this.public_adress
+    });
     this.current_transactions.push(...[transaction, reward]);
     let previousHash = this.hash(JSON.stringify(last_block));
     let block = this.new_block(proof, previousHash);
@@ -23,16 +25,13 @@ export class Blockchain {
     this.nodes.add(address);
   }
 
-  create_transaction(sender, recipient, type, data) {
-    let timestamp =(new Date()).getTime();
+  create_transaction(sender, type, data) {
+    let timestamp = Date.now();
     return {
       sender,
-      recipient,
-      value: {
-        type,
-        data,
-        timestamp,
-      }
+      type,
+      data,
+      timestamp
     };
   }
 
@@ -42,9 +41,7 @@ export class Blockchain {
       timestamp: new Date(Date.now()).toISOString(),
       transactions: this.current_transactions,
       proof,
-      previousHash: previousHash
-        ? previousHash
-        : this.hash(this.chain[this.chain.length - 1])
+      previousHash: previousHash ? previousHash : this.hash(this.chain[this.chain.length - 1])
     };
 
     this.current_transactions = [];
@@ -55,19 +52,15 @@ export class Blockchain {
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
 
-   proof_of_work(last_block) {
+  proof_of_work(last_block) {
     let last_proof = last_block.proof;
     let last_hash = this.hash(JSON.stringify(last_block));
 
     let proof = 0;
-    while (this.valid_proof(last_proof, proof, last_hash) !== true)
-    {
+    while (this.valid_proof(last_proof, proof, last_hash) !== true) {
       proof += parseInt(Math.random() * 10 + 1);
-     
     }
-      
 
     return proof;
   }
@@ -96,13 +89,7 @@ export class Blockchain {
         return false;
       }
 
-      if (
-        !this.valid_proof(
-          last_block.proof,
-          block.proof,
-          this.hash(JSON.stringify(last_block))
-        )
-      ) {
+      if (!this.valid_proof(last_block.proof, block.proof, this.hash(JSON.stringify(last_block)))) {
         return false;
       }
 
