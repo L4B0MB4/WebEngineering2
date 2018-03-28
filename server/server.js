@@ -219,17 +219,17 @@ app
     });
 
     exp.post("/api/uploadPicture", function(req, res) {
-      if (!req.files) return res.status(400).send("No files were uploaded.");
-
-      // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-      let sampleFile = req.files.sampleFile;
-
-      // Use the mv() method to place the file somewhere on your server
-      sampleFile.mv(`${__dirname}/temp/filename.jpg`, function(err) {
+      if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
+      const file = req.files.uploadedFile;
+      const filename = file.md5 + Date.now();
+      file.mv(`${__dirname}/temp/'${filename}`, function(err) {
         if (err) return res.status(500).send(err);
-
-        res.send("File uploaded!");
+        res.send({ filename });
       });
+    });
+
+    exp.get("/api/picture/:filename", (req, res) => {
+      res.sendFile(`${__dirname}/temp/'${req.params.filename}`);
     });
 
     exp.get("*", (req, res) => {
