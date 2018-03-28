@@ -29,8 +29,12 @@ class Layout extends Component {
     }
   };
 
-  render() {
+  componentWillMount()
+  {
     this.isReadyToMine();
+  }
+
+  render() {
     const { activeItem } = this.state;
     return (
       <Fragment>
