@@ -1,16 +1,5 @@
 import React, { Component, Fragment } from "react";
-import {
-  Icon,
-  Card,
-  Label,
-  Input,
-  Menu,
-  Header,
-  Grid,
-  Image,
-  List,
-  Button
-} from "semantic-ui-react";
+import { Icon, Card, Label, Input, Menu, Header, Grid, Image, List, Button } from "semantic-ui-react";
 import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
@@ -23,14 +12,13 @@ class Layout extends Component {
     this.props.handleItemClick(name);
   };
 
-  isReadyToMine = () => { 
-    if(this.props.blockchainWrapper){
-      this.setState({ isReadyToMine: true })
+  isReadyToMine = () => {
+    if (this.props.blockchainWrapper) {
+      this.setState({ isReadyToMine: true });
     }
   };
 
-  componentWillMount()
-  {
+  componentWillMount() {
     this.isReadyToMine();
   }
 
@@ -55,29 +43,17 @@ class Layout extends Component {
                 </Card.Content>
               </Card>
               <Menu vertical floated fixed="bottom" tabular className="-menu">
-                <Menu.Item
-                  name="profil"
-                  active={activeItem === "profil"}
-                  onClick={this.handleItemClick}
-                >
+                <Menu.Item name="profil" active={activeItem === "profil"} onClick={this.handleItemClick}>
                   <Icon name="user" />Profil
                 </Menu.Item>
-                <Menu.Item
-                  name="feed"
-                  active={activeItem === "feed"}
-                  onClick={this.handleItemClick}
-                >
+                <Menu.Item name="feed" active={activeItem === "feed"} onClick={this.handleItemClick}>
                   <Icon name="newspaper" />Feed
                 </Menu.Item>
-                <Menu.Item
-                  name="logout"
-                  active={activeItem === "logout"}
-                  onClick={this.handleItemClick}
-                >
+                <Menu.Item name="logout" active={activeItem === "logout"} onClick={this.handleItemClick}>
                   <Icon name="power" />Abmelden
                 </Menu.Item>
                 <Menu.Item>
-                  <Input icon='search' placeholder='Suche...' />
+                  <Input icon="search" placeholder="Suche..." />
                 </Menu.Item>
               </Menu>
             </div>
