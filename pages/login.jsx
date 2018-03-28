@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import OwnHeader from "../components/Header.jsx";
-import { Grid, Image, Button, Form, Input, Label, Icon, Message} from 'semantic-ui-react';
+import { Grid, Image, Button, Form, Input, Message} from 'semantic-ui-react';
 import Link from "next/link";
 import Request from "../components/utils/request";
 import {hash} from "../components/utils/utils"
+import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 
 const request = new Request();
 
 class Login extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {visible: false};
+        this.state = {msgtext: ""};
+    }
 
     handleLogin=async ()=>
     {
@@ -17,9 +24,13 @@ class Login extends Component {
             username:this.state.username
         }
         let res =await request.callLogin(user);
+
         if(res.data.type==="success")
         {
             window.location.replace("/");
+        } else {
+            this.setState({msgtext: res.data.message});
+            this.setState({visible: true});
         }
     }
 
@@ -34,7 +45,12 @@ class Login extends Component {
 
                             <Form className="-loginform">
 
-                                <Image src="/static/golddiggertext.png" alt="Avatar" className="-avatar"/>
+                                <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar"/>
+
+                                <Message error visible={this.state.visible}>
+                                    <Message.Header>Login fehlgeschlagen!</Message.Header>
+                                    <p>{this.state.msgtext}</p>
+                                </Message>
 
                                 <Form.Field className="-login-field">
                                     <label className="-login-label">E-Mail-Adresse</label>
@@ -46,7 +62,7 @@ class Login extends Component {
                                     <Input name="password" onChange={(e)=>this.setState({pw:e.target.value})} type="password" placeholder="Passwort" />
                                 </Form.Field>
 
-                                <div className="ui center aligned page grid -login-btn-form">
+                                <div className="ui centered grid page grid -login-btn-form">
                                     <Button className="-login-btn" onClick={this.handleLogin}>Login</Button>
                                     <span className="-psw"><a href="#">Passwort vergessen?</a></span>
                                     <span className="-reg-span"><Link prefetch href="/register"><a>Noch nicht registriert? Jetzt registrieren</a></Link></span>
