@@ -173,10 +173,6 @@ app
             return app.render(req, res, "/visitorpage", query);
         });
 
-        exp.post("/api/user/login", function(req, res, next) {
-            passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
-        });
-
         exp.get("/api/blockchain/feed", async (req, res) => {
             let feed = await createFeed(req, res, blockchain.chain);
             res.json(feed);
@@ -197,6 +193,10 @@ app
             if (!req.query.username) return res.json({});
             const visitedUser = await findPublicKeyByUsername(req.query.username);
             res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
+        });
+
+        exp.post("/api/user/login", function(req, res, next) {
+            passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
         });
 
         exp.post("/api/user/register", (req, res) => {
