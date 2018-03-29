@@ -46,7 +46,7 @@ export default class FeedElement extends Component {
               </Feed.Content>
             </div>
 
-            <div className="right-div">
+            <div className="right-div  -feed-font-size">
               <Feed.Extra text className="-post" style={item.data.picture ? { minHeight: "280px" } : { minHeight: "142px" }}>
                 {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
                 <br />
@@ -61,13 +61,13 @@ export default class FeedElement extends Component {
             </div>
             <Dropdown icon="ellipsis horizontal" className="dropdown">
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleShare(item.user.name, item)}>{item.user.name} folgen</Dropdown.Item>
+                <Dropdown.Item>{item.user.name} folgen</Dropdown.Item>
                 <Dropdown.Item text="Post melden" />
               </Dropdown.Menu>
             </Dropdown>
           </div>
           <div style={{ height: "30px", width: "100%" }}>
-            <Button size="mini" animated="fade" onClick={() => this.handleShare(item.user.name, item)} className="-float-left ">
+            <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-left ">
               <Button.Content visible>
                 <Icon name="share" />
               </Button.Content>

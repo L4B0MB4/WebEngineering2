@@ -201,3 +201,7 @@ h1 {
 .-float-right {
   float: right !important;
 }
+.-feed-font-size {
+  font-size: 16px !important;
+  font-stretch: narrower;
+}
