@@ -12,13 +12,13 @@ class Profil extends Component {
         
         <Grid className="own-grid">
           <Grid.Row>
-            <h1>Dein Profil</h1>
+            <h1>Your Profile</h1>
           </Grid.Row>
 
           <Grid.Row>
             <Grid.Column width={7} stretched className="grid-column">
               <div className="-padding-10 -full-width -follower">
-                <h3>Deine Follower</h3>
+                <h3>Your Follower</h3>
                 <Segment raised compact className="-full-width -segment">
                   <Item.Group>
                     <Item>
@@ -47,7 +47,7 @@ class Profil extends Component {
 
             <Grid.Column width={9} stretched className="grid-column">
               <div className="-padding-10 -full-width -posts">
-                <h3>Deine Posts</h3>
+                <h3>Your Posts</h3>
                 <Segment raised compact className="-full-width -segment">
                   <Feed>
                     <Feed.Event>
@@ -112,7 +112,7 @@ class Profil extends Component {
 
           <Grid.Row>
             <div className="-full-width -padding-10 -ansehen">
-              <h3>Dein Ansehen</h3>
+              <h3>Your Ansehen</h3>
               <Segment raised className="-full-width -segment">
                 <Label as="a">
                   <Image avatar spaced="right" src="../static/bild.jpeg" />

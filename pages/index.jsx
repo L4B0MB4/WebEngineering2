@@ -13,6 +13,8 @@ import OwnFeed from "../components/OwnFeed";
 import { Divider } from "semantic-ui-react";
 import Request from "../components/utils/request";
 import Profil from "../components/Profil";
+import Kontakt from "../components/kontakt";
+import Impressum from "../components/impressum"
 
 const request = new Request();
 
@@ -52,16 +54,20 @@ class Index extends Component {
 
     render() {
         return (
-            <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.props.blockchainWrapper}>
+            <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.blockchainWrapper}>
                 {this.state.activeItem === "profil" ? (
                     <Profil />
+                ) : this.state.activeItem === "kontakt" ? (
+                    <Kontakt />
+                ) : this.state.activeItem === "impressum" ? (
+                    <Impressum />
                 ) : (
-                    <Fragment>
-                        <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
-                        <Divider />
-                        <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
-                    </Fragment>
-                )}
+                        <Fragment>
+                            <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
+                            <Divider />
+                            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
+                        </Fragment>
+                    )}
             </Layout>
         );
     }

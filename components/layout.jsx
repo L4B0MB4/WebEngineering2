@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Icon, Card, Label, Input, Menu, Header, Grid, Image, List, Button } from "semantic-ui-react";
+import { Icon, Card, Label, Input, Menu, Header, Grid, Image, List, Button, Modal } from "semantic-ui-react";
 import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
@@ -44,16 +44,16 @@ class Layout extends Component {
               </Card>
               <Menu vertical floated fixed="bottom" tabular className="-menu">
                 <Menu.Item name="profil" active={activeItem === "profil"} onClick={this.handleItemClick}>
-                  <Icon name="user" />Profil
+                  <Icon name="user" />Profile
                 </Menu.Item>
                 <Menu.Item name="feed" active={activeItem === "feed"} onClick={this.handleItemClick}>
                   <Icon name="newspaper" />Feed
                 </Menu.Item>
                 <Menu.Item name="logout" active={activeItem === "logout"} onClick={this.handleItemClick}>
-                  <Icon name="power" />Abmelden
+                  <Icon name="power" />Logout
                 </Menu.Item>
                 <Menu.Item>
-                  <Input icon="search" placeholder="Suche..." />
+                  <Input icon="search" placeholder="Search..." />
                 </Menu.Item>
               </Menu>
             </div>
@@ -74,14 +74,20 @@ class Layout extends Component {
               </List>
               <List relaxed className="-list">
                 <List.Item>
-                  <Label as="a" size="big" className="list-item">
-                    <Icon name="mail" />Kontakt
-                  </Label>
+                  <Button compact as="a" size="big" className="list-item"
+                    name="kontakt"
+                    active={activeItem === "kontakt"}
+                    onClick={this.handleItemClick}>
+                    <Icon name="mail" />About us
+                  </Button>
                 </List.Item>
                 <List.Item>
-                  <Label as="a" size="big" className="list-item">
-                    <Icon name="registered" />Impressum
-                  </Label>
+                  <Button compact as="a" size="big" className="list-item"
+                   name="impressum"
+                  active={activeItem === "impressum"}
+                  onClick={this.handleItemClick}>
+                    <Icon name="registered" />Disclaimer
+                  </Button>
                 </List.Item>
               </List>
             </div>

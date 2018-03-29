@@ -88,8 +88,8 @@ class OwnFeed extends Component {
 
                   <Dropdown icon="ellipsis horizontal" className="dropdown">
                     <Dropdown.Menu>
-                      <Dropdown.Item>{item.user.name} folgen</Dropdown.Item>
-                      <Dropdown.Item text="Post melden" />
+                      <Dropdown.Item>Follow {item.user.name}</Dropdown.Item>
+                      <Dropdown.Item text="Report" />
                     </Dropdown.Menu>
                   </Dropdown>
                   <Button className="share-button" size="mini" animated="fade" onClick={() => this.handleShare(item.user.name, item)}>
