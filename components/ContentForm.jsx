@@ -15,11 +15,10 @@ export default class ContentForm extends Component {
   sendContent = async () => {
     if (this.state.content.length > 0 && !this.state.file) {
       this.props.blockchainWrapper.newTransaction("content", { text: this.state.content }, this.onSuccessFullyPosted);
-      this.setState({ buttonLoading: true });
+      this.setState({ buttonLoading: true, content: "" });
     } else if (this.state.file) {
-      this.setState({ buttonLoading: true });
+      this.setState({ buttonLoading: true, content: "" });
       const { data } = await this.props.request.callUploadFile(this.state.file);
-      console.log(data);
       if (data.filename) {
         this.props.blockchainWrapper.newTransaction(
           "content",
