@@ -6,18 +6,13 @@ export default class ContentForm extends Component {
 
   onSuccessFullyPosted = () => {
     this.setState({ buttonSucess: true, buttonLoading: false });
-    
-    setInterval(()=>this.setState({buttonSucess:false}), 1000);
 
+    setInterval(() => this.setState({ buttonSucess: false }), 1000);
   };
 
   sendContent = () => {
-    if (this.state.content.length > 0) {
-      this.props.blockchainWrapper.newTransaction(
-        "content",
-        this.state.content,
-        this.onSuccessFullyPosted
-      );
+    if (this.state.content && this.state.content.length > 0) {
+      this.props.blockchainWrapper.newTransaction("content", this.state.content, this.onSuccessFullyPosted);
       this.setState({ buttonLoading: true });
     }
   };
@@ -36,7 +31,7 @@ export default class ContentForm extends Component {
           <label>Post something!</label>
           <TextArea
             placeholder="Content"
-            value={this.isSuccessfull()?"":null}
+            value={this.isSuccessfull() ? "" : null}
             onChange={e => this.setState({ content: e.target.value })}
           />
         </Form.Field>
@@ -45,9 +40,8 @@ export default class ContentForm extends Component {
             type="submit"
             loading={this.isLoading()}
             color={this.isSuccessfull() ? "green" : null}
-            onClick={this.isLoading() ? null : this.sendContent}
-          >
-           {this.isSuccessfull() ? "Erfolgreich" : "Post"}
+            onClick={this.isLoading() ? null : this.sendContent}>
+            {this.isSuccessfull() ? "Erfolgreich" : "Post"}
           </Button>
         </Form.Field>
       </Form>

@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const query = require("underscore-query") (_);
 const mongoUrl = "mongodb://localhost:27017/local";
 const { MongoClient } = require("mongodb");
 let db;
@@ -46,28 +45,26 @@ const login = (email, password) => {
 
 const register = (email, body, httpRes) => {
   return new Promise((resolve, reject) => {
-    db
-      .collection("users")
-      .findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
-        if (res === null) {
-          var newUser = {
-            email: body.email,
-            name: body.name,
-            publicKey: body.publicKey,
-            privateKey: body.privateKey,
-            password: body.password
-          };
-          db.collection("users").insertOne(newUser, function(err, res) {
-            if (err) throw err;
-            httpRes.json({
-              type: "success",
-              message: "Erfolgreich registriert"
-            });
+    db.collection("users").findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
+      if (res === null) {
+        var newUser = {
+          email: body.email,
+          name: body.name,
+          publicKey: body.publicKey,
+          privateKey: body.privateKey,
+          password: body.password
+        };
+        db.collection("users").insertOne(newUser, function(err, res) {
+          if (err) throw err;
+          httpRes.json({
+            type: "success",
+            message: "Erfolgreich registriert"
           });
-        } else {
-          httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
-        }
-      });
+        });
+      } else {
+        httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+      }
+    });
   });
 };
 
@@ -93,12 +90,10 @@ const saveBlockchain = blockchain =>
         reject(err);
       }
       if (res !== null) {
-        db
-          .collection("blockchain")
-          .updateOne({ _id: id }, { blockchain, lastUpdate: now }, (e, r) => {
-            if (e) throw e;
-            resolve(blockchain);
-          });
+        db.collection("blockchain").updateOne({ _id: id }, { blockchain, lastUpdate: now }, (e, r) => {
+          if (e) throw e;
+          resolve(blockchain);
+        });
       } else {
         db.collection("blockchain").save(
           {
@@ -139,12 +134,10 @@ const findUsersByPublicKey = publicKeys =>
 
 const findPublicKeyByUsername = name =>
   new Promise((resolve, reject) => {
-    db
-      .collection("users")
-      .findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+    db.collection("users").findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
   });
 
 module.exports = {
@@ -155,7 +148,5 @@ module.exports = {
   register,
   printAllUsers,
   findUsersByPublicKey,
-  findPublicKeyByUsername,
-  printBlockchain,
-    test
+  findPublicKeyByUsername
 };

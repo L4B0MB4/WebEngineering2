@@ -6,13 +6,7 @@ const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const {
-  createFeed,
-  handleLogin,
-  mergeUserToBlock,
-  broadcastOrEmit,
-  printFeedNewerThanTwoDays
-} = require("./utils");
+const { createFeed, handleLogin, mergeUserToBlock, broadcastOrEmit } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
   connect,
@@ -22,9 +16,7 @@ const {
   register,
   printAllUsers,
   findUsersByPublicKey,
-  findPublicKeyByUsername,
-  printBlockchain,
-    test
+  findPublicKeyBy
 } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
@@ -146,13 +138,9 @@ app
       blockchain.chain = chain.blockchain;
     }
 
-    exp.get("/index", async (req, res) => {
+    exp.get("/index", (req, res) => {
       res.redirect("/");
     });
-
-      exp.get("/print", async (req, res) => {
-          printFeedNewerThanTwoDays(req, res, blockchain.chain);
-      });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
       const query = {
@@ -175,9 +163,7 @@ app
     });
 
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info) =>
-        handleLogin(err, user, info, req, res)
-      )(req, res, next);
+      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
     });
 
     exp.get("/api/blockchain/feed", async (req, res) => {
@@ -191,13 +177,7 @@ app
     });
 
     exp.post("/api/user/register", (req, res) => {
-      if (
-        !req.body.name ||
-        !req.body.email ||
-        !req.body.publicKey ||
-        !req.body.privateKey ||
-        !req.body.password
-      ) {
+      if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
         res.json({ type: "error", message: "Bitte alles ausfüllen!" });
       } else {
         register(req.body.email, req.body, res);
@@ -210,8 +190,7 @@ app
     });
 
     exp.post("/api/user/getPublicKey", async (req, res) => {
-      if (!req.body.username)
-        return res.json({ type: "error", message: "Benutzername fehlt!" });
+      if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
