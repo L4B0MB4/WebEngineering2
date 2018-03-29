@@ -5,9 +5,7 @@ export default class Header extends Component {
     render() {
         return (
             <Fragment>
-                <head>
-                    <title>Golddigger IO</title>
-                </head>
+                <title>Golddigger IO</title>
                 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css " />
                 <link rel="stylesheet" href={this.props.relPath ? this.props.relPath + "static/style.css" : "static/style.css"} />
                 <Container fluid>
