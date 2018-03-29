@@ -1,18 +1,10 @@
 import React, { Component, Fragment } from "react";
-import {
-  Image,
-  Item,
-  Segment,
-  Feed,
-  Icon,
-  Label,
-  Grid,
-  Pagination,
-  Button
-} from "semantic-ui-react";
+import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button } from "semantic-ui-react";
 import {
   receiveUser,
-  receiveVisitedUser
+  receiveVisitedUser,
+  receiveVisitedUserContent,
+  receiveVisitedUserFollower
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -20,15 +12,23 @@ import withRedux from "next-redux-wrapper";
 import initStore from "../components/redux/store";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
-const request = new Request();
+import { getDate } from "../components/utils/utils";
+import FeedElement from "../components/FeedElement";
 
+var request;
 class VisitorPage extends Component {
   static async getInitialProps({ store, query, req }) {
+    const baseUrl = `${req.protocol}://${req.get("Host")}`;
+    request = new Request(baseUrl);
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
     } else {
     }
+    let { data } = await request.callGetUserContent(query.visitedUser.name);
+    store.dispatch(receiveVisitedUserContent(data));
+    data = (await request.callGetUserFollower(query.visitedUser.name)).data;
+    store.dispatch(receiveVisitedUserFollower(data));
     return {};
   }
 
@@ -46,8 +46,7 @@ class VisitorPage extends Component {
   }
 
   handleFollow = async username => {
-    let publicKey = (await request.callGetPublicKey({ username })).data
-      .publicKey;
+    let publicKey = (await new Request().callGetPublicKey({ username })).data.publicKey;
     this.blockchainWrapper.newTransaction("follow", {
       following: publicKey
     });
@@ -56,16 +55,12 @@ class VisitorPage extends Component {
   render() {
     return (
       <Fragment>
-        <Layout relPath="../">
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper}>
           <Grid className="own-grid">
             <Grid.Row>
-            <div className="-full-width -padding-10">
+              <div className="-full-width -padding-10">
                 <h1>Name, Gesamtansehen</h1>
-                <Button
-                  animated="fade"
-                  className="follow-button"
-                  onClick={() => this.handleFollow(this.props.visitedUser.name)}
-                >
+                <Button animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
                   <Button.Content visible>
                     <Icon name="add user" size="large" />
                   </Button.Content>
@@ -80,32 +75,21 @@ class VisitorPage extends Component {
                   <h3>Follower</h3>
                   <Segment raised compact className="-full-width -segment">
                     <Item.Group>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Tino Metzger</Item.Header>
-                        </Item.Content>
-                      </Item>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Felix Waldbach</Item.Header>
-                        </Item.Content>
-                      </Item>
-                      <Item>
-                        <Item.Image size="tiny" src="../static/bild.jpeg" />
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header>Lars Bommersbach</Item.Header>
-                        </Item.Content>
-                      </Item>
+                      {this.props.followers
+                        ? this.props.followers.map(follower => {
+                            if (!follower.user) return null;
+                            return (
+                              <Item key={follower.user.name}>
+                                <Item.Image size="tiny" src="../static/bild.jpeg" />
+                                <Item.Content verticalAlign="middle">
+                                  <Item.Header>{follower.user.name}</Item.Header>
+                                </Item.Content>
+                              </Item>
+                            );
+                          })
+                        : null}
                     </Item.Group>
-                    <Pagination
-                      size="mini"
-                      siblingRange="0"
-                      boundaryRange="0"
-                      defaultActivePage={1}
-                      totalPages={10}
-                    />
+                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
                   </Segment>
                 </div>
               </Grid.Column>
@@ -115,68 +99,23 @@ class VisitorPage extends Component {
                   <h3>Posts</h3>
                   <Segment raised compact className="-full-width -segment">
                     <Feed>
-                      <Feed.Event>
-                        <Feed.Label>
-                          <img src="../static/bild.jpeg" />
-                        </Feed.Label>
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <Feed.User>Lars Bommersbach</Feed.User> as a
-                            friend
-                            <Feed.Date>1 Hour Ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />4 Likes
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
-                      <Feed.Event>
-                        <Feed.Label image="../static/bild.jpeg" />
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <a>2 new illustrations</a>
-                            <Feed.Date>4 days ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Extra images>
-                            <a>
-                              <img src="../static/bild.jpeg" />
-                            </a>
-                            <a>
-                              <img src="../static/bild.jpeg" />
-                            </a>
-                          </Feed.Extra>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />1 Like
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
-                      <Feed.Event>
-                        <Feed.Label image="../static/bild.jpeg" />
-                        <Feed.Content>
-                          <Feed.Summary>
-                            Added <Feed.User>Tino Metzger</Feed.User> as a
-                            friend
-                            <Feed.Date>2 Days Ago</Feed.Date>
-                          </Feed.Summary>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />8 Likes
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
+                      {this.props.userContent
+                        ? this.props.userContent.map(item => {
+                            if (!this.props.visitedUser) return null;
+                            return (
+                              <FeedElement
+                                item={item}
+                                user={this.props.visitedUser}
+                                handleShare={this.handleShare}
+                                handleLike={this.handleLike}
+                                request={request}
+                                key={item.timestamp}
+                              />
+                            );
+                          })
+                        : null}
                     </Feed>
-                    <Pagination
-                      size="mini"
-                      siblingRange="0"
-                      boundaryRange="0"
-                      defaultActivePage={1}
-                      totalPages={4}
-                    />
+                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
                   </Segment>
                 </div>
               </Grid.Column>
@@ -216,9 +155,9 @@ const mapDispatchToProps = dispatch => ({});
 
 const mapStateToProps = state => ({
   user: state.commonReducer.user,
-  visitedUser: state.commonReducer.visitedUser
+  visitedUser: state.commonReducer.visitedUser,
+  userContent: state.commonReducer.userContent,
+  followers: state.commonReducer.followers
 });
 
-export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(
-  VisitorPage
-);
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(VisitorPage);

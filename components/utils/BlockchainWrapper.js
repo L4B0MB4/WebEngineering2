@@ -62,8 +62,10 @@ export default class BlockchainWrapper {
   addToWatignTransactions(transaction) {
     this.waitForTransaction.push(transaction);
   }
-  
+
   isEquivalent(a, b) {
+    console.log(a);
+    console.log(b);
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
     if (aProps.length != bProps.length) {
@@ -72,7 +74,10 @@ export default class BlockchainWrapper {
 
     for (var i = 0; i < aProps.length; i++) {
       var propName = aProps[i];
-      if (a[propName] !== b[propName]) {
+      console.log(typeof a[propName]);
+      if (a[propName] !== b[propName] && typeof a[propName] !== "object") {
+        return false;
+      } else if (typeof a[propName] === "object" && !this.isEquivalent(a[propName], b[propName])) {
         return false;
       }
     }
@@ -87,13 +92,9 @@ export default class BlockchainWrapper {
       let callback = this.waitForTransaction[i].callback;
       for (let j = this.blockchain.chain.length - 1; j >= 0; j--) {
         let chaintr = this.blockchain.chain[j].transactions[0];
-        if (
-          tr &&
-          chaintr &&
-          tr.recipient == chaintr.recipient &&
-          tr.sender == chaintr.sender &&
-          this.isEquivalent(tr.value, chaintr.value)
-        ) {
+        if (chaintr) chaintr.secret = undefined;
+        if (tr) tr.secret = undefined;
+        if (tr && chaintr && this.isEquivalent(tr, chaintr)) {
           handled.push(this.waitForTransaction[i]);
           if (callback) callback();
           break;
@@ -127,13 +128,26 @@ export default class BlockchainWrapper {
   }
 
   newTransaction(type, data, callback) {
-    let transaction = this.blockchain.create_transaction(
-      this.blockchain.public_adress,
-      this.blockchain.public_adress,
-      type,
-      data
-    );
+    let transaction = this.blockchain.create_transaction(this.blockchain.public_adress, type, data);
     this.actions.push({ type: "transaction", transaction, callback });
     this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
+  }
+
+  alreadyLiked(previousHash, userKey) {
+    for (let i = 0; i < this.blockchain.chain.length; i++) {
+      let block = this.blockchain.chain[i];
+      if (block.transactions.length > 0) {
+        let tr = block.transactions[0];
+        if (
+          tr.type === "like" &&
+          tr.data.previousHash === previousHash &&
+          tr.data.userKey === userKey &&
+          block.transactions[0].sender === this.blockchain.public_adress
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

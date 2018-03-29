@@ -1,5 +1,4 @@
-const _ = require("lodash");
-const mongoUrl = "mongodb://localhost:27017/local";
+const mongoUrl = "mongodb://127.0.0.1:27017/local";
 const { MongoClient } = require("mongodb");
 let db;
 
@@ -56,13 +55,13 @@ const register = (email, body, httpRes) => {
         };
         db.collection("users").insertOne(newUser, function(err, res) {
           if (err) throw err;
-          httpRes.json({
+          return httpRes.json({
             type: "success",
             message: "Erfolgreich registriert"
           });
         });
       } else {
-        httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+        return httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
       }
     });
   });

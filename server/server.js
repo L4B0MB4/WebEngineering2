@@ -1,12 +1,24 @@
 const express = require("express");
 const http = require("http");
+const path = require("path");
 const socketIO = require("socket.io");
-import { Blockchain } from "../components/utils/blockchain";
+import { Blockchain } from "./blockchain";
 const blockchain = new Blockchain();
 const exp = express();
+const fileUpload = require("express-fileupload");
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const { createFeed, handleLogin, mergeUserToBlock, broadcastOrEmit } = require("./utils");
+const {
+  createFeed,
+  handleLogin,
+  mergeUserToBlock,
+  broadcastOrEmit,
+  getLikesByPreviousHash,
+  getContentOfUser,
+  getFollower,
+  getAnsehen,
+  hasEnoughAnsehen
+} = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
   connect,
@@ -16,7 +28,8 @@ const {
   register,
   printAllUsers,
   findUsersByPublicKey,
-  findPublicKeyBy
+  findPublicKeyBy,
+  findPublicKeyByUsername
 } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
@@ -27,19 +40,13 @@ const flash = require("connect-flash");
 const secret = {
   value: Math.random()
 };
-
 function setCurrentSecret() {
   secret.value = Math.random();
 }
-
 var socketsConnected = 0;
-
 setInterval(setCurrentSecret, 5000);
-
 const server = http.createServer(exp);
-
 const io = socketIO(server);
-
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
@@ -54,16 +61,19 @@ io.on("connection", socket => {
     socket.emit("solve transaction code", encrypted);
   });
 
-  socket.on("new transaction", data => {
+  socket.on("new transaction", async data => {
     const transaction = {
       sender: data.sender,
-      recipient: data.recipient,
-      value: data.value
+      type: data.type,
+      data: data.data,
+      timestamp: data.timestamp
     };
-    broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    if ((data.type === "share" && hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    }
   });
 
-  socket.on("new block", block => {
+  socket.on("new block", async block => {
     let test_chain = [];
     test_chain.push(...blockchain.chain);
     test_chain.push(block);
@@ -71,7 +81,7 @@ io.on("connection", socket => {
       blockchain.chain = test_chain;
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
-      saveBlockchain(blockchain.chain);
+      await saveBlockchain(blockchain.chain);
     }
   });
   socket.on("get blockchain", () => {
@@ -108,7 +118,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 exp.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
+
 exp.use(bodyParser.json());
 
 exp.use(
@@ -121,6 +131,7 @@ exp.use(
 
 exp.use(passport.initialize());
 exp.use(passport.session());
+exp.use(fileUpload());
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -155,6 +166,8 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
+      let Ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
+      visitedUser.ansehen = Ansehen;
       query = {
         user: req.user,
         visitedUser
@@ -162,23 +175,35 @@ app
       return app.render(req, res, "/visitorpage", query);
     });
 
-    exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
-    });
-
     exp.get("/api/blockchain/feed", async (req, res) => {
       let feed = await createFeed(req, res, blockchain.chain);
       res.json(feed);
     });
 
-    exp.get("/api/blockchain/save", (req, res) => {
-      saveBlockchain(blockchain.chain);
-      res.json(blockchain.chain);
+    exp.get("/api/blockchain/getUserFeed", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const feed = await getContentOfUser(blockchain.chain, visitedUser.publicKey);
+      res.json(feed);
+    });
+    exp.get("/api/blockchain/getUserFollower", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
+    });
+
+    exp.post("/api/user/login", function(req, res, next) {
+      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
     });
 
     exp.post("/api/user/register", (req, res) => {
       if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
-        res.json({ type: "error", message: "Bitte alles ausfüllen!" });
+        return res.json({ type: "error", message: "Bitte alles ausfüllen!" });
       } else {
         register(req.body.email, req.body, res);
       }
@@ -193,6 +218,21 @@ app
       if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await findPublicKeyByUsername(req.body.username);
       res.json(user);
+    });
+
+    exp.post("/api/uploadPicture", function(req, res) {
+      if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
+      const file = req.files.uploadedFile;
+      const filename = file.md5 + Date.now();
+      file.mv(`${__dirname}/../temp/${filename}`, function(err) {
+        if (err) return res.status(500).send(err);
+        res.send({ filename });
+      });
+    });
+
+    exp.get("/api/picture/:filename", (req, res) => {
+      let p = path.resolve(`${__dirname}/../temp/`);
+      res.sendFile(`${p}/${req.params.filename}`);
     });
 
     exp.get("*", (req, res) => {
