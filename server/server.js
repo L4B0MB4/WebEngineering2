@@ -28,6 +28,7 @@ const {
   register,
   printAllUsers,
   findUsersByPublicKey,
+  findPublicKeyBy,
   findPublicKeyByUsername
 } = require("./database");
 const passport = require("passport"),
@@ -148,7 +149,7 @@ app
       blockchain.chain = chain.blockchain;
     }
 
-    exp.get("/index", async (req, res) => {
+    exp.get("/index", (req, res) => {
       res.redirect("/");
     });
 

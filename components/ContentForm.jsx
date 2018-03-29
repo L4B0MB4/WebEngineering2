@@ -3,7 +3,9 @@ import { Button, Checkbox, Form, TextArea, Input } from "semantic-ui-react";
 import Request from "./utils/request";
 
 export default class ContentForm extends Component {
-  state = {};
+  state = {
+    content: " "
+  };
 
   onSuccessFullyPosted = () => {
     this.setState({ buttonSucess: true, buttonLoading: false });

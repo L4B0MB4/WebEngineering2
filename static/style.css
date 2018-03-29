@@ -135,16 +135,8 @@ body {
   margin-right: 10px !important;
 }
 
-.like-button {
+.-like-button {
   background-color: #daa520 !important;
-  position: absolute !important;
-  bottom: 10px !important;
-}
-
-.share-button {
-  position: absolute !important;
-  bottom: 10px !important;
-  right: 70px !important;
 }
 
 .-full-width {
@@ -186,7 +178,33 @@ h1 {
   top: 10px !important;
   right: 10px !important;
 }
-
 .upload {
   color: #f3d5bd !important;
+}
+
+.-feed-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  width: 100%;
+  max-height: 275px;
+  max-width: 375px;
+  object-fit: cover;
+}
+
+.-feed-content-wrapper {
+  display: inline-block;
+  width: 100%;
+}
+
+.-float-left {
+  float: left !important;
+}
+.-float-right {
+  float: right !important;
+}
+.-feed-font-size {
+  font-size: 16px !important;
+  font-stretch: narrower;
 }
