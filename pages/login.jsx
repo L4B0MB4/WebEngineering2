@@ -23,7 +23,7 @@ class Login extends Component {
         return (
             <div>
                 <OwnHeader />
-                DAS IST EIN TEST 2
+                DAS IST EIN TEST 3
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={5} />
