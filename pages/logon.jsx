@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class logon extends Component {
   render() {
     return (
-      <form action="/login" method="post">
+      <form action="/api/user/login" method="post">
         <div>
           <label>Username:</label>
           <input type="text" name="username" />

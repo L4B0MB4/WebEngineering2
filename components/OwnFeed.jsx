@@ -1,17 +1,41 @@
 import React, { Component } from "react";
-import { Feed, Icon } from "semantic-ui-react";
+import { Button, Feed, Icon } from "semantic-ui-react";
+import Request from "../components/utils/request";
+const request = new Request();
+
 
 class OwnFeed extends Component {
+
+  handleLike=async(username,previousHash)=>
+  {
+    let publicKey = (await request.callGetPublicKey({username})).data.publicKey
+    this.props.blockchainWrapper.newTransaction("like",{previousHash,userKey:publicKey});
+  }
+
   render() {
     return (
       <Feed>
-        {this.props.blockchainFeed.map(item => {
+        {this.props.blockchainFeed?this.props.blockchainFeed.map(item => {
+          if(item.user==undefined)return null;
           return (
             <Feed.Event key={item.hash}>
               <Feed.Content>
                 <Feed.Summary>
                 <Feed.Date>{this.getDate(item.timestamp)}</Feed.Date><br/>
-                  <a>Blabla</a> posted:
+                  <a>{item.user.name}</a> posted:
+                  <br/>
+                  <Button size="mini" animated="fade" onClick={()=>this.handleFollow(item.user.name)}>
+                    <Button.Content visible>
+                      <Icon name="add user" />
+                    </Button.Content>
+                    <Button.Content hidden>Follow</Button.Content>
+                  </Button>
+                  <Button className="like-button" size="mini" animated="fade" onClick={()=>this.handleLike(item.user.name,item.previousHash)} >
+                    <Button.Content visible>
+                      <Icon name="heart" />
+                    </Button.Content>
+                    <Button.Content hidden>Like</Button.Content>
+                  </Button>
                 </Feed.Summary>
                 <Feed.Extra text>{item.data}</Feed.Extra>
                 <Feed.Meta>
@@ -23,7 +47,7 @@ class OwnFeed extends Component {
               </Feed.Content>
             </Feed.Event>
           );
-        })}
+        }):null}
       </Feed>
     );
   }

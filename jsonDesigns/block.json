@@ -1,0 +1,24 @@
+
+{
+    "recipient":"public key",
+    "sender":"public key",
+    "value": 
+    {
+        "type" :"z.B. reward|content|like usw",
+        "data":{//frei wählbar pro type
+        },
+        "timestamp":"timestamp"
+    }
+    
+}
+
+"follow data":
+{
+    "following": "user public key"
+}
+
+"like data":
+{
+    "previousHash": "previousHash property of liked content",
+    "userKey": "public Key of user"
+}

@@ -1,3 +1,5 @@
+const _ = require("lodash");
+const query = require("underscore-query") (_);
 const mongoUrl = "mongodb://localhost:27017/local";
 const { MongoClient } = require("mongodb");
 let db;
@@ -14,37 +16,9 @@ const connect = () => {
     });
   });
 };
-const saveUser = (id, user) =>
-  new Promise((resolve, reject) => {
-    const now = Date.now();
-    db.collection("users").findOne({ _id: id }, {}, (err, res) => {
-      if (err) {
-        reject(err);
-      }
-      if (res !== null) {
-        db
-          .collection("users")
-          .updateOne({ _id: id }, { user, lastUpdate: now }, (e, r) => {
-            if (e) throw e;
-            resolve(user);
-          });
-      } else {
-        db.collection("users").save(
-          {
-            _id: id,
-            user,
-            lastUpdate: now,
-            created: now
-          },
-          { w: 1 },
-          resolve
-        );
-      }
-    });
-  });
 
-const login = (email, password, done) => {
-  new Promise((resolve, reject) => {
+const login = (email, password) => {
+  return new Promise((resolve, reject) => {
     db.collection("users").findOne(
       {
         $or: [
@@ -61,67 +35,84 @@ const login = (email, password, done) => {
       {},
       (err, res) => {
         if (res) {
-          done(null, res);
+          resolve(res);
         } else {
-          done(false);
+          resolve(null);
         }
-        console.log("Successfully logged in: ", res);
       }
     );
   });
 };
 
-const register = (email, password) => {
-  new Promise((resolve, reject) => {
-    db.collection("users").findOne({ email: email }, {}, (err, res) => {
-      console.log(res);
-      var newUser = { email: email, password: password };
-      db.collection("users").insertOne(newUser, function(err, res) {
-        if (err) throw err;
-        console.log("1 Document inserted: ", newUser);
+const register = (email, body, httpRes) => {
+  return new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
+        if (res === null) {
+          var newUser = {
+            email: body.email,
+            name: body.name,
+            publicKey: body.publicKey,
+            privateKey: body.privateKey,
+            password: body.password
+          };
+          db.collection("users").insertOne(newUser, function(err, res) {
+            if (err) throw err;
+            httpRes.json({
+              type: "success",
+              message: "Erfolgreich registriert"
+            });
+          });
+        } else {
+          httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+        }
       });
-    });
   });
 };
 
 const printAllUsers = () => {
-  new Promise((resolve, reject) => {
-      db.collection("users").find({}).toArray(function (err, res) {
-          if(err) throw err;
-          console.log("All users: ", res);
+  return new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .find({})
+      .toArray(function(err, res) {
+        if (err) throw err;
+        let users = res;
+        resolve(users);
       });
   });
 };
 
-const saveBlockchain = (blockchain) =>
-    new Promise((resolve, reject) => {
-        const id = 1;
-        const now = Date.now();
-        db.collection("blockchain").findOne({_id: id}, {}, (err, res) => {
-            if (err) {
-                reject(err);
-            }
-            if (res !== null) {
-                db
-                    .collection("blockchain")
-                    .updateOne({_id: id}, {blockchain, lastUpdate: now}, (e, r) => {
-                        if (e) throw e;
-                        resolve(blockchain);
-                    });
-            } else {
-                db.collection("blockchain").save(
-                    {
-                        _id: id,
-                        blockchain,
-                        lastUpdate: now,
-                        created: now
-                    },
-                    {w: 1},
-                    resolve
-                );
-            }
-        });
+const saveBlockchain = blockchain =>
+  new Promise((resolve, reject) => {
+    const id = 1;
+    const now = Date.now();
+    db.collection("blockchain").findOne({ _id: id }, {}, (err, res) => {
+      if (err) {
+        reject(err);
+      }
+      if (res !== null) {
+        db
+          .collection("blockchain")
+          .updateOne({ _id: id }, { blockchain, lastUpdate: now }, (e, r) => {
+            if (e) throw e;
+            resolve(blockchain);
+          });
+      } else {
+        db.collection("blockchain").save(
+          {
+            _id: id,
+            blockchain,
+            lastUpdate: now,
+            created: now
+          },
+          { w: 1 },
+          resolve
+        );
+      }
     });
+  });
 
 const getBlockchain = () =>
   // this is using the same db connection
@@ -135,13 +126,36 @@ const getBlockchain = () =>
     });
   });
 
+const findUsersByPublicKey = publicKeys =>
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .find({ publicKey: { $in: [...publicKeys] } }, { name: 1, publicKey: 1 })
+      .toArray((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
+const findPublicKeyByUsername = name =>
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
 
 module.exports = {
-    connect,
-    saveUser,
-    getBlockchain,
-    saveBlockchain,
-    login,
-    register,
-    printAllUsers
+  connect,
+  getBlockchain,
+  saveBlockchain,
+  login,
+  register,
+  printAllUsers,
+  findUsersByPublicKey,
+  findPublicKeyByUsername,
+  printBlockchain,
+    test
 };

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Blockchain } from "./blockchain";
 import io from "socket.io-client";
 import NodeRSA from "node-rsa";
+import _ from "lodash";
 
 const blockchain = new Blockchain();
 const rsaKeys = new NodeRSA({ b: 512 });
@@ -10,10 +11,29 @@ export default class BlockchainWrapper {
   constructor() {
     this.blockchain = blockchain;
     this.actions = [];
+    this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
+    this.waitForTransaction = [];
   }
 
-  init() {
+  newKeys = () => {
+    rsaKeys.generateKeyPair(512);
     this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
+  };
+
+  getPublicKey = () => {
+    return this.blockchain.public_adress;
+  };
+
+  getPrivateKey = () => {
+    return this.blockchain.private_adress;
+  };
+
+  init(priv, onUpdate) {
+    rsaKeys.importKey(priv);
+    this.blockchain.public_adress = rsaKeys.exportKey("public");
+    this.blockchain.private_adress = rsaKeys.exportKey("private");
     this.socket = io({ endpoint: "http://localhost:3000" });
     this.socket.emit("init", { message: "init" });
     this.socket.on("blockchain", data => {
@@ -23,19 +43,67 @@ export default class BlockchainWrapper {
     this.socket.on("mine", transaction => {
       this.actions.push({ type: "mine", transaction });
       this.socket.emit("get blockchain");
-      console.log("mine")
-      console.log(transaction)
     });
     this.socket.on("get blockchain", chain => {
       this.blockchain.chain = chain;
       this.runAction();
-      console.log("get blockchain")
-      console.log(chain)
+      console.log("get blockchain");
+      console.log(chain);
+      if (onUpdate) onUpdate();
+      this.handleWaitingTransactions();
     });
 
     this.socket.on("solve transaction code", code => {
       this.secret = rsaKeys.decrypt(code);
       this.runAction();
+    });
+  }
+
+  addToWatignTransactions(transaction) {
+    this.waitForTransaction.push(transaction);
+  }
+  
+  isEquivalent(a, b) {
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
+    if (aProps.length != bProps.length) {
+      return false;
+    }
+
+    for (var i = 0; i < aProps.length; i++) {
+      var propName = aProps[i];
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  handleWaitingTransactions() {
+    let handled = [];
+    for (let i = 0; i < this.waitForTransaction.length; i++) {
+      let tr = this.waitForTransaction[i].transaction;
+      let callback = this.waitForTransaction[i].callback;
+      for (let j = this.blockchain.chain.length - 1; j >= 0; j--) {
+        let chaintr = this.blockchain.chain[j].transactions[0];
+        if (
+          tr &&
+          chaintr &&
+          tr.recipient == chaintr.recipient &&
+          tr.sender == chaintr.sender &&
+          this.isEquivalent(tr.value, chaintr.value)
+        ) {
+          handled.push(this.waitForTransaction[i]);
+          if (callback) callback();
+          break;
+        }
+      }
+    }
+    this.waitForTransaction = this.waitForTransaction.filter(function(el) {
+      let x = _.find(handled, el);
+      if (x) return false;
+      return true;
     });
   }
 
@@ -48,6 +116,7 @@ export default class BlockchainWrapper {
         break;
       case "transaction":
         this.sendTransaction(action.transaction);
+        this.addToWatignTransactions(action);
         break;
     }
   }
@@ -57,14 +126,14 @@ export default class BlockchainWrapper {
     this.socket.emit("new transaction", transaction);
   }
 
-  newTransaction(data) {
+  newTransaction(type, data, callback) {
     let transaction = this.blockchain.create_transaction(
       this.blockchain.public_adress,
       this.blockchain.public_adress,
-      "content",
+      type,
       data
     );
-    this.actions.push({ type: "transaction", transaction });
+    this.actions.push({ type: "transaction", transaction, callback });
     this.socket.emit("get transaction code", rsaKeys.exportKey("public"));
   }
 }

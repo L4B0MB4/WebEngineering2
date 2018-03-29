@@ -20,24 +20,39 @@ src: url("fonts/moving_skate-webfont.woff2") format("woff2");
     border-radius: 0px !important;
 }
 
-.left-sidebar{
+.-sidebars{
     background-color:   #C7E1BA !important;
-    height: 100% !important;    
+    height: 100% !important;
+    position: fixed !important;
+    width: inherit !important;
+    margin: inherit !important;
+    padding: 20px !important;
 }
 
 .-feed{
-    background-color: #F6E4CC !important;
-}
-
-.right-sidebar{
-    background-color: #C7E1BA !important;
-    height: 100% !important;
+   margin: inherit !important;
+   padding: 30px !important;
 }
 
 .-menu{
-    background-color: #F6E4CC !important;
+    width: inherit !important;
+    margin: inherit !important;
+    position: fixed !important;
+    top: 75% !important;
+    transform: translateY(-25%) !important;
+    border-top: none !important;
 }
 
+.grid-column{
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.active.item{
+    background-color: #F6E4CC !important;
+    border-color: #DAA520 !important;
+}
 
 body
 {
@@ -45,3 +60,87 @@ body
     background-color: #F6E4CC !important;
 }
 
+.-segment{
+    border-top-color: #DAA520 !important;
+}
+
+.-list{
+    position: relative !important;
+    top: 70% !important;
+    transform: translateY(-30%) !important;
+}
+
+.list-item{
+    background-color: #F6E4CC !important;
+    width: 80% !important;
+}
+
+.-avatar {
+    width: 40% !important;
+    border-radius: 50% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 2em !important;
+}
+
+.-loginform{
+    background-color: #F3D5BD !important;
+    margin-top: 3em !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    padding: 2em 3em 3em 3em !important;
+    border-radius: 0.3em !important;
+}
+
+.ui.center.aligned.page.grid.-login-btn-form{
+    margin-top: 2em !important;
+}
+
+.-psw{
+    align-self: center !important;
+}
+
+.ui.button.-login-btn {
+    background-color: #DAA520 !important;
+    color: white !important;
+    width: 25% !important;
+}
+
+.ui.form .field>label {
+    font-size: 1em !important;
+}
+
+.div.field.-login-field{
+    margin-top: 2em !important;
+}
+
+.-reg-span{
+    margin-top: 0.9em !important;
+}
+
+.follow-button{
+    background-color: #DAA520 !important;
+    z-index: 1 !important;
+    float: right !important;
+}
+
+.like-button{
+    background-color: #DAA520 !important;
+}
+
+.-full-width
+{
+    width:100%;
+}
+.-padding-10 
+{
+    padding:10px;
+}
+.-text-right
+{
+    text-align: right;
+}
+
+h1{
+    margin: 0 !important;
+    display: inline-block !important;
+}

@@ -6,21 +6,38 @@ const blockchain = new Blockchain();
 const exp = express();
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const { createFeed } = require("./utils");
+const {
+  createFeed,
+  handleLogin,
+  mergeUserToBlock,
+  broadcastOrEmit
+} = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
-const { saveUser, connect, saveBlockchain, getBlockchain, login, register, printAllUsers } = require("./database");
-const bodyParser = require('body-parser');
+const {
+  connect,
+  saveBlockchain,
+  getBlockchain,
+  login,
+  register,
+  printAllUsers,
+  findUsersByPublicKey,
+  findPublicKeyByUsername
+} = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
+const bodyParser = require("body-parser");
 const session = require("express-session");
+const flash = require("connect-flash");
 
-const secrect = {
+const secret = {
   value: Math.random()
 };
 
 function setCurrentSecret() {
-  secrect.value = Math.random();
+  secret.value = Math.random();
 }
+
+var socketsConnected = 0;
 
 setInterval(setCurrentSecret, 5000);
 
@@ -30,13 +47,15 @@ const io = socketIO(server);
 
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
+exp.use(flash());
 
 io.on("connection", socket => {
+  socketsConnected++;
   socket.emit("blockchain", blockchain.chain);
 
   socket.on("get transaction code", publicKey => {
     rsaKeys.importKey(publicKey, "public");
-    let encrypted = rsaKeys.encrypt(secrect.value, "base64");
+    let encrypted = rsaKeys.encrypt(secret.value, "base64");
     socket.emit("solve transaction code", encrypted);
   });
 
@@ -46,7 +65,7 @@ io.on("connection", socket => {
       recipient: data.recipient,
       value: data.value
     };
-    socket.broadcast.emit("mine", transaction);
+    broadcastOrEmit(socket, "mine", transaction, socketsConnected);
   });
 
   socket.on("new block", block => {
@@ -57,6 +76,7 @@ io.on("connection", socket => {
       blockchain.chain = test_chain;
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
+      saveBlockchain(blockchain.chain);
     }
   });
   socket.on("get blockchain", () => {
@@ -64,7 +84,7 @@ io.on("connection", socket => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    socketsConnected--;
   });
 });
 
@@ -77,9 +97,13 @@ passport.deserializeUser((obj, done) => {
 });
 
 passport.use(
-  new LocalStrategy(function(username, password, done) {
-    console.log(username,password)
-    login(username,password,done);
+  new LocalStrategy(async function(username, password, done) {
+    let user = await login(username, password);
+    if (user) {
+      return done(null, user);
+    } else {
+      return done({ message: "Fehler beim Login" });
+    }
   })
 );
 
@@ -112,80 +136,89 @@ function ensureAuthenticated(req, res, next) {
 app
   .prepare()
   .then(async () => {
-      exp.use(express.static('./static/'));
-      const database = await connect();
-      const chain = await getBlockchain();
-      if (chain !== null) {
-          console.log(chain);
-          blockchain.chain = chain.blockchain;
+    exp.use(express.static("./static/"));
+    const database = await connect();
+    const chain = await getBlockchain();
+    if (chain !== null) {
+      blockchain.chain = chain.blockchain;
+    }
+
+    exp.get("/index", async (req, res) => {
+      res.redirect("/");
+    });
+
+    exp.get("/", ensureAuthenticated, async (req, res) => {
+      const query = {
+        blockchainFeed: await createFeed(req, res, blockchain.chain),
+        user: req.user
+      };
+      return app.render(req, res, "/index", query);
+    });
+
+    exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
+      let query = {
+        ...req.params
+      };
+      let visitedUser = await findPublicKeyByUsername(query.username);
+      query = {
+        user: req.user,
+        visitedUser
+      };
+      return app.render(req, res, "/visitorpage", query);
+    });
+
+    exp.post("/api/user/login", function(req, res, next) {
+      passport.authenticate("local", (err, user, info) =>
+        handleLogin(err, user, info, req, res)
+      )(req, res, next);
+    });
+
+    exp.get("/api/blockchain/feed", async (req, res) => {
+      let feed = await createFeed(req, res, blockchain.chain);
+      res.json(feed);
+    });
+
+    exp.get("/api/blockchain/save", (req, res) => {
+      saveBlockchain(blockchain.chain);
+      res.json(blockchain.chain);
+    });
+
+    exp.post("/api/user/register", (req, res) => {
+      if (
+        !req.body.name ||
+        !req.body.email ||
+        !req.body.publicKey ||
+        !req.body.privateKey ||
+        !req.body.password
+      ) {
+        res.json({ type: "error", message: "Bitte alles ausfüllen!" });
+      } else {
+        register(req.body.email, req.body, res);
       }
+    });
 
+    exp.get("/api/user/getAllUsers", async (req, res) => {
+      let users = await printAllUsers();
+      res.json(users);
+    });
 
-      exp.get("/", async (req, res) => {
-          const query = {
-              blockchainFeed: createFeed(req, res, blockchain.chain)
-          };
-          return app.render(req, res, "/index", query);
-      });
+    exp.post("/api/user/getPublicKey", async (req, res) => {
+      if (!req.body.username)
+        return res.json({ type: "error", message: "Benutzername fehlt!" });
+      let user = await findPublicKeyByUsername(req.body.username);
+      res.json(user);
+    });
 
-      exp.post(
-          "/api/user/login",
-          passport.authenticate("local", {
-              successRedirect: "/success",
-              failureRedirect: "/login",
-              failureFlash: true
-          })
-      );
-      exp.get("/api/blockchain/feed", (req, res) => {
-          res.json(createFeed(req, res, blockchain.chain));
-      });
+    exp.get("*", (req, res) => {
+      return handle(req, res);
+    });
 
-      exp.get("/api/blockchain/save", (req, res) => {
-          saveBlockchain(blockchain.chain);
-          res.json(blockchain.chain);
-      });
-
-      exp.post("/api/user/register", (req, res) => {
-          if (!req.body.password || !req.body.email) {
-              console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.email);
-          } else {
-              console.log("Register...");
-              register(req.body.email, req.body.password);
-          }
-      });
-
-      exp.post("/api/user/loginOld", (req, res) => {
-          exp.get("/api/user/getAllUsers", (req, res) => {
-              printAllUsers();
-          });
-      });
-
-          exp.post("/api/user/login", (req, res) => {
-              console.log("Posting...");
-              if (!req.body.name || !req.body.password) {
-                  console.log("Error signing in...");
-                  console.log("Bitte vollständige Daten eingeben: ", req.body.name, ", ", req.body.password);
-              } else {
-                  console.log("Logging in...", req.body.name, ", ", req.body.password);
-                  login(req.body.name, req.body.password);
-              }
-          });
-
-          exp.get("/success", ensureAuthenticated, (req, res) => {
-              return handle(req, res);
-          })
-
-
-          exp.get("*", (req, res) => {
-              return handle(req, res);
-          });
-
-          server.listen(3000, err => {
-              if (err) throw err;
-              console.log("> Ready on http://localhost:3000");
-          });
-      })
-          .catch(ex => {
-              console.error(ex.stack);
-              process.exit(1);
-          });
+    server.listen(3000, err => {
+      if (err) throw err;
+      console.log("> Ready on http://localhost:3000");
+    });
+  })
+  .catch(ex => {
+    console.error(ex.stack);
+    process.exit(1);
+  });
