@@ -17,62 +17,62 @@ import Profil from "../components/Profil";
 const request = new Request();
 
 class Index extends Component {
-    static async getInitialProps({ store, query, req }) {
-        if (req) {
-            store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
-            store.dispatch(receiveUser(query.user));
-        } else {
-            let res = await request.callgetBlockchainFeed();
-            query = { blockchainFeed: res.data.blockchainFeed };
-            store.dispatch(receiveBlockchainFeed(query));
-        }
+  static async getInitialProps({ store, query, req }) {
+    if (req) {
+      store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
+      store.dispatch(receiveUser(query.user));
+    } else {
+      let res = await request.callgetBlockchainFeed();
+      query = { blockchainFeed: res.data.blockchainFeed };
+      store.dispatch(receiveBlockchainFeed(query));
     }
+  }
 
-    constructor(props) {
-        super(props);
-        this.blockchainWrapper = new BlockchainWrapper();
-        this.hasInit = false;
-        this.state = {};
+  constructor(props) {
+    super(props);
+    this.blockchainWrapper = new BlockchainWrapper();
+    this.hasInit = false;
+    this.state = {};
+  }
+  componentDidMount() {
+    if (!this.hasInit && this.props.user) {
+      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
+      this.hasInit = true;
     }
-    componentDidMount() {
-        if (!this.hasInit && this.props.user) {
-            this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
-            this.hasInit = true;
-        }
-    }
+  }
 
-    updateBlockchainFeed = async () => {
-        let res = await request.callgetBlockchainFeed();
-        this.props.receiveBlockchainFeed(res.data);
-    };
+  updateBlockchainFeed = async () => {
+    let res = await request.callgetBlockchainFeed();
+    this.props.receiveBlockchainFeed(res.data);
+  };
 
-    handleItemClick = (item) => {
-        this.setState({ activeItem: item });
-    };
+  handleItemClick = item => {
+    this.setState({ activeItem: item });
+  };
 
-    render() {
-        return (
-            <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.props.blockchainWrapper}>
-                {this.state.activeItem === "profil" ? (
-                    <Profil />
-                ) : (
-                    <Fragment>
-                        <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
-                        <Divider />
-                        <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
-                    </Fragment>
-                )}
-            </Layout>
-        );
-    }
+  render() {
+    return (
+      <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.blockchainWrapper}>
+        {this.state.activeItem === "profil" ? (
+          <Profil />
+        ) : (
+          <Fragment>
+            <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
+            <Divider />
+            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
+          </Fragment>
+        )}
+      </Layout>
+    );
+  }
 }
-const mapDispatchToProps = (dispatch) => ({
-    receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
+const mapDispatchToProps = dispatch => ({
+  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
 });
 
-const mapStateToProps = (state) => ({
-    blockchainFeed: state.commonReducer.blockchainFeed,
-    user: state.commonReducer.user
+const mapStateToProps = state => ({
+  blockchainFeed: state.commonReducer.blockchainFeed,
+  user: state.commonReducer.user
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);
