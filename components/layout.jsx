@@ -31,7 +31,14 @@ class Layout extends Component {
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
               <Card>
-                <Image src="../static/bild.jpeg" rounded />
+                {this.state.activeItem === "profil" ? (
+                  <div>
+                    <Label as='a' ribbon>Change Picture</Label>
+                    <Image src="../static/bild.jpeg" rounded />
+                  </div>
+                ) : (
+                    <Image src="../static/bild.jpeg" rounded />
+                  )}
                 <Card.Content>
                   <Card.Header>Name</Card.Header>
                 </Card.Content>
@@ -78,15 +85,15 @@ class Layout extends Component {
                     name="kontakt"
                     active={activeItem === "kontakt"}
                     onClick={this.handleItemClick}>
-                    <Icon name="mail" />About us
+                    <Icon name="hand victory" />About us
                   </Button>
                 </List.Item>
                 <List.Item>
                   <Button compact as="a" size="big" className="list-item"
-                   name="impressum"
-                  active={activeItem === "impressum"}
-                  onClick={this.handleItemClick}>
-                    <Icon name="registered" />Disclaimer
+                    name="impressum"
+                    active={activeItem === "impressum"}
+                    onClick={this.handleItemClick}>
+                    <Icon name="legal" />Disclaimer
                   </Button>
                 </List.Item>
               </List>
