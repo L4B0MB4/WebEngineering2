@@ -22,14 +22,14 @@ class Kontakt extends Component {
                         <Card.Content>
                             <Card.Header>Prof. Dr. Med. Felix Waldbach</Card.Header>
                             <Card.Meta>Backend of Excellence Lead Engineer North America</Card.Meta>
-                            <Card.Description>Dr. Waldbach is the leading Backend Engineer for all departments in North America. 
-                                He graduated in Applied Medicine and Super Human Science in 2012 but decided to switch to something bigger. 
+                            <Card.Description>Dr. Waldbach is the leading Backend Engineer for all departments in North America.
+                                He graduated in Applied Medicine and Super Human Science in 2012 but decided to switch to something bigger.
                                 Today most people know him for his excellent contribution to global web applications like golddigger.io, wasgehtdigger.io and aufsmauldigga.io.</Card.Description>
                         </Card.Content>
                     </Card>
 
                     <Card>
-                        <Image src='../static/isi.jpg' size="large"/>
+                        <Image src='../static/isi.jpg' size="large" />
                         <Card.Content>
                             <Card.Header>Isabel Staaden</Card.Header>
                             <Card.Meta>Frontend Makeup Specialist & Worldwide Women Ambassador</Card.Meta>

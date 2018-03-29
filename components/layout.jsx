@@ -32,12 +32,9 @@ class Layout extends Component {
             <div className="-sidebars">
               <Card>
                 {this.state.activeItem === "profil" ? (
-                  <div>
-                    <Label as='a' ribbon>Change Picture</Label>
-                    <Image src="../static/bild.jpeg" rounded />
-                  </div>
+                  <Image src="../static/bild.jpeg" label={{ attached: 'top right' }} />
                 ) : (
-                    <Image src="../static/bild.jpeg" rounded />
+                    <Image src="../static/bild.jpeg" />
                   )}
                 <Card.Content>
                   <Card.Header>Name</Card.Header>
