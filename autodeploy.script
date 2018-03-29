@@ -1,11 +1,13 @@
 #!/bin/sh
+cd /home/WebEngineering2/
 x=$(git pull)
-if [ "$x" = "Already up-to-date" ]; then
+echo "$x";
+if [ "$x" != "Already up-to-date." ]; then
 	pm2 stop webe2
-	#npm run build
+	npm run build
 	mongo local --eval "db.blockchain.drop();"
 	mongo local --eval "db.createCollection('blockchain');"
-	#pm2 start pm2.json
+	pm2 start pm2.json
 else
 	echo "No restart"
 fi
