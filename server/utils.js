@@ -64,11 +64,30 @@ function broadcastOrEmit(socket,type,data,socketcount)
   }
 }
 
+async function printFeedNewerThanTwoDays(req, res, blockchain)
+{
+    let feed = blockchain;
+    //let blockchain = await printBlockchain();
+    //let array = blockchain.blockchain;
+    //let res = _.find(array, new Date('timestamp'): $lt: new Date(Date.now() - 1000*60*60*24*2}).timestamp; // $or: [{ email }, { name: body.name }]
+    var elem;
+    for(elem in feed) {
+        if(!(new Date(feed[elem].timestamp) > Date.now() - 1000*60*60*24*2 )) feed[elem] = null;
+    }
+    var newArray = _.remove(feed, function(x) {
+        return x != null;
+    });
+    //let res = _.filter(array, { 'timestamp': 'timestamp' > Date.now() - 1000*60*60*24*2}); // $or: [{ email }, { name: body.name }]
+    //let date = new Date(res);
+    console.log("This is the one and only chockblain: \n", newArray);
+}
+
 
 
 module.exports = {
   createFeed,
   handleLogin,
   mergeUserToBlock,
-  broadcastOrEmit
+  broadcastOrEmit,
+  printFeedNewerThanTwoDays
 };

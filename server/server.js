@@ -10,7 +10,8 @@ const {
   createFeed,
   handleLogin,
   mergeUserToBlock,
-  broadcastOrEmit
+  broadcastOrEmit,
+  printFeedNewerThanTwoDays
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -21,7 +22,9 @@ const {
   register,
   printAllUsers,
   findUsersByPublicKey,
-  findPublicKeyByUsername
+  findPublicKeyByUsername,
+  printBlockchain,
+    test
 } = require("./database");
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
@@ -146,6 +149,10 @@ app
     exp.get("/index", async (req, res) => {
       res.redirect("/");
     });
+
+      exp.get("/print", async (req, res) => {
+          printFeedNewerThanTwoDays(req, res, blockchain.chain);
+      });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
       const query = {
