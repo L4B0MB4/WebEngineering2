@@ -3,7 +3,9 @@ import { Button, Checkbox, Form, TextArea, Input } from "semantic-ui-react";
 import Request from "./utils/request";
 
 export default class ContentForm extends Component {
-  state = {};
+  state = {
+    content: " "
+  };
 
   onSuccessFullyPosted = () => {
     this.setState({ buttonSucess: true, buttonLoading: false });
@@ -11,7 +13,7 @@ export default class ContentForm extends Component {
   };
 
   sendContent = async () => {
-    if (this.state.content &&this.state.content.length > 0 && !this.state.file) {
+    if (this.state.content.length > 0 && !this.state.file) {
       this.props.blockchainWrapper.newTransaction("content", { text: this.state.content }, this.onSuccessFullyPosted);
       this.setState({ buttonLoading: true });
     } else if (this.state.file) {
