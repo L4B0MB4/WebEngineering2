@@ -61,5 +61,4 @@ typings/
 # dotenv environment variables file
 .env
 
-
-server/temp/
+/temp/

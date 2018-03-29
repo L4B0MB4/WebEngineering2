@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const path = require("path");
 const socketIO = require("socket.io");
 import { Blockchain } from "./blockchain";
 const blockchain = new Blockchain();
@@ -222,14 +223,15 @@ app
       if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
       const file = req.files.uploadedFile;
       const filename = file.md5 + Date.now();
-      file.mv(`${__dirname}/temp/'${filename}`, function(err) {
+      file.mv(`${__dirname}/../temp/${filename}`, function(err) {
         if (err) return res.status(500).send(err);
         res.send({ filename });
       });
     });
 
     exp.get("/api/picture/:filename", (req, res) => {
-      res.sendFile(`${__dirname}/temp/'${req.params.filename}`);
+      let p = path.resolve(`${__dirname}/../temp/`);
+      res.sendFile(`${p}/${req.params.filename}`);
     });
 
     exp.get("*", (req, res) => {

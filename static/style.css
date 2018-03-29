@@ -90,8 +90,6 @@ body {
 .-avatar {
   width: 40% !important;
   border-radius: 50% !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
   margin-bottom: 2em !important;
 }
 
@@ -103,7 +101,7 @@ body {
   border-radius: 0.3em !important;
 }
 
-.ui.center.aligned.page.grid.-login-btn-form {
+.ui.centered.grid.page.grid.-login-btn-form {
   margin-top: 2em !important;
 }
 
@@ -117,6 +115,12 @@ body {
   width: 64px !important;
 }
 
+.ui.button.-register-btn {
+  background-color: #daa520 !important;
+  color: white !important;
+  width: auto !important;
+}
+
 .ui.form .field > label {
   font-size: 1em !important;
 }
@@ -126,20 +130,15 @@ body {
 }
 
 .-reg-span {
-  margin-top: 0.9em !important;
-}
-
-.follow-button {
-  background-color: #daa520 !important;
   z-index: 1 !important;
   float: right !important;
+  margin-right: 10px !important;
 }
 
 .like-button {
   background-color: #daa520 !important;
   position: absolute !important;
   bottom: 10px !important;
-  right: 10px !important;
 }
 
 .share-button {
@@ -182,13 +181,12 @@ h1 {
   margin-right: 25px !important;
 }
 
-.dropdown{
+.dropdown {
   position: absolute !important;
   top: 10px !important;
   right: 10px !important;
 }
 
-.upload{
+.upload {
   color: #f3d5bd !important;
-  
 }
