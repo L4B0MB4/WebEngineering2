@@ -13,6 +13,7 @@ import initStore from "../components/redux/store";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
 import { getDate } from "../components/utils/utils";
+import FeedElement from "../components/FeedElement";
 
 var request;
 class VisitorPage extends Component {
@@ -102,23 +103,14 @@ class VisitorPage extends Component {
                         ? this.props.userContent.map(item => {
                             if (!this.props.visitedUser) return null;
                             return (
-                              <Feed.Event key={item.timestamp}>
-                                <Feed.Content>
-                                  <Feed.Summary>
-                                    <Feed.Date>{getDate(item.timestamp)}</Feed.Date>
-                                    <br />
-                                    <a>{this.props.visitedUser.name}</a> posted:
-                                    <br />
-                                  </Feed.Summary>
-                                  <Feed.Extra text>{item.data}</Feed.Extra>
-                                  <Feed.Meta>
-                                    <Feed.Like>
-                                      <Icon name="like" />
-                                      {item.likes.length} Likes
-                                    </Feed.Like>
-                                  </Feed.Meta>
-                                </Feed.Content>
-                              </Feed.Event>
+                              <FeedElement
+                                item={item}
+                                user={this.props.visitedUser}
+                                handleShare={this.handleShare}
+                                handleLike={this.handleLike}
+                                request={request}
+                                key={item.timestamp}
+                              />
                             );
                           })
                         : null}
