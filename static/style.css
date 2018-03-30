@@ -192,6 +192,9 @@ h1 {
   max-width: 375px;
   object-fit: cover;
 }
+.-feed-image:hover {
+  cursor: pointer;
+}
 
 .-feed-content-wrapper {
   display: inline-block;
