@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown } from "semantic-ui-react";
+import { Modal, Image, Feed, Header } from "semantic-ui-react";
 import Request from "../components/utils/request";
 import FeedElement from "./FeedElement";
 const request = new Request();
 
 class OwnFeed extends Component {
+  state = {};
+
   handleLike = async (username, previousHash) => {
     let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
     if (!this.props.blockchainWrapper.alreadyLiked(previousHash, publicKey)) {
@@ -24,24 +26,39 @@ class OwnFeed extends Component {
     });
   };
 
+  setModal = (openedImage, openedText) => {
+    this.setState({ openModal: !this.state.openModal, openedImage, openedText });
+  };
+
   render() {
     return (
-      <Feed>
-        {this.props.blockchainFeed
-          ? this.props.blockchainFeed.map(item => {
-              if (item.user == undefined) return null;
-              return (
-                <FeedElement
-                  item={item}
-                  handleShare={this.handleShare}
-                  handleLike={this.handleLike}
-                  request={request}
-                  key={item.timestamp}
-                />
-              );
-            })
-          : null}
-      </Feed>
+      <Fragment>
+        <Modal open={this.state.openModal} closeIcon={true} onClose={this.setModal}>
+          <Modal.Content image>
+            <Image wrapped size="medium" src={this.state.openedImage} />
+            <Modal.Description>
+              <p>{this.state.openedText}</p>
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
+        <Feed>
+          {this.props.blockchainFeed
+            ? this.props.blockchainFeed.map(item => {
+                if (item.user == undefined) return null;
+                return (
+                  <FeedElement
+                    item={item}
+                    handleShare={this.handleShare}
+                    handleLike={this.handleLike}
+                    request={request}
+                    key={item.timestamp}
+                    setModal={this.setModal}
+                  />
+                );
+              })
+            : null}
+        </Feed>
+      </Fragment>
     );
   }
 }

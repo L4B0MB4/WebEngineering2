@@ -48,7 +48,13 @@ export default class FeedElement extends Component {
 
             <div className="right-div  -feed-font-size">
               <Feed.Extra text className="-post" style={item.data.picture ? { minHeight: "280px" } : { minHeight: "142px" }}>
-                {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
+                {item.data.picture ? (
+                  <Image
+                    src={"/api/picture/" + item.data.picture}
+                    onClick={() => this.props.setModal("/api/picture/" + item.data.picture, item.data.text)}
+                    className="-feed-image"
+                  />
+                ) : null}
                 <br />
                 {item.data.text ? item.data.text : null}
                 <br />
