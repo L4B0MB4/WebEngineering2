@@ -89,9 +89,9 @@ class Layout extends Component {
                 </List.Item>
                 <List.Item>
                   <Button compact as="a" size="big" className="list-item"
-                   name="impressum"
-                  active={activeItem === "impressum"}
-                  onClick={this.handleItemClick}>
+                    name="impressum"
+                    active={activeItem === "impressum"}
+                    onClick={this.handleItemClick}>
                     <Icon name="registered" />Disclaimer
                   </Button>
                 </List.Item>

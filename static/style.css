@@ -211,3 +211,12 @@ h1 {
   font-size: 16px !important;
   font-stretch: narrower;
 }
+
+.-tab{
+  border-color: #daa520 !important;
+  background-color: #f6e4cc !important;
+}
+
+.ui.attached.menu{
+  border-color: #daa520 !important;
+}

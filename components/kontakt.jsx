@@ -18,13 +18,11 @@ class Kontakt extends Component {
                 <br />
                 <Card.Group centered itemsPerRow={2}>
                     <Card>
-                        <Image src='../static/felix.jpg' />
+                        <Image src='../static/lars.jpeg' />
                         <Card.Content>
-                            <Card.Header>Prof. Dr. Med. Felix Waldbach</Card.Header>
-                            <Card.Meta>Backend of Excellence Lead Engineer North America</Card.Meta>
-                            <Card.Description>Dr. Waldbach is the leading Backend Engineer for all departments in North America.
-                                He graduated in Applied Medicine and Super Human Science in 2012 but decided to switch to something bigger.
-                                Today most people know him for his excellent contribution to global web applications like golddigger.io, wasgehtdigger.io and aufsmauldigga.io.</Card.Description>
+                            <Card.Header>Lars Bommersbach</Card.Header>
+                            <Card.Meta>Joined in 2016</Card.Meta>
+                            <Card.Description>Daniel is a comedian living in Nashville.</Card.Description>
                         </Card.Content>
                     </Card>
 
@@ -38,11 +36,13 @@ class Kontakt extends Component {
                     </Card>
 
                     <Card>
-                        <Image src='../static/lars.jpeg' />
+                        <Image src='../static/felix.jpg' />
                         <Card.Content>
-                            <Card.Header>Lars Bommersbach</Card.Header>
-                            <Card.Meta>Joined in 2016</Card.Meta>
-                            <Card.Description>Daniel is a comedian living in Nashville.</Card.Description>
+                            <Card.Header>Prof. Dr. Med. Felix Waldbach</Card.Header>
+                            <Card.Meta>Backend of Excellence Lead Engineer North America</Card.Meta>
+                            <Card.Description>Dr. Waldbach is the leading Backend Engineer for all departments in North America.
+                                He graduated in Applied Medicine and Super Human Science in 2012 but decided to switch to something bigger.
+                                Today most people know him for his excellent contribution to global web applications like golddigger.io, wasgehtdigger.io and aufsmauldigga.io.</Card.Description>
                         </Card.Content>
                     </Card>
 
