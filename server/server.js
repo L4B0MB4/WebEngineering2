@@ -17,7 +17,9 @@ const {
   getContentOfUser,
   getFollower,
   getAnsehen,
-  hasEnoughAnsehen
+  hasEnoughAnsehen,
+  createFollowerFeed,
+  getFollowing
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -154,9 +156,10 @@ app
     });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
+      let following = await getFollowing(blockchain.chain, req.user.publicKey);
       const query = {
-        blockchainFeed: await createFeed(req, res, blockchain.chain),
-        user: req.user
+        user: req.user,
+        blockchainFeed: await createFollowerFeed(req, res, blockchain.chain, following)
       };
       return app.render(req, res, "/index", query);
     });
