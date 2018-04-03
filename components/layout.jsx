@@ -34,12 +34,12 @@ class Layout extends Component {
               <Card>
                 <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
                 <Card.Content>
-                  <Card.Header>Name</Card.Header>
+                  <Card.Header>{user ? user.name : ""}</Card.Header>
                 </Card.Content>
                 <Card.Content extra>
                   <a>
                     <Icon name="users" />
-                    10 Ansehen
+                    {user ? user.ansehen : ""}
                   </a>
                 </Card.Content>
               </Card>

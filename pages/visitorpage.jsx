@@ -55,7 +55,7 @@ class VisitorPage extends Component {
   render() {
     return (
       <Fragment>
-        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper}>
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
           <Grid className="own-grid">
             <Grid.Row>
               <div className="-full-width -padding-10">
