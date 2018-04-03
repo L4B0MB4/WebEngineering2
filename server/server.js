@@ -19,7 +19,8 @@ const {
     getAnsehen,
     hasEnoughAnsehen,
     createFollowerFeed,
-    getFollowing
+    getFollowing,
+    getUserWithProfilePicture
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -162,7 +163,7 @@ app
                 userContent: await getContentOfUser(blockchain.chain, req.user.publicKey),
                 followers: await getFollower(blockchain.chain, req.user.publicKey),
                 ansehen: getAnsehen(blockchain.chain, req.user.publicKey),
-                user: req.user
+                user: getUserWithProfilePicture(blockchain.chain, req.user)
             };
             return app.render(req, res, "/index", query);
         });
