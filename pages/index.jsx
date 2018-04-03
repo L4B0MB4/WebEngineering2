@@ -51,7 +51,7 @@ class Index extends Component {
     }
 
     updateBlockchainFeed = async () => {
-        let res = await request.callgetBlockchainFeed();
+        let res = await request.callgetFollowerFeed(this.props.user.name);
         this.props.receiveBlockchainFeed(res.data);
     };
 
