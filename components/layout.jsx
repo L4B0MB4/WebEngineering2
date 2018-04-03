@@ -24,6 +24,7 @@ class Layout extends Component {
 
   render() {
     const { activeItem } = this.state;
+    const { user } = this.props;
     return (
       <Fragment>
         <OwnHeader relPath={this.props.relPath} />
@@ -31,7 +32,7 @@ class Layout extends Component {
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
               <Card>
-                <Image src="../static/bild.jpeg" rounded />
+                <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
                 <Card.Content>
                   <Card.Header>Name</Card.Header>
                 </Card.Content>
@@ -80,7 +81,11 @@ class Layout extends Component {
               </List>
               <List relaxed className="-list">
                 <List.Item>
-                  <Button compact as="a" size="big" className="list-item"
+                  <Button
+                    compact
+                    as="a"
+                    size="big"
+                    className="list-item"
                     name="kontakt"
                     active={activeItem === "kontakt"}
                     onClick={this.handleItemClick}>
@@ -88,7 +93,11 @@ class Layout extends Component {
                   </Button>
                 </List.Item>
                 <List.Item>
-                  <Button compact as="a" size="big" className="list-item"
+                  <Button
+                    compact
+                    as="a"
+                    size="big"
+                    className="list-item"
                     name="impressum"
                     active={activeItem === "impressum"}
                     onClick={this.handleItemClick}>
