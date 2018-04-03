@@ -3,6 +3,7 @@ import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, B
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
 import FeedElement from "../components/FeedElement";
+import EditProfile from "./EditProfile";
 
 const panes = [
     {
@@ -99,27 +100,7 @@ const panes = [
     },
     {
         menuItem: "Edit Profile",
-        render: () => (
-            <Tab.Pane className="-tab">
-                <div className="-full-width -padding-10">
-                    <Segment raised className="-full-width -segment">
-                        <Form>
-                            <Image src="../static/bild.jpeg" size="small" circular centered />
-                            <br />
-                            <Form.Field>
-                                <label>Profile Picture</label>
-                                <Input type="file" onChange={(e) => this.onSelectFiles(e.target.files)} className="upload" />
-                            </Form.Field>
-                            <Form.Field>
-                                <label>Username</label>
-                                <Input defaultValue="Name" />
-                            </Form.Field>
-                            <Button type="submit">Save changes</Button>
-                        </Form>
-                    </Segment>
-                </div>
-            </Tab.Pane>
-        )
+        render: () => <EditProfile />
     }
 ];
 

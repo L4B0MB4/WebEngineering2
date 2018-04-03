@@ -8,7 +8,8 @@ import {
     receiveBlockchainFeed,
     receiveUser,
     receiveVisitedUserContent,
-    receiveVisitedUserFollower
+    receiveVisitedUserFollower,
+    receiveBlockchainWrapper
 } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
@@ -47,6 +48,7 @@ class Index extends Component {
         if (!this.hasInit && this.props.user) {
             this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
             this.hasInit = true;
+            this.props.receiveBlockchainWrapper(this.blockchainWrapper);
         }
     }
 
@@ -80,14 +82,16 @@ class Index extends Component {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
+    receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
+    receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
 });
 
 const mapStateToProps = (state) => ({
     blockchainFeed: state.commonReducer.blockchainFeed,
     user: state.commonReducer.user,
     userContent: state.commonReducer.userContent,
-    followers: state.commonReducer.followers
+    followers: state.commonReducer.followers,
+    blockchainWrapper: state.commonReducer.blockchainWrapper
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);

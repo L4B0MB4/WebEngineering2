@@ -61,7 +61,7 @@ export default class ContentForm extends Component {
                         color={this.isSuccessfull() ? "green" : null}
                         onClick={this.isLoading() ? null : this.sendContent}
                     >
-                        {this.isSuccessfull() ? "Erfolgreich" : "Post"}
+                        {this.isSuccessfull() ? "Success" : "Post"}
                     </Button>
                 </Form.Field>
             </Form>
