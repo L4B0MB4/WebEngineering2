@@ -175,8 +175,8 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
-      let Ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
-      visitedUser.ansehen = Ansehen;
+      visitedUser = getUserWithProfilePicture(blockchain.chain, visitedUser);
+      visitedUser.ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
       let user = getUserWithProfilePicture(blockchain.chain, req.user);
       user.ansehen = getAnsehen(blockchain.chain, user.publicKey);
       query = {
