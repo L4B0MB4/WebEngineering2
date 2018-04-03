@@ -13,14 +13,14 @@ async function createFeed(req, res, blockchain) {
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
   }
   return feed.reverse();
 }
 
-function mergeUserToBlock(block, users) {
+function mergeUserToBlock(block, users, blockchain) {
   for (let i = 0; i < users.length; i++) {
     if (block.sender === users[i].publicKey) {
       block.user = {
@@ -28,6 +28,9 @@ function mergeUserToBlock(block, users) {
         _id: undefined,
         publicKey: undefined
       };
+      if (blockchain) {
+        block.user = getUserWithProfilePicture(blockchain, users[i]);
+      }
       return block;
     }
   }
@@ -149,7 +152,7 @@ async function getFollower(blockchain, publicKey) {
   });
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   return feed;
 }
 
@@ -188,7 +191,7 @@ async function getFollowing(blockchain, publicKey) {
   });
   let publicKeys = feed.map(item => item.following);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   return feed;
 }
 
@@ -216,7 +219,7 @@ async function createFollowerFeed(req, res, blockchain, following) {
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
   }
