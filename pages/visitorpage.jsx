@@ -16,6 +16,7 @@ import { getDate } from "../components/utils/utils";
 import FeedElement from "../components/FeedElement";
 
 var request;
+
 class VisitorPage extends Component {
   static async getInitialProps({ store, query, req }) {
     const baseUrl = `${req.protocol}://${req.get("Host")}`;
@@ -52,6 +53,8 @@ class VisitorPage extends Component {
     });
   };
 
+
+
   render() {
     return (
       <Fragment>
@@ -77,16 +80,16 @@ class VisitorPage extends Component {
                     <Item.Group>
                       {this.props.followers
                         ? this.props.followers.map(follower => {
-                            if (!follower.user) return null;
-                            return (
-                              <Item key={follower.user.name}>
-                                <Item.Image size="tiny" src="../static/bild.jpeg" />
-                                <Item.Content verticalAlign="middle">
-                                  <Item.Header>{follower.user.name}</Item.Header>
-                                </Item.Content>
-                              </Item>
-                            );
-                          })
+                          if (!follower.user) return null;
+                          return (
+                            <Item key={follower.user.name}>
+                              <Item.Image size="tiny" src="../static/bild.jpeg" />
+                              <Item.Content verticalAlign="middle">
+                                <Item.Header>{follower.user.name}</Item.Header>
+                              </Item.Content>
+                            </Item>
+                          );
+                        })
                         : null}
                     </Item.Group>
                     <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
@@ -101,18 +104,18 @@ class VisitorPage extends Component {
                     <Feed>
                       {this.props.userContent
                         ? this.props.userContent.map(item => {
-                            if (!this.props.visitedUser) return null;
-                            return (
-                              <FeedElement
-                                item={item}
-                                user={this.props.visitedUser}
-                                handleShare={this.handleShare}
-                                handleLike={this.handleLike}
-                                request={request}
-                                key={item.timestamp}
-                              />
-                            );
-                          })
+                          if (!this.props.visitedUser) return null;
+                          return (
+                            <FeedElement
+                              item={item}
+                              user={this.props.visitedUser}
+                              handleShare={this.handleShare}
+                              handleLike={this.handleLike}
+                              request={request}
+                              key={item.timestamp}
+                            />
+                          );
+                        })
                         : null}
                     </Feed>
                     <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
