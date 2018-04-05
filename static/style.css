@@ -19,6 +19,14 @@
   z-index: 2 !important;
   border-radius: 0px !important;
 }
+.-header-icon {
+  color: #daa520 !important;
+  font-size: 35px !important;
+  position: fixed !important;
+  z-index: 2 !important;
+  right: 0px;
+  top: 18px;
+}
 
 .-sidebars {
   background-color: #c7e1ba !important;
@@ -140,7 +148,7 @@ body {
 }
 
 .-full-width {
-  width: 100%;
+  width: 100% !important;
 }
 .-padding-10 {
   padding: 10px;
@@ -169,6 +177,7 @@ h1 {
 
 .-post {
   text-align: center;
+  word-wrap: break-word !important;
 }
 
 .dropdown {
@@ -187,9 +196,6 @@ h1 {
   max-width: 325px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-}
-.-feed-image:hover {
-  cursor: pointer;
 }
 
 .-feed-content-wrapper {
@@ -215,4 +221,12 @@ h1 {
 
 .ui.attached.menu {
   border-color: #daa520 !important;
+}
+
+.-clickable:hover {
+  cursor: pointer;
+}
+
+.-min-full-height {
+  min-height: 100%;
 }

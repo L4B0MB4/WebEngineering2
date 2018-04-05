@@ -33,14 +33,6 @@ class OwnFeed extends Component {
   render() {
     return (
       <Fragment>
-        <Modal open={this.state.openModal} closeIcon={true} onClose={this.setModal}>
-          <Modal.Content image>
-            <Image wrapped size="medium" src={this.state.openedImage} />
-            <Modal.Description>
-              <p>{this.state.openedText}</p>
-            </Modal.Description>
-          </Modal.Content>
-        </Modal>
         <Feed>
           {this.props.blockchainFeed
             ? this.props.blockchainFeed.map(item => {
@@ -52,7 +44,6 @@ class OwnFeed extends Component {
                     handleLike={this.handleLike}
                     request={request}
                     key={item.timestamp}
-                    setModal={this.setModal}
                   />
                 );
               })
