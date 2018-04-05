@@ -205,6 +205,7 @@ async function createFollowerFeed(req, res, blockchain, following) {
   let followerKeys = [];
   let f;
   for (f in following) followerKeys.push(following[f].data.following);
+  followerKeys.push(req.user.publicKey);
 
   let feed = [];
   let k;
