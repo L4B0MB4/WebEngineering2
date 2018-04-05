@@ -133,7 +133,6 @@ class Layout extends Component {
       </Grid.Column>
     );
   };
-
   rightSide = () => {
     const { activeItem } = this.state;
     const { user } = this.props;
