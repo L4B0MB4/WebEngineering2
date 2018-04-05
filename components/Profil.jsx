@@ -17,19 +17,18 @@ const panes = [
                             <Item.Group>
                                 {followers
                                     ? followers.map((follower) => {
-                                          if (!follower.user) return null;
-                                          return (
-                                              <Item key={follower.user.name}>
-                                                  <Item.Image size="tiny" src="../static/bild.jpeg" />
-                                                  <Item.Content verticalAlign="middle">
-                                                      <Item.Header>{follower.user.name}</Item.Header>
-                                                  </Item.Content>
-                                              </Item>
-                                          );
-                                      })
+                                        if (!follower.user) return null;
+                                        return (
+                                            <Item key={follower.user.name}>
+                                                <Item.Image size="tiny" src="../static/bild.jpeg" />
+                                                <Item.Content verticalAlign="middle">
+                                                    <Item.Header>{follower.user.name}</Item.Header>
+                                                </Item.Content>
+                                            </Item>
+                                        );
+                                    })
                                     : null}
                             </Item.Group>
-                            <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
                         </Segment>
                     </div>
                 </Tab.Pane>
@@ -47,21 +46,20 @@ const panes = [
                             <Feed>
                                 {userContent
                                     ? userContent.map((item) => {
-                                          if (!user) return null;
-                                          return (
-                                              <FeedElement
-                                                  item={item}
-                                                  user={user}
-                                                  handleShare={undefined}
-                                                  handleLike={undefined}
-                                                  request={undefined}
-                                                  key={item.timestamp}
-                                              />
-                                          );
-                                      })
+                                        if (!user) return null;
+                                        return (
+                                            <FeedElement
+                                                item={item}
+                                                user={user}
+                                                handleShare={undefined}
+                                                handleLike={undefined}
+                                                request={undefined}
+                                                key={item.timestamp}
+                                            />
+                                        );
+                                    })
                                     : null}
                             </Feed>
-                            <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
                         </Segment>
                     </div>
                 </Tab.Pane>
