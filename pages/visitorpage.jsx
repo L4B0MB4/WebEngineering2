@@ -23,25 +23,24 @@ const panes = [
     {
         menuItem: "Follower",
         render: (props) => {
-            const { visitedUser, user } = props.props.props.props;
+            const { followers, user } = props.props.props.props;
             return (
                 <Tab.Pane className="-tab">
                     <div className="-full-width -padding-10 -follower">
-                        <h3>Follower</h3>
                         <Segment raised compact className="-full-width -segment">
                             <Item.Group>
                                 {props.followers
                                     ? props.followers.map((follower) => {
-                                          if (!follower.user) return null;
-                                          return (
-                                              <Item key={follower.user.name}>
-                                                  <Item.Image size="tiny" src="../static/bild.jpeg" />
-                                                  <Item.Content verticalAlign="middle">
-                                                      <Item.Header>{follower.user.name}</Item.Header>
-                                                  </Item.Content>
-                                              </Item>
-                                          );
-                                      })
+                                        if (!follower.user) return null;
+                                        return (
+                                            <Item key={follower.user.name}>
+                                                <Item.Image size="tiny" src="../static/bild.jpeg" />
+                                                <Item.Content verticalAlign="middle">
+                                                    <Item.Header>{follower.user.name}</Item.Header>
+                                                </Item.Content>
+                                            </Item>
+                                        );
+                                    })
                                     : null}
                             </Item.Group>
                         </Segment>
@@ -51,29 +50,28 @@ const panes = [
         }
     },
     {
-        menuItem: "Post",
+        menuItem: "Posts",
         render: (props) => {
-            const { visitedUser, user } = props.props.props.props;
+            const { userContent, user } = props.props.props.props;
             return (
                 <Tab.Pane className="-tab">
                     <div className="-full-width -padding-10 -posts">
-                        <h3>Posts</h3>
                         <Segment raised compact className="-full-width -segment">
                             <Feed>
                                 {props.userContent
                                     ? this.props.userContent.map((item) => {
-                                          if (!props.visitedUser) return null;
-                                          return (
-                                              <FeedElement
-                                                  item={item}
-                                                  user={this.props.visitedUser}
-                                                  handleShare={this.handleShare}
-                                                  handleLike={this.handleLike}
-                                                  request={request}
-                                                  key={item.timestamp}
-                                              />
-                                          );
-                                      })
+                                        if (!props.visitedUser) return null;
+                                        return (
+                                            <FeedElement
+                                                item={item}
+                                                user={this.props.visitedUser}
+                                                handleShare={this.handleShare}
+                                                handleLike={this.handleLike}
+                                                request={request}
+                                                key={item.timestamp}
+                                            />
+                                        );
+                                    })
                                     : null}
                             </Feed>
                         </Segment>
@@ -89,7 +87,6 @@ const panes = [
             return (
                 <Tab.Pane className="-tab">
                     <div className="-padding-10 -full-width -ansehen">
-                        <h3>Ansehen</h3>
                         <Segment raised className="-segment">
                             <Label as="a">
                                 <Image avatar spaced="right" src="../static/bild.jpeg" />
@@ -119,7 +116,9 @@ const Tabs = (props) => {
     return <Tab panes={panes} props={{ props }} />;
 };
 
+
 class VisitorPage extends Component {
+
     static async getInitialProps({ store, query, req }) {
         const baseUrl = `${req.protocol}://${req.get("Host")}`;
         request = new Request(baseUrl);
@@ -158,9 +157,9 @@ class VisitorPage extends Component {
     render() {
         return (
             <Fragment>
-                <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+                <Layout handleItemClick={this.handleItemClick} relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
                     <div className="-full-width -padding-10">
-                        <h1>Name, Gesamtansehen</h1>
+                        <h1>{this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen</h1>
                         <Button
                             floated="right"
                             animated="fade"
@@ -173,6 +172,8 @@ class VisitorPage extends Component {
                             <Button.Content hidden>Follow</Button.Content>
                         </Button>
                     </div>
+                    <br />
+                    <br />
                     <Tabs className="-tab" props={this.props} />
                 </Layout>
             </Fragment>
