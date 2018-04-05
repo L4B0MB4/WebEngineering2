@@ -52,22 +52,23 @@ const panes = [
   {
     menuItem: "Posts",
     render: props => {
-      const { userContent, user } = props.props.props.props;
+      const { userContent, user, visitedUser } = props.props.props.props;
+      console.log(props);
       return (
         <Tab.Pane className="-tab">
           <div className="-full-width -padding-10 -posts">
             <Segment raised compact className="-full-width -segment">
               <Feed>
-                {props.userContent
-                  ? this.props.userContent.map(item => {
-                      if (!props.visitedUser) return null;
+                {userContent
+                  ? userContent.map(item => {
+                      if (!visitedUser) return null;
                       return (
                         <FeedElementBig
                           item={item}
-                          user={this.props.visitedUser}
-                          handleShare={this.handleShare}
-                          handleLike={this.handleLike}
-                          request={request}
+                          user={visitedUser}
+                          handleShare={undefined}
+                          handleLike={undefined}
+                          request={undefined}
                           key={item.timestamp}
                         />
                       );
