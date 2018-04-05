@@ -4,6 +4,26 @@ import Link from "next/link";
 import { getDate } from "../components/utils/utils";
 
 export default class FeedElement extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.checkForVideo();
+  }
+
+  checkForVideo() {
+    const { item } = this.props;
+    if (item.data.text.includes("https://youtu.be")) {
+      let video = item.data.text.substring(item.data.text.indexOf("https://youtu.be") + 16);
+      video = video.substring(video.indexOf("/"), video.indexOf(" "));
+      this.state.video = video;
+      console.log(video);
+    } else if (item.data.text.includes("https://www.youtube.com")) {
+      let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com") + 22);
+      video = video.substring(video.indexOf("/"), video.indexOf(" "));
+      this.state.video = video;
+    }
+  }
+
   render() {
     const { item, request, handleLike, handleShare, user } = this.props;
     if (!item.user) item.user = user;
@@ -56,6 +76,14 @@ export default class FeedElement extends Component {
                     src={"/api/picture/" + item.data.picture}
                     onClick={() => this.props.setModal("/api/picture/" + item.data.picture, item.data.text)}
                     className="-feed-image"
+                  />
+                ) : null}
+                {!item.data.picture && this.state.video ? (
+                  <iframe
+                    style={{ width: "100%", height: "calc(30vw * 0.56)" }}
+                    src={"https://www.youtube.com/embed/" + this.state.video}
+                    frameborder="0"
+                    allowfullscreen
                   />
                 ) : null}
                 <br />
