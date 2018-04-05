@@ -29,7 +29,6 @@ const panes = [
                                     })
                                     : null}
                             </Item.Group>
-                            <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
                         </Segment>
                     </div>
                 </Tab.Pane>
@@ -61,7 +60,6 @@ const panes = [
                                     })
                                     : null}
                             </Feed>
-                            <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
                         </Segment>
                     </div>
                 </Tab.Pane>
