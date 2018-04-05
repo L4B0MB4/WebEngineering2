@@ -1,7 +1,6 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
-const socketIO = require("socket.io");
 import { Blockchain } from "./blockchain";
 const blockchain = new Blockchain();
 const exp = express();
@@ -10,7 +9,7 @@ const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
 import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
-
+import * as websocketutils from "./websockets";
 const MongoClient = require("mongodb").MongoClient;
 import * as databaseutils from "./database";
 const passport = require("passport"),
@@ -28,52 +27,11 @@ function setCurrentSecret() {
 var socketsConnected = 0;
 setInterval(setCurrentSecret, 5000);
 const server = http.createServer(exp);
-const io = socketIO(server);
+websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret);
+
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
-
-io.on("connection", socket => {
-  socketsConnected++;
-  socket.emit("blockchain", blockchain.chain);
-
-  socket.on("get transaction code", publicKey => {
-    rsaKeys.importKey(publicKey, "public");
-    let encrypted = rsaKeys.encrypt(secret.value, "base64");
-    socket.emit("solve transaction code", encrypted);
-  });
-
-  socket.on("new transaction", async data => {
-    const transaction = {
-      sender: data.sender,
-      type: data.type,
-      data: data.data,
-      timestamp: data.timestamp
-    };
-    if ((data.type === "share" && blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
-      serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
-    }
-  });
-
-  socket.on("new block", async block => {
-    let test_chain = [];
-    test_chain.push(...blockchain.chain);
-    test_chain.push(block);
-    if (blockchain.valid_chain(test_chain) === true) {
-      blockchain.chain = test_chain;
-      socket.broadcast.emit("get blockchain", blockchain.chain);
-      socket.emit("get blockchain", blockchain.chain);
-      await databaseutils.saveBlockchain(blockchain.chain);
-    }
-  });
-  socket.on("get blockchain", () => {
-    socket.emit("get blockchain", blockchain.chain);
-  });
-
-  socket.on("disconnect", () => {
-    socketsConnected--;
-  });
-});
 
 passport.serializeUser(async (user, done) => {
   done(null, user);
