@@ -197,6 +197,12 @@ h1 {
   margin-left: auto !important;
   margin-right: auto !important;
 }
+.-feed-image-mobile {
+  display: block;
+  height: auto;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 
 .-feed-content-wrapper {
   display: inline-block;

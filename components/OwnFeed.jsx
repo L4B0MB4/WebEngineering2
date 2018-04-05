@@ -54,7 +54,7 @@ class OwnFeed extends Component {
             </Feed>
           </Grid.Row>
           <Grid.Row only="mobile">
-            <Feed>
+            <Feed className="-full-width">
               {this.props.blockchainFeed
                 ? this.props.blockchainFeed.map(item => {
                     if (item.user == undefined) return null;

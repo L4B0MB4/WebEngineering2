@@ -29,7 +29,7 @@ export default class FeedElement extends Component {
       <Feed.Event>
         <Segment raised className="-segment">
           <div className="-feed-content-wrapper">
-            <div className="left-div">
+            <div className="">
               <Feed.Content>
                 <Feed.Summary>
                   <Link prefetch href={"./visit/" + item.user.name}>
@@ -42,37 +42,16 @@ export default class FeedElement extends Component {
                     </a>
                   </Link>{" "}
                   {item.shared ? "shared" : "posted"}:
-                  <br />
-                  <br />
-                  <Feed.Meta>
-                    <Feed.Like>
-                      <Icon name="like" />
-                      {item.likes.length} Likes
-                    </Feed.Like>
-                    <br />
-                    <Feed.Like>
-                      <Icon name="trophy" />
-                      {item.likes.length} Ansehen
-                    </Feed.Like>
-                  </Feed.Meta>
-                  <br />
-                  <Feed.Date>
-                    <Icon name="wait" />
-                    {getDate(item.timestamp)}
-                  </Feed.Date>
-                  <Feed.Date>
-                    <Icon name="marker" />Hier noch Ort einfügen
-                  </Feed.Date>
                 </Feed.Summary>
               </Feed.Content>
             </div>
-
-            <div className="right-div  -feed-font-size">
+            <br />
+            <div className="-feed-font-size">
               <Feed.Extra text className="-post">
-                {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
+                {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image-mobile" /> : null}
                 {!item.data.picture && this.state.video ? (
                   <iframe
-                    style={{ width: "100%", height: "calc(30vw * 0.56)" }}
+                    style={{ width: "100%", height: "calc(70vw * 0.56)" }}
                     src={"https://www.youtube.com/embed/" + this.state.video}
                     frameborder="0"
                     allowfullscreen
@@ -96,6 +75,18 @@ export default class FeedElement extends Component {
             </Dropdown>
           </div>
           <div style={{ height: "30px", width: "100%" }}>
+            <Feed.Meta>
+              <Feed.Like className="-float-left ">
+                <Icon name="trophy" />
+                {item.likes.length} Ansehen
+              </Feed.Like>
+            </Feed.Meta>
+            <Feed.Date className="-float-right ">
+              <Icon name="wait" />
+              {getDate(item.timestamp)}
+            </Feed.Date>
+            <br />
+            <br />
             <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-left ">
               <Button.Content visible>
                 <Icon name="share" />
