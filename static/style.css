@@ -216,3 +216,7 @@ h1 {
 .ui.attached.menu {
     border-color: #daa520 !important;
 }
+
+.-log-span{
+    margin-left: 10px;
+}
