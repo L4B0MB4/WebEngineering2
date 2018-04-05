@@ -75,8 +75,8 @@ export default class FeedElement extends Component {
                   <iframe
                     style={{}}
                     src={"https://www.youtube.com/embed/" + this.state.video}
-                    frameborder="0"
-                    allowfullscreen
+                    frameBorder="0"
+                    allowFullscreen
                     className="-feed-video"
                   />
                 ) : null}
