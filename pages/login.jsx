@@ -42,29 +42,29 @@ class Login extends Component {
                                 <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar" />
 
                                 <Message error visible={this.state.visible}>
-                                    <Message.Header>Login fehlgeschlagen!</Message.Header>
+                                    <Message.Header>Login failed!</Message.Header>
                                     <p>{this.state.msgtext}</p>
                                 </Message>
 
                                 <Form.Field className="-login-field">
-                                    <label className="-login-label">E-Mail-Adresse</label>
+                                    <label className="-login-label">E-Mail-Address or Username</label>
                                     <Input
                                         type="text"
                                         onChange={(e) => this.setState({ username: e.target.value })}
                                         name="username"
-                                        placeholder="E-Mail"
+                                        placeholder="E-Mail or Username"
                                     />
                                 </Form.Field>
 
                                 <Form.Field className="-login-field">
                                     <label htmlFor="password" className="-login-label">
-                                        Passwort
+                                        Password
                                     </label>
                                     <Input
                                         name="password"
                                         onChange={(e) => this.setState({ pw: e.target.value })}
                                         type="password"
-                                        placeholder="Passwort"
+                                        placeholder="Password"
                                     />
                                 </Form.Field>
 
@@ -73,11 +73,11 @@ class Login extends Component {
                                         Login
                                     </Button>
                                     <span className="-psw">
-                                        <a href="#">Passwort vergessen?</a>
+                                        <a href="#">Forgot Password?</a>
                                     </span>
                                     <span className="-reg-span">
                                         <Link prefetch href="/register">
-                                            <a>Noch nicht registriert? Jetzt registrieren</a>
+                                            <a>Not registered yet? Register Now!</a>
                                         </Link>
                                     </span>
                                 </div>
