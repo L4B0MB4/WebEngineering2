@@ -29,21 +29,16 @@ function setCurrentSecret() {
 }
 var socketsConnected = 0;
 setInterval(setCurrentSecret, 5000);
-
 websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret);
-
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
-
 passport.serializeUser(async (user, done) => {
   done(null, user);
 });
-
 passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
-
 passport.use(
   new LocalStrategy(async function(username, password, done) {
     let user = await databaseutils.login(username, password);
@@ -54,16 +49,12 @@ passport.use(
     }
   })
 );
-
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
 exp.use(bodyParser.urlencoded({ extended: false }));
-
 exp.use(bodyParser.json());
-
 exp.use(
   session({
     secret: "RH9eRdcy4aQGxE*ddCeB^K6e?24j-hwc=S8Y",
@@ -71,7 +62,6 @@ exp.use(
     saveUninitialized: false
   })
 );
-
 exp.use(passport.initialize());
 exp.use(passport.session());
 exp.use(fileUpload());
@@ -82,6 +72,10 @@ function ensureAuthenticated(req, res, next) {
   }
   res.redirect("/login");
 }
+
+/*
+starting the real server
+*/
 app
   .prepare()
   .then(async () => {
