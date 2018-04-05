@@ -69,13 +69,7 @@ export default class FeedElement extends Component {
 
             <div className="right-div  -feed-font-size">
               <Feed.Extra text className="-post">
-                {item.data.picture ? (
-                  <Image
-                    src={"/api/picture/" + item.data.picture}
-                    onClick={() => this.props.setModal("/api/picture/" + item.data.picture, item.data.text)}
-                    className="-feed-image"
-                  />
-                ) : null}
+                {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
                 {!item.data.picture && this.state.video ? (
                   <iframe
                     style={{ width: "100%", height: "calc(30vw * 0.56)" }}
