@@ -11,7 +11,7 @@ export default class FeedElement extends Component {
       <Feed.Event>
         <Segment raised className="-segment">
           <div className="-feed-content-wrapper">
-            <div className="left-div" style={item.data.picture ? { minHeight: "335px" } : null}>
+            <div className="left-div">
               <Feed.Content>
                 <Feed.Summary>
                   <Link prefetch href={"./visit/" + item.user.name}>
@@ -50,7 +50,7 @@ export default class FeedElement extends Component {
             </div>
 
             <div className="right-div  -feed-font-size">
-              <Feed.Extra text className="-post" style={item.data.picture ? { minHeight: "280px" } : { minHeight: "142px" }}>
+              <Feed.Extra text className="-post">
                 {item.data.picture ? (
                   <Image
                     src={"/api/picture/" + item.data.picture}
