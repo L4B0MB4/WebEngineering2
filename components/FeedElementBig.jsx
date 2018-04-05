@@ -18,6 +18,7 @@ export default class FeedElement extends Component {
       this.state.video = video;
     } else if (item.data.text.includes("https://www.youtube.com/watch?v=")) {
       let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com/watch?v=") + 32);
+      video = video.substring(0, video.indexOf(" "));
       this.state.video = video;
     }
   }
@@ -72,10 +73,11 @@ export default class FeedElement extends Component {
                 {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
                 {!item.data.picture && this.state.video ? (
                   <iframe
-                    style={{ width: "100%", height: "calc(30vw * 0.56)" }}
+                    style={{}}
                     src={"https://www.youtube.com/embed/" + this.state.video}
                     frameborder="0"
                     allowfullscreen
+                    className="-feed-video"
                   />
                 ) : null}
                 <br />

@@ -193,7 +193,7 @@ h1 {
   display: block;
   height: auto;
   width: 100%;
-  max-width: 325px !important;
+  max-width: 475px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -202,6 +202,16 @@ h1 {
   height: auto;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.-feed-video {
+  max-width: 475px !important;
+  width: 100%;
+  height: calc(30vw * 0.56);
+}
+.-feed-video-mobile {
+  width: 100%;
+  height: calc(70vw * 0.56);
 }
 
 .-feed-content-wrapper {

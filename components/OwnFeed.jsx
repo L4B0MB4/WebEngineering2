@@ -36,7 +36,7 @@ class OwnFeed extends Component {
       <Fragment>
         <Grid>
           <Grid.Row only="tablet computer">
-            <Feed>
+            <Feed className="-full-width">
               {this.props.blockchainFeed
                 ? this.props.blockchainFeed.map(item => {
                     if (item.user == undefined) return null;
