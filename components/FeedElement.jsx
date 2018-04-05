@@ -16,7 +16,10 @@ export default class FeedElement extends Component {
                 <Feed.Summary>
                   <Link prefetch href={"./visit/" + item.user.name}>
                     <a>
-                      <Image src="../static/bild.jpeg" avatar />
+                      <Image
+                        src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                        avatar
+                      />
                       {item.user.name}
                     </a>
                   </Link>{" "}

@@ -4,7 +4,13 @@ import withRedux from "next-redux-wrapper";
 import NodeRSA from "node-rsa";
 import { bindActionCreators } from "redux";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import { receiveBlockchainFeed, receiveUser } from "../components/redux/actions/commonActions";
+import {
+  receiveBlockchainFeed,
+  receiveUser,
+  receiveVisitedUserContent,
+  receiveVisitedUserFollower,
+  receiveBlockchainWrapper
+} from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
 import Layout from "../components/layout.jsx";
@@ -23,9 +29,11 @@ class Index extends Component {
     if (req) {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
+      store.dispatch(receiveVisitedUserContent(query.userContent));
+      store.dispatch(receiveVisitedUserFollower(query.followers));
     } else {
       let res = await request.callgetBlockchainFeed();
-      query = { blockchainFeed: res.data.blockchainFeed };
+      query = { blockchainFeed: res.data.data.blockchainFeed };
       store.dispatch(receiveBlockchainFeed(query));
     }
   }
@@ -40,11 +48,12 @@ class Index extends Component {
     if (!this.hasInit && this.props.user) {
       this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
       this.hasInit = true;
+      this.props.receiveBlockchainWrapper(this.blockchainWrapper);
     }
   }
 
   updateBlockchainFeed = async () => {
-    let res = await request.callgetBlockchainFeed();
+    let res = await request.callgetFollowerFeed(this.props.user.name);
     this.props.receiveBlockchainFeed(res.data);
   };
 
@@ -54,9 +63,9 @@ class Index extends Component {
 
   render() {
     return (
-      <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.blockchainWrapper}>
+      <Layout handleItemClick={this.handleItemClick} blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
         {this.state.activeItem === "profil" ? (
-          <Profil />
+          <Profil followers={this.props.followers} userContent={this.props.userContent} user={this.props.user} />
         ) : this.state.activeItem === "kontakt" ? (
           <Kontakt />
         ) : this.state.activeItem === "impressum" ? (
@@ -73,12 +82,16 @@ class Index extends Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch)
+  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
 });
 
 const mapStateToProps = state => ({
   blockchainFeed: state.commonReducer.blockchainFeed,
-  user: state.commonReducer.user
+  user: state.commonReducer.user,
+  userContent: state.commonReducer.userContent,
+  followers: state.commonReducer.followers,
+  blockchainWrapper: state.commonReducer.blockchainWrapper
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);

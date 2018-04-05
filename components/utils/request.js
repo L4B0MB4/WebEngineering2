@@ -65,7 +65,9 @@ class Request {
     callgetBlockchainFeed() {
         return this.callFetch("GET", "/blockchain/feed");
     }
-
+    callgetFollowerFeed(username) {
+        return this.callFetch("GET", "/blockchain/getFollowerFeed", { username });
+    }
     callLogin(data) {
         return this.callFetch("POST", "/user/login", data, true);
     }

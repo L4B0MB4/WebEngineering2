@@ -13,14 +13,14 @@ async function createFeed(req, res, blockchain) {
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
   }
   return feed.reverse();
 }
 
-function mergeUserToBlock(block, users) {
+function mergeUserToBlock(block, users, blockchain) {
   for (let i = 0; i < users.length; i++) {
     if (block.sender === users[i].publicKey) {
       block.user = {
@@ -28,6 +28,9 @@ function mergeUserToBlock(block, users) {
         _id: undefined,
         publicKey: undefined
       };
+      if (blockchain) {
+        block.user = getUserWithProfilePicture(blockchain, users[i]);
+      }
       return block;
     }
   }
@@ -149,7 +152,7 @@ async function getFollower(blockchain, publicKey) {
   });
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  feed = feed.map(block => mergeUserToBlock(block, users));
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   return feed;
 }
 
@@ -178,6 +181,66 @@ function getChainByTime(blockchain, hours = 2) {
   return feed.splice(i + 1, feed.length - i);
 }
 
+async function getFollowing(blockchain, publicKey) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  feed = _.filter(feed, {
+    sender: publicKey,
+    type: "follow"
+  });
+  let publicKeys = feed.map(item => item.following);
+  let users = await findUsersByPublicKey(publicKeys);
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
+  return feed;
+}
+
+async function createFollowerFeed(req, res, blockchain, following) {
+  let filtered = getChainByTime(blockchain);
+  filtered = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  const feedshares = getShares(blockchain, filtered);
+
+  let followerKeys = [];
+  let f;
+  for (f in following) followerKeys.push(following[f].data.following);
+
+  let feed = [];
+  let k;
+  for (k in followerKeys) {
+    let array = _.filter(filtered, { type: "content", sender: followerKeys[k] });
+    let a;
+    for (a in array) feed.push(array[a]);
+  }
+
+  feed.push(...feedshares);
+  feed.sort(sortByTimestamp);
+  feed.slice(Math.max(feed.length - 10, 1));
+  let publicKeys = feed.map(item => item.sender);
+  let users = await findUsersByPublicKey(publicKeys);
+  feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
+  for (let i = 0; i < feed.length; i++) {
+    feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
+  }
+  return feed.reverse();
+}
+
+function getUserWithProfilePicture(blockchain, user) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  feed = _.filter(feed, {
+    sender: user.publicKey,
+    type: "profilePicture"
+  });
+  if (feed.length <= 0) return user;
+  return {
+    ...user,
+    profilePicture: feed[feed.length - 1].data.picture
+  };
+}
+
 module.exports = {
   createFeed,
   handleLogin,
@@ -187,5 +250,8 @@ module.exports = {
   getContentOfUser,
   getFollower,
   getAnsehen,
-  hasEnoughAnsehen
+  hasEnoughAnsehen,
+  createFollowerFeed,
+  getFollowing,
+  getUserWithProfilePicture
 };
