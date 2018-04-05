@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button } from "semantic-ui-react";
+import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button, Tab } from "semantic-ui-react";
 import {
   receiveUser,
   receiveVisitedUser,
   receiveVisitedUserContent,
-  receiveVisitedUserFollower
+  receiveVisitedUserFollower,
+  receiveBlockchainWrapper,
+  receiveBlockchainFeed
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -16,6 +18,112 @@ import { getDate } from "../components/utils/utils";
 import FeedElement from "../components/FeedElement";
 
 var request;
+
+const panes = [
+  {
+    menuItem: 'Follower',
+    render: (props) => {
+      console.log(props);
+      return null;
+      const { visitedUser, user } = props.props.props.props;
+      return (
+        <Tab.Pane className="-tab">
+          <div className="-full-width -padding-10 -follower">
+            <h3>Follower</h3>
+            <Segment raised compact className="-full-width -segment">
+              <Item.Group>
+                {this.props.followers
+                  ? this.props.followers.map(follower => {
+                    if (!follower.user) return null;
+                    return (
+                      <Item key={follower.user.name}>
+                        <Item.Image size="tiny" src="../static/bild.jpeg" />
+                        <Item.Content verticalAlign="middle">
+                          <Item.Header>{follower.user.name}</Item.Header>
+                        </Item.Content>
+                      </Item>
+                    );
+                  })
+                  : null}
+              </Item.Group>
+            </Segment>
+          </div>
+        </Tab.Pane>
+      );
+    }
+  },
+  {
+    menuItem: 'Post',
+    render: (props) => {
+      console.log(props);
+      return null;
+      const { visitedUser, user } = props.props.props.props;
+      return (
+        <Tab.Pane className="-tab">
+          <div className="-full-width -padding-10 -posts">
+            <h3>Posts</h3>
+            <Segment raised compact className="-full-width -segment">
+              <Feed>
+                {this.props.userContent
+                  ? this.props.userContent.map(item => {
+                    if (!this.props.visitedUser) return null;
+                    return (
+                      <FeedElement
+                        item={item}
+                        user={this.props.visitedUser}
+                        handleShare={this.handleShare}
+                        handleLike={this.handleLike}
+                        request={request}
+                        key={item.timestamp}
+                      />
+                    );
+                  })
+                  : null}
+              </Feed>
+            </Segment>
+          </div>
+        </Tab.Pane>
+      );
+    }
+  },
+  {
+    menuItem: 'Ansehen',
+    render: (props) => {
+      console.log(props);
+      return null;
+      const { visitedUser, user } = props.props.props.props;
+      return (
+        <Tab.Pane className="-tab">
+          <div className="-padding-10 -full-width -ansehen">
+            <h3>Ansehen</h3>
+            <Segment raised className="-segment">
+              <Label as="a">
+                <Image avatar spaced="right" src="../static/bild.jpeg" />
+                Apple, 3
+                  </Label>
+              <Label as="a">
+                <Image avatar spaced="right" src="../static/bild.jpeg" />
+                Nike, 2
+                  </Label>
+              <Label as="a">
+                <Image avatar spaced="right" src="../static/bild.jpeg" />
+                Reebok, 1
+                  </Label>
+              <Label as="a">
+                <Image avatar spaced="right" src="../static/bild.jpeg" />
+                Gucci, 4
+                  </Label>
+            </Segment>
+          </div>
+        </Tab.Pane>
+      );
+    }
+  }
+];
+
+const Tabs = (props) => {
+  return (<Tab panes={panes} props={{ props }} />)
+};
 
 class VisitorPage extends Component {
   static async getInitialProps({ store, query, req }) {
@@ -59,95 +167,16 @@ class VisitorPage extends Component {
     return (
       <Fragment>
         <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
-          <Grid className="own-grid">
-            <Grid.Row>
-              <div className="-full-width -padding-10">
-                <h1>Name, Gesamtansehen</h1>
-                <Button animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
-                  <Button.Content visible>
-                    <Icon name="add user" size="large" />
-                  </Button.Content>
-                  <Button.Content hidden>Follow</Button.Content>
-                </Button>
-              </div>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column width={7} stretched className="grid-column">
-                <div className="-full-width -padding-10 -follower">
-                  <h3>Follower</h3>
-                  <Segment raised compact className="-full-width -segment">
-                    <Item.Group>
-                      {this.props.followers
-                        ? this.props.followers.map(follower => {
-                          if (!follower.user) return null;
-                          return (
-                            <Item key={follower.user.name}>
-                              <Item.Image size="tiny" src="../static/bild.jpeg" />
-                              <Item.Content verticalAlign="middle">
-                                <Item.Header>{follower.user.name}</Item.Header>
-                              </Item.Content>
-                            </Item>
-                          );
-                        })
-                        : null}
-                    </Item.Group>
-                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={10} />
-                  </Segment>
-                </div>
-              </Grid.Column>
-
-              <Grid.Column width={9} stretched className="grid-column">
-                <div className="-full-width -padding-10 -posts">
-                  <h3>Posts</h3>
-                  <Segment raised compact className="-full-width -segment">
-                    <Feed>
-                      {this.props.userContent
-                        ? this.props.userContent.map(item => {
-                          if (!this.props.visitedUser) return null;
-                          return (
-                            <FeedElement
-                              item={item}
-                              user={this.props.visitedUser}
-                              handleShare={this.handleShare}
-                              handleLike={this.handleLike}
-                              request={request}
-                              key={item.timestamp}
-                            />
-                          );
-                        })
-                        : null}
-                    </Feed>
-                    <Pagination size="mini" siblingRange="0" boundaryRange="0" defaultActivePage={1} totalPages={4} />
-                  </Segment>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-
-            <Grid.Row>
-              <div className="-padding-10 -full-width -ansehen">
-                <h3>Ansehen</h3>
-                <Segment raised className="-segment">
-                  <Label as="a">
-                    <Image avatar spaced="right" src="../static/bild.jpeg" />
-                    Apple, 3
-                  </Label>
-                  <Label as="a">
-                    <Image avatar spaced="right" src="../static/bild.jpeg" />
-                    Nike, 2
-                  </Label>
-                  <Label as="a">
-                    <Image avatar spaced="right" src="../static/bild.jpeg" />
-                    Reebok, 1
-                  </Label>
-                  <Label as="a">
-                    <Image avatar spaced="right" src="../static/bild.jpeg" />
-                    Gucci, 4
-                  </Label>
-                </Segment>
-              </div>
-            </Grid.Row>
-          </Grid>
+          <div className="-full-width -padding-10">
+            <h1>Name, Gesamtansehen</h1>
+            <Button floated="right" animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
+              <Button.Content visible>
+                <Icon name="add user" size="large" />
+              </Button.Content>
+              <Button.Content hidden>Follow</Button.Content>
+            </Button>
+          </div>
+          <Tabs className="-tab" props={this.props} />
         </Layout>
       </Fragment>
     );
