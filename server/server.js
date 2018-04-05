@@ -10,6 +10,7 @@ const rsaKeys = new NodeRSA({ b: 512 });
 import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
 import * as websocketutils from "./websockets";
+import * as commonutils from "./commonutils";
 const MongoClient = require("mongodb").MongoClient;
 import * as databaseutils from "./database";
 const passport = require("passport"),
@@ -17,6 +18,8 @@ const passport = require("passport"),
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+
+const server = http.createServer(exp);
 
 const secret = {
   value: Math.random()
@@ -26,7 +29,7 @@ function setCurrentSecret() {
 }
 var socketsConnected = 0;
 setInterval(setCurrentSecret, 5000);
-const server = http.createServer(exp);
+
 websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret);
 
 exp.use(bodyParser.json());
@@ -94,32 +97,12 @@ app
     });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
-      const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
-      let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
-      user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
-      const query = {
-        blockchainFeed: await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following),
-        userContent: await blockchainutils.getContentOfUser(blockchain.chain, req.user.publicKey),
-        followers: await blockchainutils.getFollower(blockchain.chain, req.user.publicKey),
-        ansehen: blockchainutils.getAnsehen(blockchain.chain, req.user.publicKey),
-        user
-      };
+      const query = await commonutils.setUpMain(req, res, blockchain);
       return app.render(req, res, "/index", query);
     });
 
     exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
-      let query = {
-        ...req.params
-      };
-      let visitedUser = await databaseutils.findPublicKeyByUsername(query.username);
-      visitedUser = blockchainutils.getUserWithProfilePicture(blockchain.chain, visitedUser);
-      visitedUser.ansehen = blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey);
-      let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
-      user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
-      query = {
-        user,
-        visitedUser
-      };
+      const query = await commonutils.setUpVisitPage(req, res, blockchain);
       return app.render(req, res, "/visitorpage", query);
     });
 
@@ -137,7 +120,7 @@ app
     exp.get("/api/blockchain/getUserFollower", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
-      res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
+      res.json(await blockchainutils.getFollower(blockchain.chain, visitedUser.publicKey));
     });
     exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
       if (!req.query.username) return res.json({});
