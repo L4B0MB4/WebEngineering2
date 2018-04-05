@@ -2,27 +2,14 @@ import React, { Component, Fragment } from "react";
 import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown } from "semantic-ui-react";
 import Link from "next/link";
 import { getDate } from "../components/utils/utils";
+import BasicFeedElement from "./BasicFeedElement";
 
-export default class FeedElement extends Component {
+export default class FeedElement extends BasicFeedElement {
   constructor(props) {
     super(props);
     this.state = {};
     this.checkForVideo();
   }
-
-  checkForVideo() {
-    const { item } = this.props;
-    if (item.data.text.includes("https://youtu.be")) {
-      let video = item.data.text.substring(item.data.text.indexOf("https://youtu.be") + 16);
-      video = video.substring(video.indexOf("/"), video.indexOf(" "));
-      this.state.video = video;
-    } else if (item.data.text.includes("https://www.youtube.com/watch?v=")) {
-      let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com/watch?v=") + 32);
-      video = video.substring(0, video.indexOf(" "));
-      this.state.video = video;
-    }
-  }
-
   render() {
     const { item, request, handleLike, handleShare, user } = this.props;
     if (!item.user) item.user = user;
@@ -68,13 +55,7 @@ export default class FeedElement extends Component {
               <Feed.Extra text className="-post">
                 {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image" /> : null}
                 {!item.data.picture && this.state.video ? (
-                  <iframe
-                    style={{}}
-                    src={"https://www.youtube.com/embed/" + this.state.video}
-                    frameBorder="0"
-                    allowFullscreen
-                    className="-feed-video"
-                  />
+                  <iframe src={this.state.video} frameBorder="0" allowFullScreen className="-feed-video" />
                 ) : null}
                 <br />
                 {item.data.text ? item.data.text : null}
