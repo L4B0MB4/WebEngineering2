@@ -15,12 +15,20 @@ class Impressum extends Component {
                 <h1>Disclaimer</h1>
 
                 <h2>Address</h2>
+                <p>
+                    golddigger.io <br />
+                    Felix Waldbach, Isabel Staaden, Lars Bommersbach & Tino Metzger <br />
+                    Projekt der Vorlesung Web-Engineering <br />
+                    Kurs TINF16B <br />
+                    DHBW Stuttgart <br />
+                    Rotebühlplatz 41 <br />
+                    70197 Stuttgart
+                </p>
                 Ein Projekt der Vorlesung Web-Engineering<br />
                 Lars Bommersbach, Isabel Staaden, Felix Waldbach & Tino Metzger<br />
                 DHBW Stuttgart Kurs TINF16B<br />
                 Rotebühlplatz 41<br />
                 70197 Stuttgart
-
 
                 <h2>Privacy Policy</h2>
                 <h5>What personal information do we collect from the people that visit our blog, website or app?</h5>

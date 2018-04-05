@@ -7,6 +7,7 @@ var request;
 class Kontakt extends Component {
   state = { activeItem: "kontakt" };
 
+
   render() {
     return (
       <Fragment>

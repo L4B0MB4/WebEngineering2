@@ -69,10 +69,10 @@ class Layout extends Component {
                   <Icon name="power" />Logout
                 </Menu.Item>
                 <Menu.Item name="kontakt" onClick={this.handleItemClick}>
-                  <Icon name="mail" />About us
+                  <Icon name="hand victory" />About us
                 </Menu.Item>
                 <Menu.Item name="impressum" onClick={this.handleItemClick}>
-                  <Icon name="registered" />Disclaimer
+                  <Icon name="legal" />Disclaimer
                 </Menu.Item>
                 <Menu.Item name="logout" onClick={this.handleItemClick}>
                   <Icon name="power" />Logout
