@@ -16,10 +16,8 @@ export default class FeedElement extends Component {
       let video = item.data.text.substring(item.data.text.indexOf("https://youtu.be") + 16);
       video = video.substring(video.indexOf("/"), video.indexOf(" "));
       this.state.video = video;
-      console.log(video);
-    } else if (item.data.text.includes("https://www.youtube.com")) {
-      let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com") + 22);
-      video = video.substring(video.indexOf("/"), video.indexOf(" "));
+    } else if (item.data.text.includes("https://www.youtube.com/watch?v=")) {
+      let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com/watch?v=") + 32);
       this.state.video = video;
     }
   }
