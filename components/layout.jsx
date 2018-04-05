@@ -63,7 +63,7 @@ class Layout extends Component {
           <Grid.Column width={10} stretched className="grid-column">
             <Grid>
               <Grid.Column only="computer" width={1} />
-              <Grid.Column mobile={16} mobile={16} computer={14} widescreen={10}>
+              <Grid.Column mobile={16} mobile={16} computer={14}>
                 <div className="-feed">{this.props.children}</div>
               </Grid.Column>
               <Grid.Column only="computer" width={1} />
