@@ -20,50 +20,12 @@ export default class FeedElement extends BasicFeedElement {
           <div className="-feed-content-wrapper">
             <div className="">
               <Feed.Content>
-                <Feed.Summary>
-                  <Link prefetch href={"./visit/" + item.user.name}>
-                    <a>
-                      <Image
-                        src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
-                        avatar
-                      />
-                      {item.user.name}
-                    </a>
-                  </Link>{" "}
-                  {item.shared ? "shared" : "posted"}:
-                </Feed.Summary>
+                <Feed.Summary>{this.getUserSection(item)}</Feed.Summary>
               </Feed.Content>
             </div>
             <br />
-            <div className="-feed-font-size">
-              <Feed.Extra text className="-post">
-                {item.data.picture ? <Image src={"/api/picture/" + item.data.picture} className="-feed-image-mobile" /> : null}
-                {!item.data.picture && this.state.video ? (
-                  <iframe
-                    src={this.state.video}
-                    frameBorder="0"
-                    allowFullScreen
-                    allowtransparency="true"
-                    allow="encrypted-media"
-                    className="-feed-video-mobile"
-                  />
-                ) : null}
-                <br />
-                {item.data.text ? item.data.text : null}
-                <br />
-                {item.data.picture ? (
-                  <Fragment>
-                    <br />
-                  </Fragment>
-                ) : null}
-              </Feed.Extra>
-            </div>
-            <Dropdown icon="ellipsis horizontal" className="dropdown">
-              <Dropdown.Menu>
-                <Dropdown.Item>{item.user.name} folgen</Dropdown.Item>
-                <Dropdown.Item text="Post melden" />
-              </Dropdown.Menu>
-            </Dropdown>
+            <div className="-feed-font-size">{this.getContent(item, true)}</div>
+            {this.getDropDown(item)}
           </div>
           <div style={{ height: "30px", width: "100%" }}>
             <Feed.Meta>
