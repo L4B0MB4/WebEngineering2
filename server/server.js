@@ -12,17 +12,7 @@ import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
 
 const MongoClient = require("mongodb").MongoClient;
-const {
-  connect,
-  saveBlockchain,
-  getBlockchain,
-  login,
-  register,
-  printAllUsers,
-  findUsersByPublicKey,
-  findPublicKeyBy,
-  findPublicKeyByUsername
-} = require("./database");
+import * as databaseutils from "./database";
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
 const bodyParser = require("body-parser");
@@ -73,7 +63,7 @@ io.on("connection", socket => {
       blockchain.chain = test_chain;
       socket.broadcast.emit("get blockchain", blockchain.chain);
       socket.emit("get blockchain", blockchain.chain);
-      await saveBlockchain(blockchain.chain);
+      await databaseutils.saveBlockchain(blockchain.chain);
     }
   });
   socket.on("get blockchain", () => {
@@ -95,7 +85,7 @@ passport.deserializeUser((obj, done) => {
 
 passport.use(
   new LocalStrategy(async function(username, password, done) {
-    let user = await login(username, password);
+    let user = await databaseutils.login(username, password);
     if (user) {
       return done(null, user);
     } else {
@@ -135,8 +125,8 @@ app
   .prepare()
   .then(async () => {
     exp.use(express.static("./static/"));
-    const database = await connect();
-    const chain = await getBlockchain();
+    const database = await databaseutils.connect();
+    const chain = await databaseutils.getBlockchain();
     if (chain !== null) {
       blockchain.chain = chain.blockchain;
     }
@@ -163,7 +153,7 @@ app
       let query = {
         ...req.params
       };
-      let visitedUser = await findPublicKeyByUsername(query.username);
+      let visitedUser = await databaseutils.findPublicKeyByUsername(query.username);
       visitedUser = blockchainutils.getUserWithProfilePicture(blockchain.chain, visitedUser);
       visitedUser.ansehen = blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey);
       let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
@@ -182,23 +172,23 @@ app
 
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
-      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       const feed = await blockchainutils.getContentOfUser(blockchain.chain, visitedUser.publicKey);
       res.json(feed);
     });
     exp.get("/api/blockchain/getUserFollower", async (req, res) => {
       if (!req.query.username) return res.json({});
-      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await getFollower(blockchain.chain, visitedUser.publicKey));
     });
     exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
       if (!req.query.username) return res.json({});
-      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
     exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
-      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       const following = await blockchainutils.getFollowing(blockchain.chain, visitedUser.publicKey);
       const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
@@ -212,18 +202,18 @@ app
       if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
         return res.json({ type: "error", message: "Bitte alles ausfüllen!" });
       } else {
-        register(req.body.email, req.body, res);
+        databaseutils.register(req.body.email, req.body, res);
       }
     });
 
     exp.get("/api/user/getAllUsers", async (req, res) => {
-      let users = await printAllUsers();
+      let users = await databaseutils.printAllUsers();
       res.json(users);
     });
 
     exp.post("/api/user/getPublicKey", async (req, res) => {
       if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
-      let user = await findPublicKeyByUsername(req.body.username);
+      let user = await databaseutils.findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
 
