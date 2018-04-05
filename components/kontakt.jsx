@@ -7,37 +7,7 @@ var request;
 class Kontakt extends Component {
   state = { activeItem: "kontakt" };
 
-<<<<<<< HEAD
-    state = { activeItem: "kontakt" };
 
-    render() {
-        return (
-            <Fragment>
-                <h1>About us</h1>
-                <br />
-                <br />
-                <br />
-                <Card.Group centered itemsPerRow={2}>
-                    <Card>
-                        <Image src='../static/felix.jpg' />
-                        <Card.Content>
-                            <Card.Header>Prof. Dr. Med. Felix Waldbach</Card.Header>
-                            <Card.Meta>Backend of Excellence Lead Engineer North America</Card.Meta>
-                            <Card.Description>Dr. Waldbach is the leading Backend Engineer for all departments in North America.
-                                He graduated in Applied Medicine and Super Human Science in 2012 but decided to switch to something bigger.
-                                Today most people know him for his excellent contribution to global web applications like golddigger.io, wasgehtdigger.io and aufsmauldigga.io.</Card.Description>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Image src='../static/isi.jpg' size="large" />
-                        <Card.Content>
-                            <Card.Header>Isabel Staaden</Card.Header>
-                            <Card.Meta>Frontend Makeup Specialist & Worldwide Women Ambassador</Card.Meta>
-                            <Card.Description>Daniel is a comedian living in Nashville.</Card.Description>
-                        </Card.Content>
-                    </Card>
-=======
   render() {
     return (
       <Fragment>
@@ -74,7 +44,6 @@ class Kontakt extends Component {
               </Card.Description>
             </Card.Content>
           </Card>
->>>>>>> 30fc16722c555644b0b0e9588f592c40a3f2fc4f
 
           <Card>
             <Image src="../static/felix.jpg" />

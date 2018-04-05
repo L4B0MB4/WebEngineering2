@@ -32,15 +32,12 @@ class Layout extends Component {
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
               <Card>
-<<<<<<< HEAD
                 {this.state.activeItem === "profil" ? (
                   <Image src="../static/bild.jpeg" label={{ attached: 'top right' }} />
                 ) : (
                     <Image src="../static/bild.jpeg" />
                   )}
-=======
                 <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
->>>>>>> 30fc16722c555644b0b0e9588f592c40a3f2fc4f
                 <Card.Content>
                   <Card.Header>{user ? user.name : ""}</Card.Header>
                 </Card.Content>
@@ -101,23 +98,11 @@ class Layout extends Component {
                   </Button>
                 </List.Item>
                 <List.Item>
-<<<<<<< HEAD
                   <Button compact as="a" size="big" className="list-item"
                     name="impressum"
                     active={activeItem === "impressum"}
                     onClick={this.handleItemClick}>
                     <Icon name="legal" />Disclaimer
-=======
-                  <Button
-                    compact
-                    as="a"
-                    size="big"
-                    className="list-item"
-                    name="impressum"
-                    active={activeItem === "impressum"}
-                    onClick={this.handleItemClick}>
-                    <Icon name="registered" />Disclaimer
->>>>>>> 30fc16722c555644b0b0e9588f592c40a3f2fc4f
                   </Button>
                 </List.Item>
               </List>
