@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { Modal, Image, Feed, Header } from "semantic-ui-react";
+import { Grid, Modal, Image, Feed, Header } from "semantic-ui-react";
 import Request from "../components/utils/request";
-import FeedElement from "./FeedElement";
+import FeedElementBig from "./FeedElementBig";
+import FeedElementSmall from "./FeedElementSmall";
 const request = new Request();
 
 class OwnFeed extends Component {
@@ -33,22 +34,44 @@ class OwnFeed extends Component {
   render() {
     return (
       <Fragment>
-        <Feed>
-          {this.props.blockchainFeed
-            ? this.props.blockchainFeed.map(item => {
-                if (item.user == undefined) return null;
-                return (
-                  <FeedElement
-                    item={item}
-                    handleShare={this.handleShare}
-                    handleLike={this.handleLike}
-                    request={request}
-                    key={item.timestamp}
-                  />
-                );
-              })
-            : null}
-        </Feed>
+        <Grid>
+          <Grid.Row only="tablet computer">
+            <Feed>
+              {this.props.blockchainFeed
+                ? this.props.blockchainFeed.map(item => {
+                    if (item.user == undefined) return null;
+                    return (
+                      <FeedElementBig
+                        item={item}
+                        handleShare={this.handleShare}
+                        handleLike={this.handleLike}
+                        request={request}
+                        key={item.timestamp}
+                      />
+                    );
+                  })
+                : null}
+            </Feed>
+          </Grid.Row>
+          <Grid.Row only="mobile">
+            <Feed>
+              {this.props.blockchainFeed
+                ? this.props.blockchainFeed.map(item => {
+                    if (item.user == undefined) return null;
+                    return (
+                      <FeedElementSmall
+                        item={item}
+                        handleShare={this.handleShare}
+                        handleLike={this.handleLike}
+                        request={request}
+                        key={item.timestamp}
+                      />
+                    );
+                  })
+                : null}
+            </Feed>
+          </Grid.Row>
+        </Grid>
       </Fragment>
     );
   }

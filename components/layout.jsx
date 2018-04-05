@@ -34,7 +34,7 @@ class Layout extends Component {
       <Fragment>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Grid divided={false} celled="internally">
-          <Grid.Row only="computer">
+          <Grid.Row only="tablet computer">
             <OwnHeader relPath={this.props.relPath} />
             {this.leftSide()}
             <Grid.Column width={10} stretched className="grid-column">
@@ -48,7 +48,7 @@ class Layout extends Component {
             </Grid.Column>
             {this.rightSide()}
           </Grid.Row>
-          <Grid.Row only="tablet mobile">
+          <Grid.Row only="mobile">
             <Sidebar.Pushable as={"div"} className="-full-width">
               <Sidebar
                 as={Menu}

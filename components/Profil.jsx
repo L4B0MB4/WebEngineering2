@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, Button, Input } from "semantic-ui-react";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
-import FeedElement from "../components/FeedElement";
+import FeedElementBig from "../components/FeedElementBig";
 import EditProfile from "./EditProfile";
 
 const panes = [
@@ -48,7 +48,7 @@ const panes = [
                   ? userContent.map(item => {
                       if (!user) return null;
                       return (
-                        <FeedElement
+                        <FeedElementBig
                           item={item}
                           user={user}
                           handleShare={undefined}
