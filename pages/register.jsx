@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import OwnHeader from "../components/Header.jsx";
-import { Grid, Form, Input, Button, TextArea, Image } from "semantic-ui-react";
+import { Grid, Form, Input, Button, Message, Image } from "semantic-ui-react";
+import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
 import { hash } from "../components/utils/utils";
@@ -9,6 +10,8 @@ const request = new Request();
 class Register extends Component {
   constructor(props) {
     super(props);
+    this.state = {visible: false};
+    this.state = {msgtext: ""};
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
     this.state = {
@@ -44,6 +47,9 @@ class Register extends Component {
     let res = await request.callRegistration(user);
     if (res.data.type === "success") {
       window.location.replace("/");
+    } else {
+        this.setState({msgtext: res.data.message});
+        this.setState({visible: true});
     }
   };
 
@@ -59,8 +65,13 @@ class Register extends Component {
                 <Image
                   src="/static/golddiggertext.png"
                   alt="Avatar"
-                  className="-avatar"
+                  className="ui centered grid -avatar"
                 />
+
+                  <Message error visible={this.state.visible}>
+                      <Message.Header>Regisrieren fehlgeschlagen!</Message.Header>
+                      <p>{this.state.msgtext}</p>
+                  </Message>
 
                 <Form.Field className="-login-field">
                   <label>Username</label>
@@ -84,7 +95,7 @@ class Register extends Component {
                 <Form.Field className="-login-field">
                   <label>Passwort</label>
                   <Input
-                    type="text"
+                    type="password"
                     name="password"
                     onChange={e => this.setState({ password: e.target.value })}
                     placeholder={"Passwort"}
@@ -105,11 +116,12 @@ class Register extends Component {
                   value={this.state.keys.priv}
                 />
                 <Button
-                  className="-login-btn"
+                  className="-register-btn"
                   onClick={this.handleRegistration}
                 >
                   Register
                 </Button>
+                  <span className="-log-span"><Link prefetch href="/login"><a>Bereits registriert? Zum Login</a></Link></span>
               </Form>
             </Grid.Column>
             <Grid.Column width={5} />

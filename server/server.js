@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const path = require("path");
 const socketIO = require("socket.io");
 import { Blockchain } from "./blockchain";
 const blockchain = new Blockchain();
@@ -16,7 +17,10 @@ const {
   getContentOfUser,
   getFollower,
   getAnsehen,
-  hasEnoughAnsehen
+  hasEnoughAnsehen,
+  createFollowerFeed,
+  getFollowing,
+  getUserWithProfilePicture
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -27,6 +31,7 @@ const {
   register,
   printAllUsers,
   findUsersByPublicKey,
+  findPublicKeyBy,
   findPublicKeyByUsername
 } = require("./database");
 const passport = require("passport"),
@@ -147,14 +152,20 @@ app
       blockchain.chain = chain.blockchain;
     }
 
-    exp.get("/index", async (req, res) => {
+    exp.get("/index", (req, res) => {
       res.redirect("/");
     });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
+      const following = await getFollowing(blockchain.chain, req.user.publicKey);
+      let user = getUserWithProfilePicture(blockchain.chain, req.user);
+      user.ansehen = getAnsehen(blockchain.chain, user.publicKey);
       const query = {
-        blockchainFeed: await createFeed(req, res, blockchain.chain),
-        user: req.user
+        blockchainFeed: await createFollowerFeed(req, res, blockchain.chain, following),
+        userContent: await getContentOfUser(blockchain.chain, req.user.publicKey),
+        followers: await getFollower(blockchain.chain, req.user.publicKey),
+        ansehen: getAnsehen(blockchain.chain, req.user.publicKey),
+        user
       };
       return app.render(req, res, "/index", query);
     });
@@ -164,10 +175,12 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
-      let Ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
-      visitedUser.ansehen = Ansehen;
+      visitedUser = getUserWithProfilePicture(blockchain.chain, visitedUser);
+      visitedUser.ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
+      let user = getUserWithProfilePicture(blockchain.chain, req.user);
+      user.ansehen = getAnsehen(blockchain.chain, user.publicKey);
       query = {
-        user: req.user,
+        user,
         visitedUser
       };
       return app.render(req, res, "/visitorpage", query);
@@ -193,6 +206,13 @@ app
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
       res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await findPublicKeyByUsername(req.query.username);
+      const following = await getFollowing(blockchain.chain, visitedUser.publicKey);
+      const feed = await createFollowerFeed(req, res, blockchain.chain, following);
+      res.json(feed);
     });
 
     exp.post("/api/user/login", function(req, res, next) {
@@ -222,14 +242,15 @@ app
       if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
       const file = req.files.uploadedFile;
       const filename = file.md5 + Date.now();
-      file.mv(`${__dirname}/temp/'${filename}`, function(err) {
+      file.mv(`${__dirname}/../temp/${filename}`, function(err) {
         if (err) return res.status(500).send(err);
         res.send({ filename });
       });
     });
 
     exp.get("/api/picture/:filename", (req, res) => {
-      res.sendFile(`${__dirname}/temp/'${req.params.filename}`);
+      let p = path.resolve(`${__dirname}/../temp/`);
+      res.sendFile(`${p}/${req.params.filename}`);
     });
 
     exp.get("*", (req, res) => {

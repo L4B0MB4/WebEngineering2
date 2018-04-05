@@ -24,6 +24,7 @@ class Layout extends Component {
 
   render() {
     const { activeItem } = this.state;
+    const { user } = this.props;
     return (
       <Fragment>
         <OwnHeader relPath={this.props.relPath} />
@@ -31,18 +32,22 @@ class Layout extends Component {
           <Grid.Column width={3} stretched className="grid-column">
             <div className="-sidebars">
               <Card>
+<<<<<<< HEAD
                 {this.state.activeItem === "profil" ? (
                   <Image src="../static/bild.jpeg" label={{ attached: 'top right' }} />
                 ) : (
                     <Image src="../static/bild.jpeg" />
                   )}
+=======
+                <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
+>>>>>>> 30fc16722c555644b0b0e9588f592c40a3f2fc4f
                 <Card.Content>
-                  <Card.Header>Name</Card.Header>
+                  <Card.Header>{user ? user.name : ""}</Card.Header>
                 </Card.Content>
                 <Card.Content extra>
                   <a>
                     <Icon name="users" />
-                    10 Ansehen
+                    {user ? user.ansehen : ""}
                   </a>
                 </Card.Content>
               </Card>
@@ -64,7 +69,13 @@ class Layout extends Component {
           </Grid.Column>
 
           <Grid.Column width={10} stretched className="grid-column">
-            <div className="-feed">{this.props.children}</div>
+            <Grid>
+              <Grid.Column only="computer" width={2} />
+              <Grid.Column mobile={16} mobile={16} computer={12}>
+                <div className="-feed">{this.props.children}</div>
+              </Grid.Column>
+              <Grid.Column only="computer" width={2} />
+            </Grid>
           </Grid.Column>
 
           <Grid.Column width={3} stretched className="grid-column">
@@ -78,7 +89,11 @@ class Layout extends Component {
               </List>
               <List relaxed className="-list">
                 <List.Item>
-                  <Button compact as="a" size="big" className="list-item"
+                  <Button
+                    compact
+                    as="a"
+                    size="big"
+                    className="list-item"
                     name="kontakt"
                     active={activeItem === "kontakt"}
                     onClick={this.handleItemClick}>
@@ -86,11 +101,23 @@ class Layout extends Component {
                   </Button>
                 </List.Item>
                 <List.Item>
+<<<<<<< HEAD
                   <Button compact as="a" size="big" className="list-item"
                     name="impressum"
                     active={activeItem === "impressum"}
                     onClick={this.handleItemClick}>
                     <Icon name="legal" />Disclaimer
+=======
+                  <Button
+                    compact
+                    as="a"
+                    size="big"
+                    className="list-item"
+                    name="impressum"
+                    active={activeItem === "impressum"}
+                    onClick={this.handleItemClick}>
+                    <Icon name="registered" />Disclaimer
+>>>>>>> 30fc16722c555644b0b0e9588f592c40a3f2fc4f
                   </Button>
                 </List.Item>
               </List>
