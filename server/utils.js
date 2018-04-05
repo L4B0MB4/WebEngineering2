@@ -1,5 +1,14 @@
 const _ = require("lodash");
 const { findUsersByPublicKey } = require("./database");
+const readChunk = require("read-chunk");
+const fileType = require("file-type");
+
+async function checkFileType(file) {
+  const buffer = readChunk.sync(file, 0, 4100);
+  const fileinfo = await fileType(buffer);
+  if (fileinfo.mime.startsWith("image")) return true;
+  else return false;
+}
 
 async function createFeed(req, res, blockchain) {
   let filtered = getChainByTime(blockchain);
@@ -243,32 +252,32 @@ function getUserWithProfilePicture(blockchain, user) {
 }
 
 async function getLikedContent(blockchain, user) {
-    let feed = blockchain.map(item => {
-        return { ...item.transactions[0], previousHash: item.previousHash };
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  let likes = _.filter(feed, {
+    sender: user.publicKey,
+    type: "like"
+  });
+  let l;
+  let content;
+  let finalFeed = [];
+  for (l in likes) {
+    content = _.find(feed, {
+      type: "content",
+      previousHash: likes[l].data.previousHash
     });
-    let likes = _.filter(feed, {
-        sender: user.publicKey,
-        type: "like"
-    });
-    let l;
-    let content;
-    let finalFeed = [];
-    for(l in likes) {
-      content = _.find(feed, {
-        type: "content",
-        previousHash: likes[l].data.previousHash
-      });
-      finalFeed.push(content);
-    }
-    finalFeed.sort(sortByTimestamp);
-    finalFeed.slice(Math.max(feed.length - 10, 1));
-    let publicKeys = finalFeed.map(item => item.sender);
-    let users = await findUsersByPublicKey(publicKeys);
-    finalFeed = finalFeed.map(block => mergeUserToBlock(block, users, blockchain));
-    for (let i = 0; i < finalFeed.length; i++) {
-        finalFeed[i].likes = await getLikesByPreviousHash(blockchain, finalFeed[i].previousHash);
-    }
-    return finalFeed.reverse();
+    finalFeed.push(content);
+  }
+  finalFeed.sort(sortByTimestamp);
+  finalFeed.slice(Math.max(feed.length - 10, 1));
+  let publicKeys = finalFeed.map(item => item.sender);
+  let users = await findUsersByPublicKey(publicKeys);
+  finalFeed = finalFeed.map(block => mergeUserToBlock(block, users, blockchain));
+  for (let i = 0; i < finalFeed.length; i++) {
+    finalFeed[i].likes = await getLikesByPreviousHash(blockchain, finalFeed[i].previousHash);
+  }
+  return finalFeed.reverse();
 }
 
 module.exports = {
@@ -284,5 +293,6 @@ module.exports = {
   createFollowerFeed,
   getFollowing,
   getUserWithProfilePicture,
-  getLikedContent
+  getLikedContent,
+  checkFileType
 };

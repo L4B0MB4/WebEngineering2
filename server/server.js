@@ -21,7 +21,8 @@ const {
   createFollowerFeed,
   getFollowing,
   getUserWithProfilePicture,
-  getLikedContent
+  getLikedContent,
+  checkFileType
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
@@ -106,7 +107,7 @@ passport.deserializeUser((obj, done) => {
 });
 
 passport.use(
-  new LocalStrategy(async function (username, password, done) {
+  new LocalStrategy(async function(username, password, done) {
     let user = await login(username, password);
     if (user) {
       return done(null, user);
@@ -216,7 +217,7 @@ app
       res.json(feed);
     });
 
-    exp.post("/api/user/login", function (req, res, next) {
+    exp.post("/api/user/login", function(req, res, next) {
       passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
     });
 
@@ -239,13 +240,20 @@ app
       res.json(user);
     });
 
-    exp.post("/api/uploadPicture", function (req, res) {
+    exp.post("/api/uploadPicture", function(req, res) {
       if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
       const file = req.files.uploadedFile;
       const filename = file.md5 + Date.now();
-      file.mv(`${__dirname}/../temp/${filename}`, function (err) {
+      const destination = path.join(__dirname, "..", "temp", filename);
+      file.mv(destination, async function(err) {
         if (err) return res.status(500).send(err);
-        res.send({ filename });
+        let allowed = await checkFileType(destination);
+        if (allowed) {
+          return res.send({ filename });
+        } else {
+          fs.unlink(destination);
+          return res.status(500).send(err);
+        }
       });
     });
 
