@@ -58,7 +58,7 @@ export default class FeedElement extends Component {
                   </Feed.Date>
                   <br />
                   <Feed.Date>
-                    <Icon name="marker" />Hier noch Ort einfügen
+                    <Icon name="marker" />Stuttgart
                   </Feed.Date>
                 </Feed.Summary>
               </Feed.Content>
