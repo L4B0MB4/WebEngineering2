@@ -159,20 +159,7 @@ app
     });
 
     exp.post("/api/uploadPicture", function(req, res) {
-      if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
-      const file = req.files.uploadedFile;
-      const filename = file.md5 + Date.now();
-      const destination = path.join(__dirname, "..", "temp", filename);
-      file.mv(destination, async function(err) {
-        if (err) return res.status(500).send(err);
-        let allowed = await serverutils.checkFileType(destination);
-        if (allowed) {
-          return res.send({ filename });
-        } else {
-          fs.unlink(destination);
-          return res.status(500).send(err);
-        }
-      });
+      commonutils.setUpPictureUpload(req, res);
     });
 
     exp.get("/api/picture/:filename", (req, res) => {

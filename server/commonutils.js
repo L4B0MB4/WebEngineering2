@@ -2,6 +2,7 @@ import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
 import * as websocketutils from "./websockets";
 import * as databaseutils from "./database";
+const path = require("path");
 
 async function setUpMain(req, res, blockchain) {
   const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
@@ -30,4 +31,21 @@ async function setUpVisitPage(req, res, blockchain) {
   return query;
 }
 
-module.exports = { setUpMain, setUpVisitPage };
+function setUpPictureUpload(req, res) {
+  if (!req.files || !req.files.uploadedFile) return res.status(400).json({ message: "No / Wrong files were uploaded." });
+  const file = req.files.uploadedFile;
+  const filename = file.md5 + Date.now();
+  const destination = path.join(__dirname, "..", "temp", filename);
+  file.mv(destination, async function(err) {
+    if (err) return res.status(500).send(err);
+    let allowed = await serverutils.checkFileType(destination);
+    if (allowed) {
+      return res.send({ filename });
+    } else {
+      fs.unlink(destination);
+      return res.status(500).send(err);
+    }
+  });
+}
+
+module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload };
