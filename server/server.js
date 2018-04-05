@@ -8,22 +8,9 @@ const exp = express();
 const fileUpload = require("express-fileupload");
 const NodeRSA = require("node-rsa");
 const rsaKeys = new NodeRSA({ b: 512 });
-const {
-  createFeed,
-  handleLogin,
-  mergeUserToBlock,
-  broadcastOrEmit,
-  getLikesByPreviousHash,
-  getContentOfUser,
-  getFollower,
-  getAnsehen,
-  hasEnoughAnsehen,
-  createFollowerFeed,
-  getFollowing,
-  getUserWithProfilePicture,
-  getLikedContent,
-  checkFileType
-} = require("./utils");
+import * as serverutils from "./serverutils";
+import * as blockchainutils from "./blockchainutils";
+
 const MongoClient = require("mongodb").MongoClient;
 const {
   connect,
@@ -73,8 +60,8 @@ io.on("connection", socket => {
       data: data.data,
       timestamp: data.timestamp
     };
-    if ((data.type === "share" && hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
-      broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+    if ((data.type === "share" && blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
     }
   });
 
@@ -159,14 +146,14 @@ app
     });
 
     exp.get("/", ensureAuthenticated, async (req, res) => {
-      const following = await getFollowing(blockchain.chain, req.user.publicKey);
-      let user = getUserWithProfilePicture(blockchain.chain, req.user);
-      user.ansehen = getAnsehen(blockchain.chain, user.publicKey);
+      const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
+      let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
+      user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
       const query = {
-        blockchainFeed: await createFollowerFeed(req, res, blockchain.chain, following),
-        userContent: await getContentOfUser(blockchain.chain, req.user.publicKey),
-        followers: await getFollower(blockchain.chain, req.user.publicKey),
-        ansehen: getAnsehen(blockchain.chain, req.user.publicKey),
+        blockchainFeed: await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following),
+        userContent: await blockchainutils.getContentOfUser(blockchain.chain, req.user.publicKey),
+        followers: await blockchainutils.getFollower(blockchain.chain, req.user.publicKey),
+        ansehen: blockchainutils.getAnsehen(blockchain.chain, req.user.publicKey),
         user
       };
       return app.render(req, res, "/index", query);
@@ -177,10 +164,10 @@ app
         ...req.params
       };
       let visitedUser = await findPublicKeyByUsername(query.username);
-      visitedUser = getUserWithProfilePicture(blockchain.chain, visitedUser);
-      visitedUser.ansehen = getAnsehen(blockchain.chain, visitedUser.publicKey);
-      let user = getUserWithProfilePicture(blockchain.chain, req.user);
-      user.ansehen = getAnsehen(blockchain.chain, user.publicKey);
+      visitedUser = blockchainutils.getUserWithProfilePicture(blockchain.chain, visitedUser);
+      visitedUser.ansehen = blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey);
+      let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
+      user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
       query = {
         user,
         visitedUser
@@ -189,14 +176,14 @@ app
     });
 
     exp.get("/api/blockchain/feed", async (req, res) => {
-      let feed = await createFeed(req, res, blockchain.chain);
+      let feed = await blockchainutils.createFeed(req, res, blockchain.chain);
       res.json(feed);
     });
 
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
-      const feed = await getContentOfUser(blockchain.chain, visitedUser.publicKey);
+      const feed = await blockchainutils.getContentOfUser(blockchain.chain, visitedUser.publicKey);
       res.json(feed);
     });
     exp.get("/api/blockchain/getUserFollower", async (req, res) => {
@@ -207,18 +194,18 @@ app
     exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
-      res.json(await getAnsehen(blockchain.chain, visitedUser.publicKey));
+      res.json(await blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
     exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await findPublicKeyByUsername(req.query.username);
-      const following = await getFollowing(blockchain.chain, visitedUser.publicKey);
-      const feed = await createFollowerFeed(req, res, blockchain.chain, following);
+      const following = await blockchainutils.getFollowing(blockchain.chain, visitedUser.publicKey);
+      const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
     });
 
     exp.post("/api/user/login", function(req, res, next) {
-      passport.authenticate("local", (err, user, info) => handleLogin(err, user, info, req, res))(req, res, next);
+      passport.authenticate("local", (err, user, info) => serverutils.handleLogin(err, user, info, req, res))(req, res, next);
     });
 
     exp.post("/api/user/register", (req, res) => {
@@ -247,7 +234,7 @@ app
       const destination = path.join(__dirname, "..", "temp", filename);
       file.mv(destination, async function(err) {
         if (err) return res.status(500).send(err);
-        let allowed = await checkFileType(destination);
+        let allowed = await serverutils.checkFileType(destination);
         if (allowed) {
           return res.send({ filename });
         } else {
