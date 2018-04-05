@@ -47,11 +47,6 @@ export default class FeedElement extends Component {
                   <br />
                   <Feed.Meta>
                     <Feed.Like>
-                      <Icon name="like" />
-                      {item.likes.length} Likes
-                    </Feed.Like>
-                    <br />
-                    <Feed.Like>
                       <Icon name="trophy" />
                       {item.likes.length} Ansehen
                     </Feed.Like>
@@ -61,6 +56,7 @@ export default class FeedElement extends Component {
                     <Icon name="wait" />
                     {getDate(item.timestamp)}
                   </Feed.Date>
+                  <br />
                   <Feed.Date>
                     <Icon name="marker" />Hier noch Ort einfügen
                   </Feed.Date>
