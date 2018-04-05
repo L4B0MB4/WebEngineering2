@@ -242,6 +242,35 @@ function getUserWithProfilePicture(blockchain, user) {
   };
 }
 
+async function getLikedContent(blockchain, user) {
+    let feed = blockchain.map(item => {
+        return { ...item.transactions[0], previousHash: item.previousHash };
+    });
+    let likes = _.filter(feed, {
+        sender: user.publicKey,
+        type: "like"
+    });
+    let l;
+    let content;
+    let finalFeed = [];
+    for(l in likes) {
+      content = _.find(feed, {
+        type: "content",
+        previousHash: likes[l].data.previousHash
+      });
+      finalFeed.push(content);
+    }
+    finalFeed.sort(sortByTimestamp);
+    finalFeed.slice(Math.max(feed.length - 10, 1));
+    let publicKeys = finalFeed.map(item => item.sender);
+    let users = await findUsersByPublicKey(publicKeys);
+    finalFeed = finalFeed.map(block => mergeUserToBlock(block, users, blockchain));
+    for (let i = 0; i < finalFeed.length; i++) {
+        finalFeed[i].likes = await getLikesByPreviousHash(blockchain, finalFeed[i].previousHash);
+    }
+    return finalFeed.reverse();
+}
+
 module.exports = {
   createFeed,
   handleLogin,
@@ -254,5 +283,6 @@ module.exports = {
   hasEnoughAnsehen,
   createFollowerFeed,
   getFollowing,
-  getUserWithProfilePicture
+  getUserWithProfilePicture,
+  getLikedContent
 };

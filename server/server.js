@@ -20,7 +20,8 @@ const {
   hasEnoughAnsehen,
   createFollowerFeed,
   getFollowing,
-  getUserWithProfilePicture
+  getUserWithProfilePicture,
+  getLikedContent
 } = require("./utils");
 const MongoClient = require("mongodb").MongoClient;
 const {
