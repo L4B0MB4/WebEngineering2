@@ -132,6 +132,7 @@ body {
 .-reg-span {
   z-index: 1 !important;
   float: right !important;
+  margin-top: 10px; !important;
   margin-right: 10px !important;
 }
 
