@@ -54,30 +54,37 @@ class Layout extends Component {
                 icon="labeled"
                 vertical
                 inverted>
-                <Menu.Item name="profil">
-                  <Icon name="user" />Profile
-                </Menu.Item>
-                <Menu.Item name="feed">
-                  <Icon name="newspaper" />Feed
-                </Menu.Item>
-                <Menu.Item name="featured" onClick={this.handleItemClick}>
-                  <Icon name="trophy" />Featured Profiles
-                </Menu.Item>
-                <Menu.Item name="logout" onClick={this.handleItemClick}>
-                  <Icon name="power" />Logout
-                </Menu.Item>
-                <Menu.Item name="kontakt">
-                  <Icon name="hand victory" />About us
-                </Menu.Item>
-                <Menu.Item name="impressum">
-                  <Icon name="legal" />Disclaimer
-                </Menu.Item>
-                <Menu.Item name="logout">
-                  <Icon name="power" />Logout
-                </Menu.Item>
+                <Link href={relPath + "./profile"}>
+                  <Menu.Item name="profil">
+                    <Icon name="user" />Profile
+                  </Menu.Item>
+                </Link>
+                <Link href={relPath + "./"}>
+                  <Menu.Item name="feed">
+                    <Icon name="newspaper" />Feed
+                  </Menu.Item>
+                </Link>
+                <Link href={relPath + "./featured"}>
+                  <Menu.Item name="featured">
+                    <Icon name="trophy" />Featured Profiles
+                  </Menu.Item>
+                </Link>
+                <Link href={relPath + "./aboutus"}>
+                  <Menu.Item name="kontakt">
+                    <Icon name="hand victory" />About us
+                  </Menu.Item>
+                </Link>
+                <Link href={relPath + "./impressum"}>
+                  <Menu.Item name="impressum">
+                    <Icon name="legal" />Disclaimer
+                  </Menu.Item>
+                </Link>
                 <Menu.Item name="delete" className="-clickable" onClick={() => this.setOpenSidebar(false)}>
                   <Icon name="delete" />
                   Close
+                </Menu.Item>
+                <Menu.Item name="logout">
+                  <Icon name="power" />Logout
                 </Menu.Item>
               </Sidebar>
               <Sidebar.Pusher>
@@ -127,9 +134,8 @@ class Layout extends Component {
                 <Icon name="newspaper" />Feed
               </Menu.Item>
             </Link>
-
-            <Link href={relPath + "./"}>
-              <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
+            <Link href={relPath + "./featured"}>
+              <Menu.Item name="featured" active={activeItem === "featured"}>
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
             </Link>
