@@ -38,6 +38,7 @@ const panes = [
 ];
 
 class VisitorPage extends Component {
+
   static async getInitialProps({ store, query, req }) {
     const baseUrl = `${req.protocol}://${req.get("Host")}`;
     request = new Request(baseUrl);

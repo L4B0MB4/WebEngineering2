@@ -21,6 +21,7 @@ import Request from "../components/utils/request";
 import Profil from "../components/Profil";
 import Kontakt from "../components/kontakt";
 import Impressum from "../components/impressum";
+import FeaturedProfiles from "../components/FeaturedProfiles"
 
 const request = new Request();
 
@@ -70,13 +71,15 @@ class Index extends Component {
           <Kontakt />
         ) : this.state.activeItem === "impressum" ? (
           <Impressum />
+        ) : this.state.activeItem === "featured" ? ( 
+          <FeaturedProfiles />
         ) : (
-          <Fragment>
-            <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
-            <Divider />
-            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
-          </Fragment>
-        )}
+                <Fragment>
+                  <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
+                  <Divider />
+                  <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
+                </Fragment>
+              )}
       </Layout>
     );
   }

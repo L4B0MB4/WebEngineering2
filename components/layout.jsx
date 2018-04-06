@@ -65,6 +65,9 @@ class Layout extends Component {
                 <Menu.Item name="feed" onClick={this.handleItemClick}>
                   <Icon name="newspaper" />Feed
                 </Menu.Item>
+                <Menu.Item name="featured" onClick={this.handleItemClick}>
+                  <Icon name="trophy" />Featured Profiles
+                </Menu.Item>
                 <Menu.Item name="logout" onClick={this.handleItemClick}>
                   <Icon name="power" />Logout
                 </Menu.Item>
@@ -124,6 +127,9 @@ class Layout extends Component {
             <Menu.Item name="feed" active={activeItem === "feed"} onClick={this.handleItemClick}>
               <Icon name="newspaper" />Feed
             </Menu.Item>
+            <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
+              <Icon name="trophy" />Featured Profiles
+            </Menu.Item>
             <Menu.Item name="logout" active={activeItem === "logout"} onClick={this.handleItemClick}>
               <Icon name="power" />Logout
             </Menu.Item>
@@ -158,7 +164,7 @@ class Layout extends Component {
                 name="kontakt"
                 active={activeItem === "kontakt"}
                 onClick={this.handleItemClick}>
-                <Icon name="mail" />About us
+                <Icon name="hand victory" />About us
               </Button>
             </List.Item>
             <List.Item>
@@ -170,7 +176,7 @@ class Layout extends Component {
                 name="impressum"
                 active={activeItem === "impressum"}
                 onClick={this.handleItemClick}>
-                <Icon name="registered" />Disclaimer
+                <Icon name="legal" />Disclaimer
               </Button>
             </List.Item>
           </List>
