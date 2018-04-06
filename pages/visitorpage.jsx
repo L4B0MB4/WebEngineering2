@@ -38,14 +38,12 @@ const panes = [
 ];
 
 class VisitorPage extends Component {
-
   static async getInitialProps({ store, query, req }) {
     const baseUrl = `${req.protocol}://${req.get("Host")}`;
     request = new Request(baseUrl);
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
-    } else {
     }
     let { data } = await request.callGetUserContent(query.visitedUser.name);
     store.dispatch(receiveVisitedUserContent(data));
@@ -77,7 +75,7 @@ class VisitorPage extends Component {
   render() {
     return (
       <Fragment>
-        <Layout handleItemClick={this.handleItemClick} relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
           <div className="-full-width -padding-10">
             <h1>
               {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen

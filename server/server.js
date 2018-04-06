@@ -145,6 +145,11 @@ app
       }
     });
 
+    exp.get("/api/user/getUser", async (req, res) => {
+      let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
+      res.json(user);
+    });
+
     exp.get("/api/user/getAllUsers", async (req, res) => {
       let users = await databaseutils.printAllUsers();
       res.json(users);

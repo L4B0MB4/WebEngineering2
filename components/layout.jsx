@@ -113,18 +113,18 @@ class Layout extends Component {
             </Card.Content>
           </Card>
           <Menu vertical floated fixed="bottom" tabular className="-menu">
-            <Link href="./profile">
+            <Link href={this.props.relPath + "./profile"}>
               <Menu.Item name="profile" active={activeItem === "profile"}>
                 <Icon name="user" />Profile
               </Menu.Item>
             </Link>
-            <Link href="./">
+            <Link href={this.props.relPath + "./"}>
               <Menu.Item name="feed" active={activeItem === "feed"}>
                 <Icon name="newspaper" />Feed
               </Menu.Item>
             </Link>
 
-            <Link href="./">
+            <Link href={this.props.relPath + "./"}>
               <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
@@ -153,14 +153,14 @@ class Layout extends Component {
             </List.Item>
           </List>
           <List relaxed className="-list">
-            <Link href="./kontakt">
+            <Link href={this.props.relPath + "./aboutus"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="kontakt" active={activeItem === "kontakt"}>
                   <Icon name="mail" />About us
                 </Button>
               </List.Item>
             </Link>
-            <Link href="./impressum">
+            <Link href={this.props.relPath + "./impressum"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="impressum" active={activeItem === "impressum"}>
                   <Icon name="registered" />Disclaimer
