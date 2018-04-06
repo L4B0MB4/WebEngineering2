@@ -73,7 +73,7 @@ export default class FeedElement extends BasicFeedElement {
           </div>
           <br />
           <div className="-feed-content-wrapper">
-            <div className="">{this.getComments()}</div>
+            <div className="">{this.getComments(item)}</div>
           </div>
           {this.getCommentForm(this)}
         </Segment>

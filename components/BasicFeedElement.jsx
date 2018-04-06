@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment, Form, TextArea } from "semantic-ui-react";
 import Link from "next/link";
+import { getDate } from "../components/utils/utils";
 
 export default class FeedElement extends Component {
   checkForVideo() {
@@ -51,35 +52,31 @@ export default class FeedElement extends Component {
     );
   }
 
-  getComments() {
+  getComments(item) {
+    const { comments } = item;
     return (
       <Comment.Group>
-        <Comment>
-          <Comment.Avatar src="/assets/images/avatar/small/matt.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">Matt</Comment.Author>
-            <Comment.Metadata>
-              <div>Today at 5:42PM</div>
-            </Comment.Metadata>
-            <Comment.Text>How artistic!</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
-        <Comment>
-          <Comment.Avatar src="/assets/images/avatar/small/matt.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">Matt</Comment.Author>
-            <Comment.Metadata>
-              <div>Today at 5:42PM</div>
-            </Comment.Metadata>
-            <Comment.Text>How artistic!</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+        {comments
+          ? comments.map(comment => {
+              return (
+                <Comment>
+                  <Comment.Avatar
+                    src={comment.user && comment.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                  />
+                  <Comment.Content>
+                    <Comment.Author as="a">{comment.user.name}</Comment.Author>
+                    <Comment.Metadata>
+                      <div>{getDate(comment.timestamp)}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.data.text}</Comment.Text>
+                    <Comment.Actions>
+                      <Comment.Action>Reply</Comment.Action>
+                    </Comment.Actions>
+                  </Comment.Content>
+                </Comment>
+              );
+            })
+          : null}
       </Comment.Group>
     );
   }
