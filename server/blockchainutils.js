@@ -16,7 +16,11 @@ async function createFeed(req, res, blockchain) {
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
-    feed[i].comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    const comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    for (let j = 0; j < comments.length; j++) {
+      comments[j].likes = await getTagByPreviousHash(blockchain, comments.previousHash, "like");
+    }
+    feed[i].comments = comments;
   }
   return feed.reverse();
 }
@@ -191,7 +195,11 @@ async function createFollowerFeed(req, res, blockchain, following) {
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
-    feed[i].comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    const comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    for (let j = 0; j < comments.length; j++) {
+      comments[j].likes = await getTagByPreviousHash(blockchain, comments[j].previousHash, "like");
+    }
+    feed[i].comments = comments;
   }
   return feed.reverse();
 }
