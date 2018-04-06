@@ -57,6 +57,9 @@ export default class FeedElement extends BasicFeedElement {
               <Button.Content hidden>Like</Button.Content>
             </Button>
           </div>
+          <br />
+          <br />
+          {this.getComments()}
         </Segment>
         <br />
       </Feed.Event>

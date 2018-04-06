@@ -246,3 +246,7 @@ h1 {
 .-min-full-height {
   min-height: 100%;
 }
+
+.-no-border {
+  border: none !important;
+}

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown } from "semantic-ui-react";
+import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment } from "semantic-ui-react";
 import Link from "next/link";
 import { getDate } from "../components/utils/utils";
 import BasicFeedElement from "./BasicFeedElement";
@@ -60,6 +60,7 @@ export default class FeedElement extends BasicFeedElement {
               <Button.Content hidden>Like</Button.Content>
             </Button>
           </div>
+          <div className="right-div -no-border">{this.getComments()}</div>
         </Segment>
         <br />
       </Feed.Event>
