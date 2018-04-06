@@ -52,7 +52,7 @@ export default class FeedElement extends Component {
     );
   }
 
-  getComments(item) {
+  getComments(item, handleLike) {
     const { comments } = item;
     return (
       <Comment.Group>
@@ -70,7 +70,9 @@ export default class FeedElement extends Component {
                     </Comment.Metadata>
                     <Comment.Text>{comment.data.text}</Comment.Text>
                     <Comment.Actions>
-                      <Comment.Action>Reply</Comment.Action>
+                      <Comment.Action onClick={() => handleLike(comment.user.name, comment.previousHash)}>
+                        <Icon name="heart" style={{ color: "#daa520" }} /> <span style={{ color: "black" }}>Like!</span>
+                      </Comment.Action>
                     </Comment.Actions>
                   </Comment.Content>
                 </Comment>

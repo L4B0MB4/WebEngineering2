@@ -70,7 +70,7 @@ export default class FeedElement extends BasicFeedElement {
             <br />
           </div>
           <br />
-          {this.getComments(item)}
+          {this.getComments(item, handleLike)}
           {this.getCommentForm(this)}
         </Segment>
         <br />

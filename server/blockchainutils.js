@@ -54,6 +54,7 @@ async function getTagByPreviousHash(blockchain, hash, tag) {
   arr = arr.map(block => {
     let b = mergeUserToBlock(block, users, blockchain);
     return {
+      previousHash: b.previousHash,
       timestamp: b.timestamp,
       data: b.data,
       user: b.user
