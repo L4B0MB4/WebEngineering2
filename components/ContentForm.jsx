@@ -7,7 +7,7 @@ export default class ContentForm extends Component {
   };
 
   onSuccessFullyPosted = () => {
-    this.state.inputImage.value = "";
+    if (this.state.inputImage) this.state.inputImage.value = "";
     this.setState({ content: "", buttonSucess: true, buttonLoading: false, file: undefined });
     setInterval(() => this.setState({ buttonSucess: false }), 1000);
   };
