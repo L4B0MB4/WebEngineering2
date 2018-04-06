@@ -15,7 +15,7 @@ export default class FeedElement extends BasicFeedElement {
     if (this.state.content.length > 0 && !this.state.file) {
       this.props.blockchainWrapper.newTransaction(
         "comment",
-        { text: this.state.content, postPreviousHash: this.props.item.previousHash },
+        { text: this.state.content, previousHash: this.props.item.previousHash },
         this.onSuccessFullyPosted
       );
       this.setState({ buttonLoading: true });
@@ -64,7 +64,7 @@ export default class FeedElement extends BasicFeedElement {
             </Feed.Date>
             <br />
             <br />
-            {this.getLikeAndShare()}
+            {this.getLikeAndShare(handleLike, handleShare, item)}
             <br />
             <br />
             <br />

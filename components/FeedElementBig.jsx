@@ -14,7 +14,7 @@ export default class FeedElement extends BasicFeedElement {
     if (this.state.content.length > 0 && !this.state.file) {
       this.props.blockchainWrapper.newTransaction(
         "comment",
-        { text: this.state.content, postPreviousHash: this.props.item.previousHash },
+        { text: this.state.content, previousHash: this.props.item.previousHash },
         this.onSuccessFullyPosted
       );
       this.setState({ buttonLoading: true });
@@ -69,7 +69,7 @@ export default class FeedElement extends BasicFeedElement {
             {this.getDropDown(item)}
           </div>
           <div style={{ minHeight: "30px", width: "100%" }} className="-border-top ">
-            {this.getLikeAndShare()}
+            {this.getLikeAndShare(handleLike, handleShare, item)}
           </div>
           <br />
           <div className="-feed-content-wrapper">
