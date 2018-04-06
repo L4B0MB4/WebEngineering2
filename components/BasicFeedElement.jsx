@@ -23,12 +23,12 @@ export default class FeedElement extends Component {
 
   getCommentForm(classthis) {
     return (
-      <Fragment>
+      <Container>
         <br />
         <br />
         <Form>
-          <Form.Group widths={16} unstackable={true}>
-            <Form.Field width={13}>
+          <Form.Group unstackable widths={16}>
+            <Form.Field style={{ width: "calc(100% - 96px)" }}>
               <TextArea
                 placeholder="Comment"
                 value={undefined}
@@ -36,19 +36,19 @@ export default class FeedElement extends Component {
                 onChange={e => this.setState({ content: e.target.value, textArea: e.target })}
               />
             </Form.Field>
-            <Form.Field width={3}>
+            <Form.Field style={{ textAlign: "center", width: "96px" }}>
               <Button
                 type="submit"
                 loading={classthis.isLoading() ? true : false}
                 color={classthis.isSuccessfull() ? "green" : null}
                 onClick={classthis.isLoading() ? null : classthis.sendContent}
-                classthis={{ minHeight: "42px", width: "100%", wordBreak: "break-word" }}>
+                style={{ minHeight: "42px", width: "100%" }}>
                 {classthis.isSuccessfull() ? "Success" : "Post"}
               </Button>
             </Form.Field>
           </Form.Group>
         </Form>
-      </Fragment>
+      </Container>
     );
   }
 
