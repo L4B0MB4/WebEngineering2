@@ -9,15 +9,20 @@ class EditProfile extends Component {
 
   render() {
     const { user } = this.props;
+    const { preloadeImage } = this.state;
     return (
       <Tab.Pane className="-tab">
         <div className="-full-width -padding-10">
           <Segment raised className="-full-width -segment">
             <Form>
               <Image
-                src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
+                src={
+                  preloadeImage
+                    ? preloadeImage
+                    : user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"
+                }
                 size="small"
-                circular
+                rounded
                 centered
               />
               <br />
@@ -52,6 +57,11 @@ class EditProfile extends Component {
   };
   onSelectFiles = files => {
     this.setState({ file: files[0] });
+    var reader = new FileReader();
+    reader.onload = e => {
+      this.setState({ preloadeImage: e.target.result });
+    };
+    reader.readAsDataURL(files[0]);
   };
   uploadProfilePicture = async () => {
     this.setState({ buttonLoading: true });
