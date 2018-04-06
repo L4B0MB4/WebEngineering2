@@ -94,6 +94,10 @@ app
       const query = await commonutils.setUpMain(req, res, blockchain);
       return app.render(req, res, "/index", query);
     });
+    exp.get("/profile", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/profile", query);
+    });
 
     exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
       const query = await commonutils.setUpVisitPage(req, res, blockchain);

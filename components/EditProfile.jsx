@@ -64,6 +64,7 @@ class EditProfile extends Component {
     reader.readAsDataURL(files[0]);
   };
   uploadProfilePicture = async () => {
+    console.log(this.props);
     this.setState({ buttonLoading: true });
     const { data } = await request.callUploadFile(this.state.file);
     if (data.filename) {
