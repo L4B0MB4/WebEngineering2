@@ -162,17 +162,10 @@ h1 {
   display: inline-block !important;
 }
 
-.left-div {
-  float: left;
-  width: 25% !important;
-}
-
-.right-div {
-  float: right;
-  width: 70% !important;
-  height: 100% !important;
-  border-left: 1px solid !important;
-  border-left-color: lightgray !important;
+.-left-feed-grid {
+  padding-right: 5px;
+  border-right: 1px solid !important;
+  border-right-color: lightgray !important;
 }
 
 .-post {
@@ -249,4 +242,10 @@ h1 {
 
 .-no-border {
   border: none !important;
+}
+.-border-top {
+  margin-top: 15px;
+  padding-top: 5px;
+  border-top: 1px solid !important;
+  border-color: lightgray !important;
 }

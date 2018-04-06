@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment } from "semantic-ui-react";
+import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment, Form, TextArea } from "semantic-ui-react";
 import Link from "next/link";
 
 export default class FeedElement extends Component {
@@ -18,6 +18,23 @@ export default class FeedElement extends Component {
       video = video.substring(0, video.indexOf("?"));
       this.state.video = "https://open.spotify.com/embed/track/" + video;
     }
+  }
+
+  getCommentForm() {
+    return (
+      <Form>
+        <Form.Group widths={16} unstackable={true}>
+          <Form.Field width={13}>
+            <TextArea placeholder="Comment" value={undefined} rows={1} onChange={e => this.setState({ content: e.target.value })} />
+          </Form.Field>
+          <Form.Field width={3}>
+            <Button type="submit" loading={false} color={null} style={{ minHeight: "42px", width: "100%", wordBreak: "break-word" }}>
+              Post
+            </Button>
+          </Form.Field>
+        </Form.Group>
+      </Form>
+    );
   }
 
   getComments() {
@@ -100,14 +117,36 @@ export default class FeedElement extends Component {
           />
         ) : null}
         <br />
-        {item.data.text ? item.data.text : null}
-        <br />
-        {item.data.picture ? (
+        {item.data.text ? (
           <Fragment>
+            {item.data.text}
             <br />
           </Fragment>
         ) : null}
       </Feed.Extra>
+    );
+  }
+
+  getLikeAndShare() {
+    return (
+      <Fragment>
+        <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-right ">
+          <Button.Content visible>
+            <Icon name="share" />
+          </Button.Content>
+          <Button.Content hidden>Share</Button.Content>
+        </Button>
+        <Button
+          size="mini"
+          animated="fade"
+          onClick={() => handleLike(item.user.name, item.previousHash)}
+          className="-float-right -like-button">
+          <Button.Content visible>
+            <Icon name="heart" />
+          </Button.Content>
+          <Button.Content hidden>Like</Button.Content>
+        </Button>
+      </Fragment>
     );
   }
 }

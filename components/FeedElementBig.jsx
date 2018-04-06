@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment } from "semantic-ui-react";
+import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown } from "semantic-ui-react";
 import Link from "next/link";
 import { getDate } from "../components/utils/utils";
 import BasicFeedElement from "./BasicFeedElement";
@@ -17,50 +17,41 @@ export default class FeedElement extends BasicFeedElement {
       <Feed.Event>
         <Segment raised className="-segment">
           <div className="-feed-content-wrapper">
-            <div className="left-div">
-              <Feed.Content>
-                <Feed.Summary>
-                  {this.getUserSection(item)}
-                  <Feed.Meta>
-                    <Feed.Like>
-                      <Icon name="trophy" />
-                      {item.likes.length} Ansehen
-                    </Feed.Like>
-                  </Feed.Meta>
-                  <br />
-                  <Feed.Date>
-                    <Icon name="wait" />
-                    {getDate(item.timestamp)}
-                  </Feed.Date>
-                  <br />
-                  <Feed.Date>
-                    <Icon name="marker" />Stuttgart
-                  </Feed.Date>
-                </Feed.Summary>
-              </Feed.Content>
-            </div>
-            <div className="right-div  -feed-font-size">{this.getContent(item)}</div>
+            <Grid>
+              <Grid.Column width={5} className="-left-feed-grid">
+                <Feed.Content>
+                  <Feed.Summary>
+                    {this.getUserSection(item)}
+                    <Feed.Meta>
+                      <Feed.Like>
+                        <Icon name="trophy" />
+                        {item.likes.length} Ansehen
+                      </Feed.Like>
+                    </Feed.Meta>
+                    <br />
+                    <Feed.Date>
+                      <Icon name="wait" />
+                      {getDate(item.timestamp)}
+                    </Feed.Date>
+                    <br />
+                    <Feed.Date>
+                      <Icon name="marker" />Stuttgart
+                    </Feed.Date>
+                  </Feed.Summary>
+                </Feed.Content>
+              </Grid.Column>
+              <Grid.Column width={11}>{this.getContent(item)}</Grid.Column>
+            </Grid>
             {this.getDropDown(item)}
           </div>
-          <div style={{ height: "30px", width: "100%" }}>
-            <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-left ">
-              <Button.Content visible>
-                <Icon name="share" />
-              </Button.Content>
-              <Button.Content hidden>Share</Button.Content>
-            </Button>
-            <Button
-              size="mini"
-              animated="fade"
-              onClick={() => handleLike(item.user.name, item.previousHash)}
-              className="-float-right -like-button">
-              <Button.Content visible>
-                <Icon name="heart" />
-              </Button.Content>
-              <Button.Content hidden>Like</Button.Content>
-            </Button>
+          <div style={{ minHeight: "30px", width: "100%" }} className="-border-top ">
+            {this.getLikeAndShare()}
           </div>
-          <div className="right-div -no-border">{this.getComments()}</div>
+          <br />
+          <div className="-feed-content-wrapper">
+            <div className="">{this.getComments()}</div>
+          </div>
+          {this.getCommentForm()}
         </Segment>
         <br />
       </Feed.Event>

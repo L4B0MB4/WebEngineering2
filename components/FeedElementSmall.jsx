@@ -27,7 +27,7 @@ export default class FeedElement extends BasicFeedElement {
             <div className="-feed-font-size">{this.getContent(item, true)}</div>
             {this.getDropDown(item)}
           </div>
-          <div style={{ height: "30px", width: "100%" }}>
+          <div style={{ minHeight: "35px", width: "100%" }} className="-border-bottom ">
             <Feed.Meta>
               <Feed.Like className="-float-left ">
                 <Icon name="trophy" />
@@ -40,26 +40,14 @@ export default class FeedElement extends BasicFeedElement {
             </Feed.Date>
             <br />
             <br />
-            <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-left ">
-              <Button.Content visible>
-                <Icon name="share" />
-              </Button.Content>
-              <Button.Content hidden>Share</Button.Content>
-            </Button>
-            <Button
-              size="mini"
-              animated="fade"
-              onClick={() => handleLike(item.user.name, item.previousHash)}
-              className="-float-right -like-button">
-              <Button.Content visible>
-                <Icon name="heart" />
-              </Button.Content>
-              <Button.Content hidden>Like</Button.Content>
-            </Button>
+            {this.getLikeAndShare()}
+            <br />
+            <br />
+            <br />
           </div>
           <br />
-          <br />
           {this.getComments()}
+          {this.getCommentForm()}
         </Segment>
         <br />
       </Feed.Event>
