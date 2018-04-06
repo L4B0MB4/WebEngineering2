@@ -65,13 +65,12 @@ export default class FeedElement extends Component {
                     src={comment.user && comment.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
                   />
                   <Comment.Content>
-                    <Comment.Author>{comment.user.name}</Comment.Author>
+                    <Comment.Author as="a">{comment.user.name}</Comment.Author>
                     <Comment.Metadata>
-                      <div>{getDate(comment.timestamp)}</div>
                       <div className="-feed-comment-font-color">
-                        <Icon name="heart" />
-                        {comment.likes.length} Likes!
+                        {comment.likes.length} <Icon name="heart" />
                       </div>
+                      <div>{getDate(comment.timestamp)}</div>
                     </Comment.Metadata>
                     <Comment.Text>{comment.data.text}</Comment.Text>
                     <Comment.Actions>
