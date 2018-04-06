@@ -74,7 +74,7 @@ class Index extends Component {
           <Fragment>
             <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
             <Divider />
-            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} />
+            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} user={this.props.user} />
           </Fragment>
         )}
       </Layout>

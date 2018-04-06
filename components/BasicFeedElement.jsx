@@ -146,17 +146,13 @@ export default class FeedElement extends Component {
   getLikeAndShare(handleLike, handleShare, item) {
     return (
       <Fragment>
-        <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-right ">
+        <Button size="mini" animated="fade" onClick={handleShare} className="-float-right ">
           <Button.Content visible>
             <Icon name="share" />
           </Button.Content>
           <Button.Content hidden>Share</Button.Content>
         </Button>
-        <Button
-          size="mini"
-          animated="fade"
-          onClick={() => handleLike(item.user.name, item.previousHash)}
-          className="-float-right -like-button">
+        <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
           <Button.Content visible>
             <Icon name="heart" />
           </Button.Content>
