@@ -23,12 +23,14 @@ class Layout extends Component {
 
   render() {
     const { user, activeItem } = this.props;
+    let { relPath } = this.props;
+    if (!relPath) relPath = "";
     return (
       <Fragment>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Grid divided={false} celled="internally">
           <Grid.Row only="tablet computer">
-            <OwnHeader relPath={this.props.relPath} />
+            <OwnHeader relPath={relPath} />
             {this.leftSide()}
             <Grid.Column width={10} stretched className="grid-column">
               <Grid>
@@ -79,7 +81,7 @@ class Layout extends Component {
                 </Menu.Item>
               </Sidebar>
               <Sidebar.Pusher>
-                <OwnHeader relPath={this.props.relPath} setOpenSidebar={this.setOpenSidebar} />
+                <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -97,6 +99,8 @@ class Layout extends Component {
 
   leftSide = () => {
     const { user, activeItem } = this.props;
+    let { relPath } = this.props;
+    if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -113,18 +117,18 @@ class Layout extends Component {
             </Card.Content>
           </Card>
           <Menu vertical floated fixed="bottom" tabular className="-menu">
-            <Link href={this.props.relPath + "./profile"}>
+            <Link href={relPath + "./profile"}>
               <Menu.Item name="profile" active={activeItem === "profile"}>
                 <Icon name="user" />Profile
               </Menu.Item>
             </Link>
-            <Link href={this.props.relPath + "./"}>
+            <Link href={relPath + "./"}>
               <Menu.Item name="feed" active={activeItem === "feed"}>
                 <Icon name="newspaper" />Feed
               </Menu.Item>
             </Link>
 
-            <Link href={this.props.relPath + "./"}>
+            <Link href={relPath + "./"}>
               <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
@@ -142,6 +146,8 @@ class Layout extends Component {
   };
   rightSide = () => {
     const { user, activeItem } = this.props;
+    let { relPath } = this.props;
+    if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -153,14 +159,14 @@ class Layout extends Component {
             </List.Item>
           </List>
           <List relaxed className="-list">
-            <Link href={this.props.relPath + "./aboutus"}>
+            <Link href={relPath + "./aboutus"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="kontakt" active={activeItem === "kontakt"}>
                   <Icon name="mail" />About us
                 </Button>
               </List.Item>
             </Link>
-            <Link href={this.props.relPath + "./impressum"}>
+            <Link href={relPath + "./impressum"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="impressum" active={activeItem === "impressum"}>
                   <Icon name="registered" />Disclaimer
