@@ -7,10 +7,9 @@ var request;
 class Kontakt extends Component {
   state = { activeItem: "kontakt" };
 
-
   render() {
     return (
-      <Fragment>
+      <Layout>
         <h1>About us</h1>
         <br />
         <br />
@@ -72,7 +71,7 @@ class Kontakt extends Component {
             </Card.Content>
           </Card>
         </Card.Group>
-      </Fragment>
+      </Layout>
     );
   }
 }

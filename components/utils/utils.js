@@ -1,4 +1,6 @@
 import crypto from "crypto";
+import Request from "./request";
+const request = new Request();
 
 const hash = block => {
   return crypto
@@ -21,7 +23,36 @@ const getDate = timestamp => {
   return hrs + ":" + mins + " " + days + "." + mnth + "." + year;
 };
 
+const handleLike = async (blockchainWrapper, username, previousHash, callback) => {
+  let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
+  if (!blockchainWrapper.alreadyLiked(previousHash, publicKey)) {
+    blockchainWrapper.newTransaction(
+      "like",
+      {
+        previousHash,
+        userKey: publicKey
+      },
+      callback
+    );
+  }
+};
+
+const handleShare = async (blockchainWrapper, username, item, callback) => {
+  if (item.shared) return;
+  let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
+  blockchainWrapper.newTransaction(
+    "share",
+    {
+      previousHash: item.previousHash,
+      userKey: publicKey
+    },
+    callback
+  );
+};
+
 module.exports = {
   hash,
-  getDate
+  getDate,
+  handleLike,
+  handleShare
 };

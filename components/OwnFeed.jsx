@@ -4,28 +4,10 @@ import Request from "../components/utils/request";
 import FeedElementBig from "./FeedElementBig";
 import FeedElementSmall from "./FeedElementSmall";
 const request = new Request();
+import { handleLike, handleShare } from "./utils/utils";
 
 class OwnFeed extends Component {
   state = {};
-
-  handleLike = async (username, previousHash) => {
-    let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
-    if (!this.props.blockchainWrapper.alreadyLiked(previousHash, publicKey)) {
-      this.props.blockchainWrapper.newTransaction("like", {
-        previousHash,
-        userKey: publicKey
-      });
-    }
-  };
-
-  handleShare = async (username, item) => {
-    if (item.shared) return;
-    let publicKey = (await request.callGetPublicKey({ username })).data.publicKey;
-    this.props.blockchainWrapper.newTransaction("share", {
-      previousHash: item.previousHash,
-      userKey: publicKey
-    });
-  };
 
   setModal = (openedImage, openedText) => {
     this.setState({ openModal: !this.state.openModal, openedImage, openedText });
@@ -43,8 +25,8 @@ class OwnFeed extends Component {
                     return (
                       <FeedElementBig
                         item={item}
-                        handleShare={this.handleShare}
-                        handleLike={this.handleLike}
+                        handleShare={() => handleShare(this.props.blockchainWrapper, this.props.user.name, item)}
+                        handleLike={() => handleLike(this.props.blockchainWrapper, this.props.user.name, item.previousHash)}
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}
@@ -62,8 +44,8 @@ class OwnFeed extends Component {
                     return (
                       <FeedElementSmall
                         item={item}
-                        handleShare={this.handleShare}
-                        handleLike={this.handleLike}
+                        handleShare={() => handleShare(this.props.blockchainWrapper, this.props.user.name, item)}
+                        handleLike={() => handleLike(this.props.blockchainWrapper, this.props.user.name, item.previousHash)}
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}

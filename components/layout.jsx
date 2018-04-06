@@ -5,13 +5,7 @@ import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 
 class Layout extends Component {
-  state = { activeItem: "feed", openSidebar: false };
-
-  handleItemClick = (e, { name }) => {
-    this.setState({ activeItem: name });
-    this.props.handleItemClick(name);
-    this.setOpenSidebar(false);
-  };
+  state = { openSidebar: false };
 
   isReadyToMine = () => {
     if (this.props.blockchainWrapper) {
@@ -28,8 +22,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { activeItem } = this.state;
-    const { user } = this.props;
+    const { user, activeItem } = this.props;
     return (
       <Fragment>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -59,10 +52,10 @@ class Layout extends Component {
                 icon="labeled"
                 vertical
                 inverted>
-                <Menu.Item name="profil" onClick={this.handleItemClick}>
+                <Menu.Item name="profil">
                   <Icon name="user" />Profile
                 </Menu.Item>
-                <Menu.Item name="feed" onClick={this.handleItemClick}>
+                <Menu.Item name="feed">
                   <Icon name="newspaper" />Feed
                 </Menu.Item>
                 <Menu.Item name="featured" onClick={this.handleItemClick}>
@@ -71,13 +64,13 @@ class Layout extends Component {
                 <Menu.Item name="logout" onClick={this.handleItemClick}>
                   <Icon name="power" />Logout
                 </Menu.Item>
-                <Menu.Item name="kontakt" onClick={this.handleItemClick}>
+                <Menu.Item name="kontakt">
                   <Icon name="hand victory" />About us
                 </Menu.Item>
-                <Menu.Item name="impressum" onClick={this.handleItemClick}>
+                <Menu.Item name="impressum">
                   <Icon name="legal" />Disclaimer
                 </Menu.Item>
-                <Menu.Item name="logout" onClick={this.handleItemClick}>
+                <Menu.Item name="logout">
                   <Icon name="power" />Logout
                 </Menu.Item>
                 <Menu.Item name="delete" className="-clickable" onClick={() => this.setOpenSidebar(false)}>
@@ -103,8 +96,7 @@ class Layout extends Component {
   }
 
   leftSide = () => {
-    const { activeItem } = this.state;
-    const { user } = this.props;
+    const { user, activeItem } = this.props;
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -121,16 +113,23 @@ class Layout extends Component {
             </Card.Content>
           </Card>
           <Menu vertical floated fixed="bottom" tabular className="-menu">
-            <Menu.Item name="profil" active={activeItem === "profil"} onClick={this.handleItemClick}>
-              <Icon name="user" />Profile
-            </Menu.Item>
-            <Menu.Item name="feed" active={activeItem === "feed"} onClick={this.handleItemClick}>
-              <Icon name="newspaper" />Feed
-            </Menu.Item>
-            <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
-              <Icon name="trophy" />Featured Profiles
-            </Menu.Item>
-            <Menu.Item name="logout" active={activeItem === "logout"} onClick={this.handleItemClick}>
+            <Link href="./profile">
+              <Menu.Item name="profile" active={activeItem === "profile"}>
+                <Icon name="user" />Profile
+              </Menu.Item>
+            </Link>
+            <Link href="./">
+              <Menu.Item name="feed" active={activeItem === "feed"}>
+                <Icon name="newspaper" />Feed
+              </Menu.Item>
+            </Link>
+
+            <Link href="./">
+              <Menu.Item name="featured" active={activeItem === "featured"} onClick={this.handleItemClick}>
+                <Icon name="trophy" />Featured Profiles
+              </Menu.Item>
+            </Link>
+            <Menu.Item name="logout" active={activeItem === "logout"}>
               <Icon name="power" />Logout
             </Menu.Item>
             <Menu.Item>
@@ -142,8 +141,7 @@ class Layout extends Component {
     );
   };
   rightSide = () => {
-    const { activeItem } = this.state;
-    const { user } = this.props;
+    const { user, activeItem } = this.props;
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -155,30 +153,20 @@ class Layout extends Component {
             </List.Item>
           </List>
           <List relaxed className="-list">
-            <List.Item>
-              <Button
-                compact
-                as="a"
-                size="big"
-                className="list-item"
-                name="kontakt"
-                active={activeItem === "kontakt"}
-                onClick={this.handleItemClick}>
-                <Icon name="hand victory" />About us
-              </Button>
-            </List.Item>
-            <List.Item>
-              <Button
-                compact
-                as="a"
-                size="big"
-                className="list-item"
-                name="impressum"
-                active={activeItem === "impressum"}
-                onClick={this.handleItemClick}>
-                <Icon name="legal" />Disclaimer
-              </Button>
-            </List.Item>
+            <Link href="./kontakt">
+              <List.Item>
+                <Button compact as="a" size="big" className="list-item" name="kontakt" active={activeItem === "kontakt"}>
+                  <Icon name="mail" />About us
+                </Button>
+              </List.Item>
+            </Link>
+            <Link href="./impressum">
+              <List.Item>
+                <Button compact as="a" size="big" className="list-item" name="impressum" active={activeItem === "impressum"}>
+                  <Icon name="registered" />Disclaimer
+                </Button>
+              </List.Item>
+            </Link>
           </List>
         </div>
       </Grid.Column>

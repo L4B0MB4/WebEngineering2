@@ -12,7 +12,6 @@ export default class FeedElement extends Component {
       this.state.video = "https://www.youtube.com/embed/" + video;
     } else if (item.data.text.includes("https://www.youtube.com/watch?v=")) {
       let video = item.data.text.substring(item.data.text.indexOf("https://www.youtube.com/watch?v=") + 32);
-      video = video.substring(0, video.indexOf(" "));
       this.state.video = "https://www.youtube.com/embed/" + video;
     } else if (item.data.text.includes("https://open.spotify.com/track/")) {
       let video = item.data.text.substring(item.data.text.indexOf("https://open.spotify.com/track/") + 31);
@@ -147,17 +146,13 @@ export default class FeedElement extends Component {
   getLikeAndShare(handleLike, handleShare, item) {
     return (
       <Fragment>
-        <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-right ">
+        <Button size="mini" animated="fade" onClick={handleShare} className="-float-right ">
           <Button.Content visible>
             <Icon name="share" />
           </Button.Content>
           <Button.Content hidden>Share</Button.Content>
         </Button>
-        <Button
-          size="mini"
-          animated="fade"
-          onClick={() => handleLike(item.user.name, item.previousHash)}
-          className="-float-right -like-button">
+        <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
           <Button.Content visible>
             <Icon name="heart" />
           </Button.Content>

@@ -64,8 +64,6 @@ export default class BlockchainWrapper {
   }
 
   isEquivalent(a, b) {
-    console.log(a);
-    console.log(b);
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
     if (aProps.length != bProps.length) {
@@ -74,7 +72,6 @@ export default class BlockchainWrapper {
 
     for (var i = 0; i < aProps.length; i++) {
       var propName = aProps[i];
-      console.log(typeof a[propName]);
       if (a[propName] !== b[propName] && typeof a[propName] !== "object") {
         return false;
       } else if (typeof a[propName] === "object" && !this.isEquivalent(a[propName], b[propName])) {

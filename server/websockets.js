@@ -1,4 +1,6 @@
 const socketIO = require("socket.io");
+import * as blockchainutils from "./blockchainutils";
+
 function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret) {
   const io = socketIO(server);
   io.on("connection", socket => {
