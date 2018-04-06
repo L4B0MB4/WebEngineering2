@@ -14,7 +14,7 @@ class Post extends Component {
             <Tab.Pane className="-tab">
                 <div className="-padding-10 -full-width -posts">
                     <Segment raised compact className="-full-width -segment">
-                        <Feed>
+                        <Feed className="-full-width">
                             {userContent
                                 ? userContent.map(item => {
                                     if (!user) return null;
