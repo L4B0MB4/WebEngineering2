@@ -84,11 +84,13 @@ class Layout extends Component {
               </Sidebar>
               <Sidebar.Pusher>
                 <OwnHeader relPath={this.props.relPath} setOpenSidebar={this.setOpenSidebar} />
-                <Grid.Column width={16}>
-                  <div className="-feed" style={{ minHeight: "500px" }}>
-                    {this.props.children}
-                  </div>
-                </Grid.Column>
+                <Grid>
+                  <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
+                    <div className="-feed" style={{ minHeight: "500px" }}>
+                      {this.props.children}
+                    </div>
+                  </Grid.Column>
+                </Grid>
               </Sidebar.Pusher>
             </Sidebar.Pushable>
           </Grid.Row>

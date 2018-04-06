@@ -3,13 +3,20 @@ import { Button, Checkbox, Form, TextArea, Input } from "semantic-ui-react";
 
 export default class ContentForm extends Component {
   state = {
-    content: " "
+    content: ""
   };
 
   onSuccessFullyPosted = () => {
     if (this.state.inputImage) this.state.inputImage.value = "";
     this.setState({ content: "", buttonSucess: true, buttonLoading: false, file: undefined });
     setInterval(() => this.setState({ buttonSucess: false }), 1000);
+  };
+
+  isLoading = () => {
+    return this.state.buttonLoading;
+  };
+  isSuccessfull = () => {
+    return !this.state.buttonLoading && this.state.buttonSucess;
   };
 
   sendContent = async () => {
@@ -28,14 +35,6 @@ export default class ContentForm extends Component {
       }
     }
   };
-
-  isLoading = () => {
-    return this.state.buttonLoading;
-  };
-  isSuccessfull = () => {
-    return !this.state.buttonLoading && this.state.buttonSucess;
-  };
-
   onSelectFiles = e => {
     this.setState({ inputImage: e.target, file: e.target.files[0] });
   };

@@ -36,7 +36,7 @@ class Profil extends Component {
         <h1>Your Profile</h1>
         <br />
         <br />
-        <Tab className="-tab" menu={{ secondary: true, pointing: true }} panes={panes} props={this.props} />
+        <Tab className="-tab" panes={panes} props={this.props} />
       </div>
     );
   }

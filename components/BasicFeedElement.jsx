@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment } from "semantic-ui-react";
+import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment, Form, TextArea } from "semantic-ui-react";
 import Link from "next/link";
+import { getDate } from "../components/utils/utils";
 
 export default class FeedElement extends Component {
   checkForVideo() {
@@ -20,35 +21,68 @@ export default class FeedElement extends Component {
     }
   }
 
-  getComments() {
+  getCommentForm(classthis) {
     return (
-      <Comment.Group>
-        <Comment>
-          <Comment.Avatar src="/assets/images/avatar/small/matt.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">Matt</Comment.Author>
-            <Comment.Metadata>
-              <div>Today at 5:42PM</div>
-            </Comment.Metadata>
-            <Comment.Text>How artistic!</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
-        <Comment>
-          <Comment.Avatar src="/assets/images/avatar/small/matt.jpg" />
-          <Comment.Content>
-            <Comment.Author as="a">Matt</Comment.Author>
-            <Comment.Metadata>
-              <div>Today at 5:42PM</div>
-            </Comment.Metadata>
-            <Comment.Text>How artistic!</Comment.Text>
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+      <Container>
+        <br />
+        <br />
+        <Form>
+          <Form.Group unstackable widths={16}>
+            <Form.Field style={{ width: "calc(100% - 96px)" }}>
+              <TextArea
+                placeholder="Comment"
+                value={undefined}
+                rows={1}
+                onChange={e => this.setState({ content: e.target.value, textArea: e.target })}
+              />
+            </Form.Field>
+            <Form.Field style={{ textAlign: "center", width: "96px" }}>
+              <Button
+                type="submit"
+                loading={classthis.isLoading() ? true : false}
+                color={classthis.isSuccessfull() ? "green" : null}
+                onClick={classthis.isLoading() ? null : classthis.sendContent}
+                style={{ minHeight: "42px", width: "100%" }}>
+                {classthis.isSuccessfull() ? "Success" : "Post"}
+              </Button>
+            </Form.Field>
+          </Form.Group>
+        </Form>
+      </Container>
+    );
+  }
+
+  getComments(item, handleLike) {
+    const { comments } = item;
+    return (
+      <Comment.Group size="large">
+        {comments
+          ? comments.map(comment => {
+              return (
+                <Comment>
+                  <Comment.Avatar
+                    as="a"
+                    src={comment.user && comment.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                  />
+                  <Comment.Content>
+                    <Comment.Author as="a">{comment.user.name}</Comment.Author>
+                    <Comment.Metadata>
+                      <div className="-feed-comment-font-color">
+                        {comment.likes.length} <Icon name="heart" />
+                      </div>
+                      <div>{getDate(comment.timestamp)}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.data.text}</Comment.Text>
+                    <Comment.Actions>
+                      <Comment.Action onClick={() => handleLike(comment.user.name, comment.previousHash)}>
+                        <Icon name="heart" style={{ color: "#daa520" }} /> <span className="-feed-comment-font-color">Like!</span>
+                      </Comment.Action>
+                    </Comment.Actions>
+                  </Comment.Content>
+                </Comment>
+              );
+            })
+          : null}
       </Comment.Group>
     );
   }
@@ -100,14 +134,36 @@ export default class FeedElement extends Component {
           />
         ) : null}
         <br />
-        {item.data.text ? item.data.text : null}
-        <br />
-        {item.data.picture ? (
+        {item.data.text ? (
           <Fragment>
+            {item.data.text}
             <br />
           </Fragment>
         ) : null}
       </Feed.Extra>
+    );
+  }
+
+  getLikeAndShare(handleLike, handleShare, item) {
+    return (
+      <Fragment>
+        <Button size="mini" animated="fade" onClick={() => handleShare(item.user.name, item)} className="-float-right ">
+          <Button.Content visible>
+            <Icon name="share" />
+          </Button.Content>
+          <Button.Content hidden>Share</Button.Content>
+        </Button>
+        <Button
+          size="mini"
+          animated="fade"
+          onClick={() => handleLike(item.user.name, item.previousHash)}
+          className="-float-right -like-button">
+          <Button.Content visible>
+            <Icon name="heart" />
+          </Button.Content>
+          <Button.Content hidden>Like</Button.Content>
+        </Button>
+      </Fragment>
     );
   }
 }

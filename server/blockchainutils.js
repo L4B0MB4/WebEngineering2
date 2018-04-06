@@ -15,7 +15,12 @@ async function createFeed(req, res, blockchain) {
   let users = await findUsersByPublicKey(publicKeys);
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
-    feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
+    feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
+    const comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    for (let j = 0; j < comments.length; j++) {
+      comments[j].likes = await getTagByPreviousHash(blockchain, comments.previousHash, "like");
+    }
+    feed[i].comments = comments;
   }
   return feed.reverse();
 }
@@ -37,36 +42,29 @@ function mergeUserToBlock(block, users, blockchain) {
   return block;
 }
 
-async function getLikesByPreviousHash(blockchain, hash) {
-  blockchain = blockchain.map(item => {
+async function getTagByPreviousHash(blockchain, hash, tag) {
+  let filtered = blockchain.map(item => {
     return {
       ...item.transactions[0],
-      previousHash: item.previousHash,
-      sender: undefined
+      previousHash: item.previousHash
     };
   });
-  let arr = _.filter(blockchain, {
-    type: "like",
+  let arr = _.filter(filtered, {
+    type: tag,
     data: { previousHash: hash }
   });
-  let publicKeys = arr.map(item => item.data.userKey);
+  let publicKeys = arr.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
-  arr = arr.map(block => mergeUserToTransaction(block, users).user);
+  arr = arr.map(block => {
+    let b = mergeUserToBlock(block, users, blockchain);
+    return {
+      previousHash: b.previousHash,
+      timestamp: b.timestamp,
+      data: b.data,
+      user: b.user
+    };
+  });
   return arr;
-}
-
-function mergeUserToTransaction(block, users) {
-  for (let i = 0; i < users.length; i++) {
-    if (block.data.userKey === users[i].publicKey) {
-      block.user = {
-        ...users[i],
-        _id: undefined,
-        publicKey: undefined
-      };
-      return block;
-    }
-  }
-  return block;
 }
 
 function getBlockByPreviousHash(blockchain, hash) {
@@ -111,7 +109,7 @@ async function getContentOfUser(blockchain, publicKey) {
   feed.sort(sortByTimestamp);
   feed.slice(Math.max(feed.length - 20, 1));
   for (let i = 0; i < feed.length; i++) {
-    feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
+    feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
   }
   return feed.reverse();
 }
@@ -196,7 +194,12 @@ async function createFollowerFeed(req, res, blockchain, following) {
   let users = await findUsersByPublicKey(publicKeys);
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
-    feed[i].likes = await getLikesByPreviousHash(blockchain, feed[i].previousHash);
+    feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
+    const comments = await getTagByPreviousHash(blockchain, feed[i].previousHash, "comment");
+    for (let j = 0; j < comments.length; j++) {
+      comments[j].likes = await getTagByPreviousHash(blockchain, comments[j].previousHash, "like");
+    }
+    feed[i].comments = comments;
   }
   return feed.reverse();
 }
@@ -240,7 +243,7 @@ async function getLikedContent(blockchain, user) {
   let users = await findUsersByPublicKey(publicKeys);
   finalFeed = finalFeed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < finalFeed.length; i++) {
-    finalFeed[i].likes = await getLikesByPreviousHash(blockchain, finalFeed[i].previousHash);
+    finalFeed[i].likes = await getTagByPreviousHash(blockchain, finalFeed[i].previousHash, "like");
   }
   return finalFeed.reverse();
 }
@@ -248,7 +251,7 @@ async function getLikedContent(blockchain, user) {
 module.exports = {
   createFeed,
   mergeUserToBlock,
-  getLikesByPreviousHash,
+  getTagByPreviousHash,
   getContentOfUser,
   getFollower,
   getAnsehen,
