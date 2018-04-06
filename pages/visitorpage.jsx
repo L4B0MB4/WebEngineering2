@@ -170,7 +170,7 @@ class VisitorPage extends Component {
           </div>
           <br />
           <br />
-          <Tab className="-tab" menu={{ secondary: true, pointing: true }} panes={panes} props={this.props} />
+          <Tab className="-tab" panes={panes} props={this.props} />
         </Layout>
       </Fragment>
     );
