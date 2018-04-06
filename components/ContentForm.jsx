@@ -27,7 +27,6 @@ export default class ContentForm extends Component {
         );
       }
     }
-    this.setState({ content: "" });
   };
 
   isLoading = () => {
