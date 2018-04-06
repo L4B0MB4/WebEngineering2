@@ -7,9 +7,33 @@ import BasicFeedElement from "./BasicFeedElement";
 export default class FeedElement extends BasicFeedElement {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { content: "" };
     this.checkForVideo();
   }
+  sendContent = async () => {
+    if (this.state.content.length > 0 && !this.state.file) {
+      this.props.blockchainWrapper.newTransaction(
+        "comment",
+        { text: this.state.content, postPreviousHash: this.props.item.previousHash },
+        this.onSuccessFullyPosted
+      );
+      this.setState({ buttonLoading: true });
+    }
+  };
+
+  onSuccessFullyPosted = () => {
+    if (this.state.inputImage) this.state.inputImage.value = "";
+    if (this.state.textArea) this.state.textArea.value = "";
+    this.setState({ content: "", buttonSucess: true, buttonLoading: false, file: undefined });
+    setInterval(() => this.setState({ buttonSucess: false }), 1000);
+  };
+
+  isLoading = () => {
+    return this.state.buttonLoading;
+  };
+  isSuccessfull = () => {
+    return !this.state.buttonLoading && this.state.buttonSucess;
+  };
   render() {
     const { item, request, handleLike, handleShare, user } = this.props;
     if (!item.user) item.user = user;
@@ -51,7 +75,7 @@ export default class FeedElement extends BasicFeedElement {
           <div className="-feed-content-wrapper">
             <div className="">{this.getComments()}</div>
           </div>
-          {this.getCommentForm()}
+          {this.getCommentForm(this)}
         </Segment>
         <br />
       </Feed.Event>

@@ -20,20 +20,34 @@ export default class FeedElement extends Component {
     }
   }
 
-  getCommentForm() {
+  getCommentForm(classthis) {
     return (
-      <Form>
-        <Form.Group widths={16} unstackable={true}>
-          <Form.Field width={13}>
-            <TextArea placeholder="Comment" value={undefined} rows={1} onChange={e => this.setState({ content: e.target.value })} />
-          </Form.Field>
-          <Form.Field width={3}>
-            <Button type="submit" loading={false} color={null} style={{ minHeight: "42px", width: "100%", wordBreak: "break-word" }}>
-              Post
-            </Button>
-          </Form.Field>
-        </Form.Group>
-      </Form>
+      <Fragment>
+        <br />
+        <br />
+        <Form>
+          <Form.Group widths={16} unstackable={true}>
+            <Form.Field width={13}>
+              <TextArea
+                placeholder="Comment"
+                value={undefined}
+                rows={1}
+                onChange={e => this.setState({ content: e.target.value, textArea: e.target })}
+              />
+            </Form.Field>
+            <Form.Field width={3}>
+              <Button
+                type="submit"
+                loading={classthis.isLoading() ? true : false}
+                color={classthis.isSuccessfull() ? "green" : null}
+                onClick={classthis.isLoading() ? null : classthis.sendContent}
+                classthis={{ minHeight: "42px", width: "100%", wordBreak: "break-word" }}>
+                {classthis.isSuccessfull() ? "Success" : "Post"}
+              </Button>
+            </Form.Field>
+          </Form.Group>
+        </Form>
+      </Fragment>
     );
   }
 

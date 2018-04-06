@@ -47,6 +47,7 @@ class OwnFeed extends Component {
                         handleLike={this.handleLike}
                         request={request}
                         key={item.timestamp}
+                        blockchainWrapper={this.props.blockchainWrapper}
                       />
                     );
                   })
@@ -65,6 +66,7 @@ class OwnFeed extends Component {
                         handleLike={this.handleLike}
                         request={request}
                         key={item.timestamp}
+                        blockchainWrapper={this.props.blockchainWrapper}
                       />
                     );
                   })
