@@ -21,9 +21,9 @@ var request;
 
 const panes = [
   {
-    menuItem: "Follower",
+    menuItem: "Followers",
     render: props => {
-      const { followers, user } = props.props.props.props;
+      const { followers, user } = props.props;
       return (
         <Tab.Pane className="-tab">
           <div className="-full-width -padding-10 -follower">
@@ -52,7 +52,7 @@ const panes = [
   {
     menuItem: "Posts",
     render: props => {
-      const { userContent, user, visitedUser } = props.props.props.props;
+      const { userContent, user, visitedUser } = props.props;
       console.log(props);
       return (
         <Tab.Pane className="-tab">
@@ -84,7 +84,7 @@ const panes = [
   {
     menuItem: "Ansehen",
     render: props => {
-      const { visitedUser, user } = props.props.props.props;
+      const { visitedUser, user } = props.props;
       return (
         <Tab.Pane className="-tab">
           <div className="-padding-10 -full-width -ansehen">
@@ -112,10 +112,6 @@ const panes = [
     }
   }
 ];
-
-const Tabs = props => {
-  return <Tab panes={panes} props={{ props }} />;
-};
 
 class VisitorPage extends Component {
   static async getInitialProps({ store, query, req }) {
@@ -174,7 +170,7 @@ class VisitorPage extends Component {
           </div>
           <br />
           <br />
-          <Tabs className="-tab" props={this.props} />
+          <Tab className="-tab" menu={{ secondary: true, pointing: true }} panes={panes} props={this.props} />
         </Layout>
       </Fragment>
     );

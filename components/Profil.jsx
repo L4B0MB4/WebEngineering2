@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, Button, Input } from "semantic-ui-react";
+import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, Button, Input, Container } from "semantic-ui-react";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
 import FeedElementBig from "../components/FeedElementBig";
@@ -7,9 +7,9 @@ import EditProfile from "./EditProfile";
 
 const panes = [
   {
-    menuItem: "Your Follower",
+    menuItem: "Followers",
     render: props => {
-      const { followers, user } = props.props.props.props;
+      const { followers, user } = props.props;
       return (
         <Tab.Pane className="-tab">
           <div className="-padding-10 -full-width">
@@ -36,9 +36,9 @@ const panes = [
     }
   },
   {
-    menuItem: "Your Posts",
+    menuItem: "Posts",
     render: props => {
-      const { userContent, user } = props.props.props.props;
+      const { userContent, user } = props.props;
       return (
         <Tab.Pane className="-tab">
           <div className="-padding-10 -full-width -posts">
@@ -67,9 +67,9 @@ const panes = [
     }
   },
   {
-    menuItem: "Your Ansehen",
+    menuItem: "Ansehen",
     render: props => {
-      const { userContent, user } = props.props.props.props;
+      const { userContent, user } = props.props;
       return (
         <Tab.Pane className="-tab">
           <div className="-full-width -padding-10">
@@ -102,8 +102,6 @@ const panes = [
   }
 ];
 
-const Tabs = props => <Tab panes={panes} props={{ props }} />;
-
 class Profil extends Component {
   state = { active: true, activeItem: "profil" };
 
@@ -113,7 +111,7 @@ class Profil extends Component {
         <h1>Your Profile</h1>
         <br />
         <br />
-        <Tabs className="-tab" props={this.props} />
+        <Tab className="-tab" menu={{ secondary: true, pointing: true }} panes={panes} props={this.props} />
       </div>
     );
   }
