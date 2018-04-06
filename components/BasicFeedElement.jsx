@@ -55,23 +55,28 @@ export default class FeedElement extends Component {
   getComments(item, handleLike) {
     const { comments } = item;
     return (
-      <Comment.Group>
+      <Comment.Group size="large">
         {comments
           ? comments.map(comment => {
               return (
                 <Comment>
                   <Comment.Avatar
+                    as="a"
                     src={comment.user && comment.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
                   />
                   <Comment.Content>
-                    <Comment.Author as="a">{comment.user.name}</Comment.Author>
+                    <Comment.Author>{comment.user.name}</Comment.Author>
                     <Comment.Metadata>
                       <div>{getDate(comment.timestamp)}</div>
+                      <div className="-feed-comment-font-color">
+                        <Icon name="heart" />
+                        {comment.likes.length} Likes!
+                      </div>
                     </Comment.Metadata>
                     <Comment.Text>{comment.data.text}</Comment.Text>
                     <Comment.Actions>
                       <Comment.Action onClick={() => handleLike(comment.user.name, comment.previousHash)}>
-                        <Icon name="heart" style={{ color: "#daa520" }} /> <span style={{ color: "black" }}>Like!</span>
+                        <Icon name="heart" style={{ color: "#daa520" }} /> <span className="-feed-comment-font-color">Like!</span>
                       </Comment.Action>
                     </Comment.Actions>
                   </Comment.Content>
