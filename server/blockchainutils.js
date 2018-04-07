@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { findUsersByPublicKey } = require("./database");
+const { findUsersByPublicKey, findSingleUsernameByPublicKey } = require("./database");
 
 async function createFeed(req, res, blockchain) {
   let filtered = getChainByTime(blockchain);
@@ -248,6 +248,42 @@ async function getLikedContent(blockchain, user) {
   return finalFeed.reverse();
 }
 
+async function getLikesByUser(blockchain, user) {
+    let feed = blockchain.map(item => {
+        return { ...item.transactions[0], previousHash: item.previousHash };
+    });
+    let posts = _.filter(feed, {
+        sender: user.publicKey,
+        type: "content"
+    });
+    let p;
+    let likes;
+    let allLikes = [];
+    for (p in posts) {
+        likes = _.find(feed, {
+            type: "like",
+            data: { previousHash: posts[p].previousHash }
+        });
+        allLikes.push(likes);
+    }
+    let sortedResults = [];
+    let a;
+    for(a in allLikes) {
+      let existingUser = _.find(sortedResults, {user: await findSingleUsernameByPublicKey(allLikes[a].sender)});
+      if(!existingUser) {
+          sortedResults.push({
+              "user": await findSingleUsernameByPublicKey(allLikes[a].sender),
+              "likes": 1
+          });
+      } else {
+        existingUser.likes += 1;
+        _.remove(sortedResults, {user: existingUser.user});
+        sortedResults.push(existingUser);
+      }
+    }
+    return sortedResults;
+}
+
 module.exports = {
   createFeed,
   mergeUserToBlock,
@@ -259,5 +295,6 @@ module.exports = {
   createFollowerFeed,
   getFollowing,
   getUserWithProfilePicture,
-  getLikedContent
+  getLikedContent,
+  getLikesByUser
 };
