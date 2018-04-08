@@ -16,100 +16,24 @@ import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
 import { getDate } from "../components/utils/utils";
 import FeedElementBig from "../components/FeedElementBig";
+import Follower from "../components/Follower";
+import Post from "../components/Post";
+import Ansehen from "../components/Ansehen";
 
 var request;
 
 const panes = [
   {
     menuItem: "Followers",
-    render: props => {
-      const { followers, user } = props.props;
-      return (
-        <Tab.Pane className="-tab">
-          <div className="-full-width -padding-10 -follower">
-            <Segment raised compact className="-full-width -segment">
-              <Item.Group>
-                {props.followers
-                  ? props.followers.map(follower => {
-                      if (!follower.user) return null;
-                      return (
-                        <Item key={follower.user.name}>
-                          <Item.Image size="tiny" src="../static/bild.jpeg" />
-                          <Item.Content verticalAlign="middle">
-                            <Item.Header>{follower.user.name}</Item.Header>
-                          </Item.Content>
-                        </Item>
-                      );
-                    })
-                  : null}
-              </Item.Group>
-            </Segment>
-          </div>
-        </Tab.Pane>
-      );
-    }
+    render: () => <Follower />
   },
   {
     menuItem: "Posts",
-    render: props => {
-      const { userContent, user, visitedUser } = props.props;
-      console.log(props);
-      return (
-        <Tab.Pane className="-tab">
-          <div className="-full-width -padding-10 -posts">
-            <Segment raised compact className="-full-width -segment">
-              <Feed>
-                {userContent
-                  ? userContent.map(item => {
-                      if (!visitedUser) return null;
-                      return (
-                        <FeedElementBig
-                          item={item}
-                          user={visitedUser}
-                          handleShare={undefined}
-                          handleLike={undefined}
-                          request={undefined}
-                          key={item.timestamp}
-                        />
-                      );
-                    })
-                  : null}
-              </Feed>
-            </Segment>
-          </div>
-        </Tab.Pane>
-      );
-    }
+    render: () => <Post />
   },
   {
     menuItem: "Ansehen",
-    render: props => {
-      const { visitedUser, user } = props.props;
-      return (
-        <Tab.Pane className="-tab">
-          <div className="-padding-10 -full-width -ansehen">
-            <Segment raised className="-segment">
-              <Label as="a">
-                <Image avatar spaced="right" src="../static/bild.jpeg" />
-                Apple, 3
-              </Label>
-              <Label as="a">
-                <Image avatar spaced="right" src="../static/bild.jpeg" />
-                Nike, 2
-              </Label>
-              <Label as="a">
-                <Image avatar spaced="right" src="../static/bild.jpeg" />
-                Reebok, 1
-              </Label>
-              <Label as="a">
-                <Image avatar spaced="right" src="../static/bild.jpeg" />
-                Gucci, 4
-              </Label>
-            </Segment>
-          </div>
-        </Tab.Pane>
-      );
-    }
+    render: () => <Ansehen />
   }
 ];
 
@@ -120,7 +44,6 @@ class VisitorPage extends Component {
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
-    } else {
     }
     let { data } = await request.callGetUserContent(query.visitedUser.name);
     store.dispatch(receiveVisitedUserContent(data));
@@ -152,7 +75,7 @@ class VisitorPage extends Component {
   render() {
     return (
       <Fragment>
-        <Layout handleItemClick={this.handleItemClick} relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
           <div className="-full-width -padding-10">
             <h1>
               {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen

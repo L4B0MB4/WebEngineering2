@@ -46,11 +46,11 @@ class Profil extends Component {
     if (req) {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
-      store.dispatch(receiveVisitedUserContent(query.userContent));
-      store.dispatch(receiveVisitedUserFollower(query.followers));
     } else {
       let res = await request.callgetBlockchainFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
+      res = await request.callgetUser();
+      store.dispatch(receiveUser(res.data));
     }
   }
 

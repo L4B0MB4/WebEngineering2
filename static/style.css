@@ -253,3 +253,19 @@ h1 {
 .-feed-comment-font-color {
   color: #494d44 !important;
 }
+
+.featured-user {
+  background-color: white !important;
+  border-top: 1px solid #daa520 !important;
+  width: 150px !important;
+  height: 150px !important;
+  padding: 0 !important;
+}
+
+.-visible{
+  margin: 0 !important;
+}
+
+.-image{
+  opacity: 0.4 !important;
+}
