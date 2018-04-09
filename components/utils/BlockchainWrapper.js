@@ -35,7 +35,10 @@ export default class BlockchainWrapper {
     this.blockchain.public_adress = rsaKeys.exportKey("public");
     this.blockchain.private_adress = rsaKeys.exportKey("private");
     this.socket = io({ endpoint: "http://localhost:3000" });
-    this.socket.emit("init", { message: "init" });
+    this.socket.emit("init", { publicKey: this.blockchain.public_adress });
+    this.socket.on("news", data => {
+      console.log(data);
+    });
     this.socket.on("blockchain", data => {
       this.blockchain.chain = data;
     });

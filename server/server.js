@@ -28,8 +28,10 @@ function setCurrentSecret() {
   secret.value = Math.random();
 }
 var socketsConnected = 0;
+const sockets = [];
+
 setInterval(setCurrentSecret, 5000);
-websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret);
+websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets);
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());

@@ -297,5 +297,6 @@ module.exports = {
   getFollowing,
   getUserWithProfilePicture,
   getLikedContent,
-  getLikesByUser
+  getLikesByUser,
+  getBlockByPreviousHash
 };
