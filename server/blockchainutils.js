@@ -260,11 +260,11 @@ async function getLikesByUser(blockchain, user) {
   let likes;
   let allLikes = [];
   for (p in posts) {
-    likes = _.find(feed, {
+    likes = _.filter(feed, {
       type: "like",
       data: { previousHash: posts[p].previousHash }
     });
-    allLikes.push(likes);
+    if (likes) allLikes.push(...likes);
   }
   let sortedResults = [];
   let a;
