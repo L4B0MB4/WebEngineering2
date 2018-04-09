@@ -142,8 +142,20 @@ export default class BlockchainWrapper {
           tr.type === "like" &&
           tr.data.previousHash === previousHash &&
           tr.data.userKey === userKey &&
-          block.transactions[0].sender === this.blockchain.public_adress
+          tr.sender === this.blockchain.public_adress
         ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  alreadyFollowed(userKey) {
+    for (let i = 0; i < this.blockchain.chain.length; i++) {
+      let block = this.blockchain.chain[i];
+      if (block.transactions.length > 0) {
+        let tr = block.transactions[0];
+        if (tr.type === "follow" && tr.data.following === userKey && tr.sender === this.blockchain.public_adress) {
           return true;
         }
       }

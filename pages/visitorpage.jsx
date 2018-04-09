@@ -79,9 +79,12 @@ class VisitorPage extends Component {
 
   handleFollow = async username => {
     let publicKey = (await new Request().callGetPublicKey({ username })).data.publicKey;
-    this.blockchainWrapper.newTransaction("follow", {
-      following: publicKey
-    });
+
+    if (!this.blockchainWrapper.alreadyFollowed(publicKey)) {
+      this.blockchainWrapper.newTransaction("follow", {
+        following: publicKey
+      });
+    }
   };
 
   render() {
