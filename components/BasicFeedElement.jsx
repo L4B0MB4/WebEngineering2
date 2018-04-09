@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Comment, Form, TextArea } from "semantic-ui-react";
 import Link from "next/link";
 import { getDate } from "../components/utils/utils";
+import { handleLike } from "./utils/utils";
 
 export default class FeedElement extends Component {
   checkForVideo() {
@@ -22,8 +23,7 @@ export default class FeedElement extends Component {
 
   getCommentForm(classthis) {
     return (
-      <Container>
-        <br />
+      <div className="-full-width">
         <br />
         <Form>
           <Form.Group unstackable widths={16}>
@@ -47,11 +47,11 @@ export default class FeedElement extends Component {
             </Form.Field>
           </Form.Group>
         </Form>
-      </Container>
+      </div>
     );
   }
 
-  getComments(item, handleLike) {
+  getComments(item, user) {
     const { comments } = item;
     return (
       <Comment.Group size="large">
@@ -73,7 +73,7 @@ export default class FeedElement extends Component {
                     </Comment.Metadata>
                     <Comment.Text>{comment.data.text}</Comment.Text>
                     <Comment.Actions>
-                      <Comment.Action onClick={() => handleLike(comment.user.name, comment.previousHash)}>
+                      <Comment.Action onClick={() => handleLike(this.props.blockchainWrapper, user.name, comment.previousHash)}>
                         <Icon name="heart" style={{ color: "#daa520" }} /> <span className="-feed-comment-font-color">Like!</span>
                       </Comment.Action>
                     </Comment.Actions>
@@ -146,7 +146,7 @@ export default class FeedElement extends Component {
   getLikeAndShare(handleLike, handleShare, item) {
     return (
       <Fragment>
-        <Button size="mini" animated="fade" onClick={handleShare} className="-float-right ">
+        <Button size="mini" animated="fade" onClick={handleShare} className="-float-left ">
           <Button.Content visible>
             <Icon name="share" />
           </Button.Content>
