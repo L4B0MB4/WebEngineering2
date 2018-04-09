@@ -309,7 +309,7 @@ async function getFeaturedUsers(blockchain) {
   }
 
   result.sort(sortByAnsehen);
-  result.slice(Math.max(result.length - 12, 1));
+  result.slice(Math.min(result.length - 1, 12));
   return result;
 }
 
