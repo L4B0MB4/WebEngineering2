@@ -100,6 +100,10 @@ app
       const query = await commonutils.setUpProfile(req, res, blockchain);
       return app.render(req, res, "/profile", query);
     });
+    exp.get("/featured", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/featured", query);
+    });
 
     exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
       const query = await commonutils.setUpVisitPage(req, res, blockchain);
@@ -138,6 +142,10 @@ app
       const following = await blockchainutils.getFollowing(blockchain.chain, visitedUser.publicKey);
       const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
+    });
+    exp.get("/api/blockchain/getFeaturedUsers", async (req, res) => {
+      let users = await blockchainutils.getFeaturedUsers(blockchain.chain);
+      res.json(users);
     });
 
     exp.post("/api/user/login", function(req, res, next) {

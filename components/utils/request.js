@@ -92,6 +92,9 @@ class Request {
   callGetUserLikes(username) {
     return this.callFetch("GET", "/blockchain/getUserLikes", { username });
   }
+  callGetFeaturedUsers() {
+    return this.callFetch("GET", "/blockchain/getFeaturedUsers");
+  }
 }
 
 export default Request;

@@ -7,7 +7,8 @@ export const actionTypes = {
   RECEIVE_VISITED_USER_FOLLOWER: "RECEIVE_VISITED_USER_FOLLOWER",
   RECEIVE_BLOCKCHAIN_WRAPPER: "RECEIVE_BLOCKCHAIN_WRAPPER",
   RECEIVE_LIKES: "RECEIVE_LIKES",
-  RECEIVE_NEWS: "RECEIVE_NEWS"
+  RECEIVE_NEWS: "RECEIVE_NEWS",
+  RECEIVE_FEATURED_USERS: "RECEIVE_FEATURED_USERS"
 };
 
 export function receiveBlockchainFeed(payload) {
@@ -61,6 +62,13 @@ export function receiveLikes(payload) {
 export function receiveNews(payload) {
   return {
     type: actionTypes.RECEIVE_NEWS,
+    payload
+  };
+}
+
+export function receiveFeaturedUsers(payload) {
+  return {
+    type: actionTypes.RECEIVE_FEATURED_USERS,
     payload
   };
 }

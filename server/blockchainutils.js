@@ -303,7 +303,10 @@ async function getFeaturedUsers(blockchain) {
   let result = [];
   for (let a in allUsers) {
     result.push({
-      user: await findSingleUsernameByPublicKey(allUsers[a].publicKey),
+      user: {
+        name: await findSingleUsernameByPublicKey(allUsers[a].publicKey),
+        profilePicture: (await getUserWithProfilePicture(blockchain, { publicKey: allUsers[a].publicKey })).profilePicture
+      },
       ansehen: getAnsehen(blockchain, allUsers[a].publicKey)
     });
   }

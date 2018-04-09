@@ -18,6 +18,8 @@ const commonReducer = (state = {}, action) => {
       return Object.assign({}, state, { likes: action.payload });
     case actionTypes.RECEIVE_NEWS:
       return Object.assign({}, state, { news: action.payload });
+    case actionTypes.RECEIVE_FEATURED_USERS:
+      return Object.assign({}, state, { featuredUsers: action.payload });
     default:
       return state;
   }

@@ -275,7 +275,7 @@ h1 {
   margin: 0 !important;
 }
 
-.-image {
+.-image:hover {
   opacity: 0.4 !important;
 }
 .-no-padding {

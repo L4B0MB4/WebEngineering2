@@ -60,10 +60,6 @@ class Index extends Component {
     this.props.receiveBlockchainFeed(res.data);
   };
 
-  handleItemClick = item => {
-    this.setState({ activeItem: item });
-  };
-
   render() {
     return (
       <Layout activeItem="feed" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
