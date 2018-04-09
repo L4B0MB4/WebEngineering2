@@ -7,7 +7,7 @@ if [ "$x" != "Already up-to-date." ]; then
 	npm run build
 	mongo local --eval "db.blockchain.drop();"
 	mongo local --eval "db.createCollection('blockchain');"
-	pm2 start pm2.json
+	pm2 start npm -- start
 else
 	echo "No restart"
 fi
