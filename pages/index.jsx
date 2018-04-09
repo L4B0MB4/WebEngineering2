@@ -28,7 +28,7 @@ class Index extends Component {
     } else {
       let res = await request.callgetBlockchainFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
-      res = await request.callgetUser();
+      res = await request.callGetUser();
       store.dispatch(receiveUser(res.data));
     }
   }

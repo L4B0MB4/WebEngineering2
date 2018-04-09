@@ -95,7 +95,7 @@ app
       return app.render(req, res, "/index", query);
     });
     exp.get("/profile", ensureAuthenticated, async (req, res) => {
-      const query = await commonutils.setUpMain(req, res, blockchain);
+      const query = await commonutils.setUpProfile(req, res, blockchain);
       return app.render(req, res, "/profile", query);
     });
 
@@ -124,6 +124,11 @@ app
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getUserLikes", async (req, res) => {
+      if (!req.query.username) return res.json({});
+      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
+      res.json(await blockchainutils.getLikesByUser(blockchain.chain, visitedUser.publicKey));
     });
     exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
       if (!req.query.username) return res.json({});

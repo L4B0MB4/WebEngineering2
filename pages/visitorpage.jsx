@@ -6,7 +6,8 @@ import {
   receiveVisitedUserContent,
   receiveVisitedUserFollower,
   receiveBlockchainWrapper,
-  receiveBlockchainFeed
+  receiveBlockchainFeed,
+  receiveLikes
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -44,6 +45,7 @@ class VisitorPage extends Component {
     if (req) {
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveVisitedUser(query.visitedUser));
+      store.dispatch(receiveLikes(query.likes));
     }
     let { data } = await request.callGetUserContent(query.visitedUser.name);
     store.dispatch(receiveVisitedUserContent(data));

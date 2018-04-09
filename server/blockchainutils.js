@@ -248,12 +248,12 @@ async function getLikedContent(blockchain, user) {
   return finalFeed.reverse();
 }
 
-async function getLikesByUser(blockchain, user) {
+async function getLikesByUser(blockchain, publicKey) {
   let feed = blockchain.map(item => {
     return { ...item.transactions[0], previousHash: item.previousHash };
   });
   let posts = _.filter(feed, {
-    sender: user.publicKey,
+    sender: publicKey,
     type: "content"
   });
   let p;

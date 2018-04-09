@@ -17,6 +17,20 @@ async function setUpMain(req, res, blockchain) {
   };
   return query;
 }
+async function setUpProfile(req, res, blockchain) {
+  const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
+  let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
+  user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
+  const query = {
+    blockchainFeed: await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following),
+    userContent: await blockchainutils.getContentOfUser(blockchain.chain, req.user.publicKey),
+    followers: await blockchainutils.getFollower(blockchain.chain, req.user.publicKey),
+    ansehen: blockchainutils.getAnsehen(blockchain.chain, req.user.publicKey),
+    likes: await blockchainutils.getLikesByUser(blockchain.chain, req.user.publicKey),
+    user
+  };
+  return query;
+}
 
 async function setUpVisitPage(req, res, blockchain) {
   let visitedUser = await databaseutils.findPublicKeyByUsername(req.params.username);
@@ -24,9 +38,11 @@ async function setUpVisitPage(req, res, blockchain) {
   visitedUser.ansehen = blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey);
   let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
   user.ansehen = blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
+  const likes = await blockchainutils.getLikesByUser(blockchain.chain, visitedUser.publicKey);
   const query = {
     user,
-    visitedUser
+    visitedUser,
+    likes
   };
   return query;
 }
@@ -48,4 +64,4 @@ function setUpPictureUpload(req, res) {
   });
 }
 
-module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload };
+module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload, setUpProfile };

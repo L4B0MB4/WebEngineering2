@@ -14,7 +14,8 @@ import {
   receiveUser,
   receiveVisitedUserContent,
   receiveVisitedUserFollower,
-  receiveBlockchainWrapper
+  receiveBlockchainWrapper,
+  receiveLikes
 } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import withRedux from "next-redux-wrapper";
@@ -46,11 +47,14 @@ class Profil extends Component {
     if (req) {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
+      store.dispatch(receiveLikes(query.likes));
     } else {
       let res = await request.callgetBlockchainFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
-      res = await request.callgetUser();
+      res = await request.callGetUser();
       store.dispatch(receiveUser(res.data));
+      res = await request.callGetUserLikes(res.data.name);
+      store.dispatch(receiveLikes(res.data));
     }
   }
 
@@ -90,7 +94,8 @@ const mapStateToProps = state => ({
   user: state.commonReducer.user,
   userContent: state.commonReducer.userContent,
   followers: state.commonReducer.followers,
-  blockchainWrapper: state.commonReducer.blockchainWrapper
+  blockchainWrapper: state.commonReducer.blockchainWrapper,
+  likes: state.commonReducer.likes
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Profil);

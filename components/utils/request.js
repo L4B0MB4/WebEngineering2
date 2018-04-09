@@ -77,7 +77,7 @@ class Request {
   callGetPublicKey(data) {
     return this.callFetch("POST", "/user/getPublicKey", data);
   }
-  callgetUser() {
+  callGetUser() {
     return this.callFetch("GET", "/user/getUser");
   }
   callGetUserContent(username) {
@@ -88,6 +88,9 @@ class Request {
   }
   callUploadFile(file) {
     return this.callFetchFileUpload("POST", "/uploadPicture", file);
+  }
+  callGetUserLikes(username) {
+    return this.callFetch("GET", "/blockchain/getUserLikes", { username });
   }
 }
 
