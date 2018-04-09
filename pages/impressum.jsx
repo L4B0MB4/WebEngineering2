@@ -9,7 +9,7 @@ class Impressum extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout isUnconnected={true}>
         <h1>Disclaimer</h1>
         <h2>Address</h2>
         <p>

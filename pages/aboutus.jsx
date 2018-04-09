@@ -9,7 +9,7 @@ class Kontakt extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout isUnconnected={true}>
         <h1>About us</h1>
         <br />
         <br />

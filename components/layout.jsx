@@ -3,6 +3,7 @@ import { Icon, Card, Label, Input, Menu, Header, Grid, Image, List, Button, Moda
 import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
+import OwnUnconnectedHeader from "./HeaderUnconnected";
 
 class Layout extends Component {
   state = { openSidebar: false };
@@ -22,7 +23,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { user, activeItem } = this.props;
+    const { user, activeItem, isUnconnected } = this.props;
     let { relPath } = this.props;
     if (!relPath) relPath = "";
     return (
@@ -30,7 +31,7 @@ class Layout extends Component {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Grid divided={false} celled="internally">
           <Grid.Row only="tablet computer">
-            <OwnHeader relPath={relPath} />
+            {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
             {this.leftSide()}
             <Grid.Column width={10} stretched className="grid-column">
               <Grid>
@@ -88,7 +89,11 @@ class Layout extends Component {
                 </Menu.Item>
               </Sidebar>
               <Sidebar.Pusher>
-                <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                {isUnconnected ? (
+                  <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                ) : (
+                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
