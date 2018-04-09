@@ -52,7 +52,7 @@ class Profil extends Component {
       store.dispatch(receiveVisitedUserContent(query.userContent));
       store.dispatch(receiveVisitedUserFollower(query.followers));
     } else {
-      let res = await request.callgetBlockchainFeed();
+      let res = await request.callgetFollowerFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
       let userres = await request.callGetUser();
       store.dispatch(receiveUser(userres.data));

@@ -31,7 +31,7 @@ class FeaturedProfiles extends Component {
       store.dispatch(receiveFeaturedUsers(res.data));
     } else {
       request = new Request();
-      let res = await request.callgetBlockchainFeed();
+      let res = await request.callgetFollowerFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
       res = await request.callGetUser();
       store.dispatch(receiveUser(res.data));

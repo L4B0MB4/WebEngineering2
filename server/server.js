@@ -110,11 +110,6 @@ app
       return app.render(req, res, "/visitorpage", query);
     });
 
-    exp.get("/api/blockchain/feed", async (req, res) => {
-      let feed = await blockchainutils.createFeed(req, res, blockchain.chain);
-      res.json(feed);
-    });
-
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
@@ -136,10 +131,8 @@ app
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getLikesByUser(blockchain.chain, visitedUser.publicKey));
     });
-    exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
-      if (!req.query.username) return res.json({});
-      const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
-      const following = await blockchainutils.getFollowing(blockchain.chain, visitedUser.publicKey);
+    exp.get("/api/blockchain/getFollowerFeed", ensureAuthenticated, async (req, res) => {
+      const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
       const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
     });

@@ -27,7 +27,7 @@ class Index extends Component {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
     } else {
-      let res = await request.callgetBlockchainFeed();
+      let res = await request.callgetFollowerFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
       res = await request.callGetUser();
       store.dispatch(receiveUser(res.data));
