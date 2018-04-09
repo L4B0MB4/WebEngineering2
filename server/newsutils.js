@@ -7,7 +7,15 @@ export async function handleNews(blockchain, sockets, block) {
   let news = undefined;
   switch (transaction.type) {
     case "like":
-      news = await createLikeNews(blockchain, transaction);
+      news = await creatLikeOrShareNews(blockchain, transaction, "like");
+      sendNews(news, sockets);
+      break;
+    case "share":
+      news = await creatLikeOrShareNews(blockchain, transaction, "share");
+      sendNews(news, sockets);
+      break;
+    case "follow":
+      news = await creatFollowNews(blockchain, transaction);
       sendNews(news, sockets);
       break;
   }
@@ -20,8 +28,7 @@ function sendNews(news, sockets) {
     //saving news i guess?
   }
 }
-
-async function createLikeNews(blockchain, transaction) {
+async function creatLikeOrShareNews(blockchain, transaction, type) {
   let sender = transaction.sender;
   let receiver = blockchainutils.getBlockByPreviousHash(blockchain, transaction.data.previousHash).sender;
   const user = {
@@ -31,7 +38,21 @@ async function createLikeNews(blockchain, transaction) {
   return {
     user,
     receiver,
-    type: "like",
+    type,
+    timestamp: transaction.timestamp
+  };
+}
+
+async function creatFollowNews(blockchain, transaction) {
+  let receiver = transaction.data.following;
+  const user = {
+    profilePicture: (await blockchainutils.getUserWithProfilePicture(blockchain, { publicKey: transaction.sender })).profilePicture,
+    name: await databaseutils.findSingleUsernameByPublicKey(transaction.sender)
+  };
+  return {
+    user,
+    receiver,
+    type: "follow",
     timestamp: transaction.timestamp
   };
 }

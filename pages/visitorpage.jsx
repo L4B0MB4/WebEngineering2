@@ -13,6 +13,7 @@ import {
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
 import withRedux from "next-redux-wrapper";
+import { bindActionCreators } from "redux";
 import initStore from "../components/redux/store";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
@@ -112,7 +113,8 @@ class VisitorPage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  receiveNews: bindActionCreators(receiveNews, dispatch)
+  receiveNews: bindActionCreators(receiveNews, dispatch),
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
 });
 
 const mapStateToProps = state => ({
