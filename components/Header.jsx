@@ -15,11 +15,11 @@ class Header extends Component {
           <Menu fluid widths={1} size="massive">
             <Menu.Item className="-header-menu">
               <Grid style={{ width: "inherit", height: "inherit" }}>
-                <Grid.Column className="-no-padding" width="3" />
-                <Grid.Column className="-no-padding" width="10">
+                <Grid.Column className="-no-padding" mobile={1} tablet={3} computer={3} />
+                <Grid.Column className="-no-padding" mobile={7} tablet={10} computer={10}>
                   <span className="-header">golddigger.io</span>
                 </Grid.Column>
-                <Grid.Column className="-no-padding -header-news " width="3">
+                <Grid.Column className="-no-padding -header-news " mobile={8} tablet={3} computer={3}>
                   <Popup
                     trigger={
                       <Button as="div" className="-header-news-button" labelPosition="right">
@@ -37,11 +37,11 @@ class Header extends Component {
                     basic>
                     <News news={news} />
                   </Popup>
+                  {setOpenSidebar ? <Icon name="sidebar" onClick={() => setOpenSidebar(true)} className="-header-icon -clickable" /> : null}
                 </Grid.Column>
               </Grid>
             </Menu.Item>
           </Menu>
-          {setOpenSidebar ? <Icon name="sidebar" onClick={() => setOpenSidebar(true)} className="-header-icon -clickable" /> : null}
         </Container>
       </Fragment>
     );
