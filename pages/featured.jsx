@@ -77,7 +77,7 @@ class FeaturedProfiles extends Component {
           <Grid.Row only="tablet computer" columns={3} textAlign="center">
             {featuredUsers
               ? featuredUsers.map(item => (
-                  <Grid.Column>
+                  <Grid.Column key={item.user.name}>
                     <Button animated="fade" className="featured-user">
                       <Button.Content className="-visible">
                         <Image
@@ -88,6 +88,7 @@ class FeaturedProfiles extends Component {
                       </Button.Content>
                       <Button.Content hidden>{item.user.name}</Button.Content>
                     </Button>
+                    <br />
                     {item.user.name} - {item.ansehen} Ansehen
                   </Grid.Column>
                 ))
@@ -96,7 +97,7 @@ class FeaturedProfiles extends Component {
           <Grid.Row only="mobile" columns={2} textAlign="center">
             {featuredUsers
               ? featuredUsers.map(item => (
-                  <Grid.Column>
+                  <Grid.Column key={item.user.name}>
                     <Button animated="fade" className="featured-user">
                       <Button.Content className="-visible">
                         <Image
@@ -107,6 +108,7 @@ class FeaturedProfiles extends Component {
                       </Button.Content>
                       <Button.Content hidden>{item.user.name}</Button.Content>
                     </Button>
+                    <br />
                     {item.user.name} - {item.ansehen} Ansehen
                   </Grid.Column>
                 ))
