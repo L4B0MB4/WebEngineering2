@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { findUsersByPublicKey, findSingleUsernameByPublicKey } = require("./database");
+const { findUsersByPublicKey, findSingleUsernameByPublicKey, printAllUsers } = require("./database");
 
 async function createFeed(req, res, blockchain) {
   let filtered = getChainByTime(blockchain);
@@ -94,6 +94,16 @@ function sortByTimestamp(a, b) {
     return 1;
   }
   if (a.timestamp < b.timestamp) {
+    return -1;
+  }
+  return 0;
+}
+
+function sortByAnsehen(a, b) {
+  if (a.ansehen < b.ansehen) {
+    return 1;
+  }
+  if (a.ansehen > b.ansehen) {
     return -1;
   }
   return 0;
@@ -285,6 +295,24 @@ async function getLikesByUser(blockchain, publicKey) {
   return sortedResults;
 }
 
+async function getFeaturedUsers(blockchain) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  let allUsers = await printAllUsers();
+  let result = [];
+  for (let a in allUsers) {
+    result.push({
+      user: await findSingleUsernameByPublicKey(allUsers[a].publicKey),
+      ansehen: getAnsehen(blockchain, allUsers[a].publicKey)
+    });
+  }
+
+  result.sort(sortByAnsehen);
+  result.slice(Math.max(result.length - 12, 1));
+  return result;
+}
+
 module.exports = {
   createFeed,
   mergeUserToBlock,
@@ -298,5 +326,6 @@ module.exports = {
   getUserWithProfilePicture,
   getLikedContent,
   getLikesByUser,
-  getBlockByPreviousHash
+  getBlockByPreviousHash,
+  getFeaturedUsers
 };
