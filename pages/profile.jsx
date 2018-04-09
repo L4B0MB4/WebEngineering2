@@ -48,13 +48,19 @@ class Profil extends Component {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
       store.dispatch(receiveLikes(query.likes));
+      store.dispatch(receiveVisitedUserContent(query.userContent));
+      store.dispatch(receiveVisitedUserFollower(query.followers));
     } else {
       let res = await request.callgetBlockchainFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
-      res = await request.callGetUser();
-      store.dispatch(receiveUser(res.data));
-      res = await request.callGetUserLikes(res.data.name);
+      let userres = await request.callGetUser();
+      store.dispatch(receiveUser(userres.data));
+      res = await request.callGetUserLikes(userres.data.name);
       store.dispatch(receiveLikes(res.data));
+      res = await request.callGetUserContent(userres.data.name);
+      store.dispatch(receiveVisitedUserContent(res.data));
+      res = await request.callGetUserFollower(userres.data.name);
+      store.dispatch(receiveVisitedUserFollower(res.data));
     }
   }
 
