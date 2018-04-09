@@ -3,16 +3,21 @@ import { List, Image } from "semantic-ui-react";
 
 export default class News extends Component {
   render() {
+    let i = 0;
     const { news } = this.props;
-    if (!news || news.length == 0) return;
+    if (!news) return "";
     return (
       <List>
         {news.map(item => {
+          i++;
           return (
-            <List.Item>
-              <Image avatar src="/assets/images/avatar/small/rachel.png" />
+            <List.Item style={{ minWidth: "200px" }} key={i}>
+              <Image
+                src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                avatar
+              />
               <List.Content>
-                <List.Header as="a">{item.sender}</List.Header>
+                <List.Header as="a">{item.user ? item.user.name : "someone"}</List.Header>
                 <List.Description>{item.type}d your content</List.Description>
               </List.Content>
             </List.Item>

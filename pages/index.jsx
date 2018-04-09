@@ -49,7 +49,8 @@ class Index extends Component {
     }
   }
   onNews = news => {
-    const newsarr = this.props.news ? this.props.news : [];
+    const newsarr = [];
+    newsarr.push(...(this.props.news ? this.props.news : []));
     newsarr.push(news);
     this.props.receiveNews(newsarr);
   };

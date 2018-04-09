@@ -7,7 +7,8 @@ import {
   receiveVisitedUserFollower,
   receiveBlockchainWrapper,
   receiveBlockchainFeed,
-  receiveLikes
+  receiveLikes,
+  receiveNews
 } from "../components/redux/actions/commonActions";
 import OwnHeader from "../components/Header.jsx";
 import Layout from "../components/layout.jsx";
@@ -51,6 +52,7 @@ class VisitorPage extends Component {
     store.dispatch(receiveVisitedUserContent(data));
     data = (await request.callGetUserFollower(query.visitedUser.name)).data;
     store.dispatch(receiveVisitedUserFollower(data));
+    receiveNews([]);
     return {};
   }
 
@@ -62,10 +64,17 @@ class VisitorPage extends Component {
 
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
-      this.blockchainWrapper.init(this.props.user.privateKey);
+      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed, this.onNews);
       this.hasInit = true;
+      this.props.receiveBlockchainWrapper(this.blockchainWrapper);
     }
   }
+  onNews = news => {
+    const newsarr = [];
+    newsarr.push(...(this.props.news ? this.props.news : []));
+    newsarr.push(news);
+    this.props.receiveNews(newsarr);
+  };
 
   handleFollow = async username => {
     let publicKey = (await new Request().callGetPublicKey({ username })).data.publicKey;
@@ -102,13 +111,16 @@ class VisitorPage extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  receiveNews: bindActionCreators(receiveNews, dispatch)
+});
 
 const mapStateToProps = state => ({
   user: state.commonReducer.user,
   visitedUser: state.commonReducer.visitedUser,
   userContent: state.commonReducer.userContent,
-  followers: state.commonReducer.followers
+  followers: state.commonReducer.followers,
+  news: state.commonReducer.news
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(VisitorPage);

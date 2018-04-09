@@ -15,7 +15,8 @@ import {
   receiveVisitedUserContent,
   receiveVisitedUserFollower,
   receiveBlockchainWrapper,
-  receiveLikes
+  receiveLikes,
+  receiveNews
 } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import withRedux from "next-redux-wrapper";
@@ -62,6 +63,7 @@ class Profil extends Component {
       res = await request.callGetUserFollower(userres.data.name);
       store.dispatch(receiveVisitedUserFollower(res.data));
     }
+    receiveNews([]);
   }
 
   constructor(props) {
@@ -72,11 +74,17 @@ class Profil extends Component {
   }
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
-      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
+      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed, this.onNews);
       this.hasInit = true;
       this.props.receiveBlockchainWrapper(this.blockchainWrapper);
     }
   }
+  onNews = news => {
+    const newsarr = [];
+    newsarr.push(...(this.props.news ? this.props.news : []));
+    newsarr.push(news);
+    this.props.receiveNews(newsarr);
+  };
 
   render() {
     return (
@@ -92,7 +100,8 @@ class Profil extends Component {
 
 const mapDispatchToProps = dispatch => ({
   receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
-  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch),
+  receiveNews: bindActionCreators(receiveNews, dispatch)
 });
 
 const mapStateToProps = state => ({
@@ -101,7 +110,8 @@ const mapStateToProps = state => ({
   userContent: state.commonReducer.userContent,
   followers: state.commonReducer.followers,
   blockchainWrapper: state.commonReducer.blockchainWrapper,
-  likes: state.commonReducer.likes
+  likes: state.commonReducer.likes,
+  news: state.commonReducer.news
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Profil);

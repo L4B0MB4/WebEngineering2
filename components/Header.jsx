@@ -20,25 +20,23 @@ class Header extends Component {
                   <span className="-header">golddigger.io</span>
                 </Grid.Column>
                 <Grid.Column className="-no-padding -header-news " width="3">
-                  {
-                    <Popup
-                      trigger={
-                        <Button as="div" className="-header-news-button" labelPosition="right">
-                          <Button icon>
-                            <Icon name="newspaper" /> News
-                          </Button>
-                          <Label as="a" basic pointing="left">
-                            {news.length ? news.length : 0}
-                          </Label>
+                  <Popup
+                    trigger={
+                      <Button as="div" className="-header-news-button" labelPosition="right">
+                        <Button icon>
+                          <Icon name="newspaper" /> News
                         </Button>
-                      }
-                      on="click"
-                      hideOnScroll
-                      horizontalOffset={70}
-                      basic>
-                      <News news={news} />
-                    </Popup>
-                  }
+                        <Label as="a" basic pointing="left">
+                          {news && news.length ? news.length : 0}
+                        </Label>
+                      </Button>
+                    }
+                    on="click"
+                    hideOnScroll
+                    horizontalOffset={70}
+                    basic>
+                    <News news={news} />
+                  </Popup>
                 </Grid.Column>
               </Grid>
             </Menu.Item>

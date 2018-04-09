@@ -24,10 +24,14 @@ function sendNews(news, sockets) {
 async function createLikeNews(blockchain, transaction) {
   let sender = transaction.sender;
   let receiver = blockchainutils.getBlockByPreviousHash(blockchain, transaction.data.previousHash).sender;
-  sender = await databaseutils.findSingleUsernameByPublicKey(sender);
+  const user = {
+    profilePicture: (await blockchainutils.getUserWithProfilePicture(blockchain, { publicKey: sender })).profilePicture,
+    name: await databaseutils.findSingleUsernameByPublicKey(sender)
+  };
   return {
-    sender,
+    user,
     receiver,
-    type: "like"
+    type: "like",
+    timestamp: transaction.timestamp
   };
 }
