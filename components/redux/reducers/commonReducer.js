@@ -16,6 +16,8 @@ const commonReducer = (state = {}, action) => {
       return Object.assign({}, state, { blockchainWrapper: action.payload });
     case actionTypes.RECEIVE_LIKES:
       return Object.assign({}, state, { likes: action.payload });
+    case actionTypes.RECEIVE_NEWS:
+      return Object.assign({}, state, { news: action.payload });
     default:
       return state;
   }
