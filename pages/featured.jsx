@@ -69,52 +69,54 @@ class FeaturedProfiles extends Component {
     const { featuredUsers } = this.props;
     return (
       <Layout activeItem="featured" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
-        <h1>!! The Top {featuredUsers ? featuredUsers.length : ""} Users right now !!</h1>
-        <br />
-        <br />
-        <br />
-        <Grid>
-          <Grid.Row only="tablet computer" columns={3} textAlign="center">
-            {featuredUsers
-              ? featuredUsers.map(item => (
-                  <Grid.Column key={item.user.name}>
-                    <Button animated="fade" className="featured-user">
-                      <Button.Content className="-visible">
-                        <Image
-                          fluid
-                          src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
-                          className="-image"
-                        />
-                      </Button.Content>
-                      <Button.Content hidden>{item.user.name}</Button.Content>
-                    </Button>
-                    <br />
-                    {item.user.name} - {item.ansehen} Ansehen
-                  </Grid.Column>
-                ))
-              : null}
-          </Grid.Row>
-          <Grid.Row only="mobile" columns={2} textAlign="center">
-            {featuredUsers
-              ? featuredUsers.map(item => (
-                  <Grid.Column key={item.user.name}>
-                    <Button animated="fade" className="featured-user">
-                      <Button.Content className="-visible">
-                        <Image
-                          fluid
-                          src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
-                          className="-image"
-                        />
-                      </Button.Content>
-                      <Button.Content hidden>{item.user.name}</Button.Content>
-                    </Button>
-                    <br />
-                    {item.user.name} - {item.ansehen} Ansehen
-                  </Grid.Column>
-                ))
-              : null}
-          </Grid.Row>
-        </Grid>
+        <div className="-text-center">
+          <h1>!! The Top {featuredUsers ? featuredUsers.length : ""} Users right now !!</h1>
+          <br />
+          <br />
+          <br />
+          <Grid>
+            <Grid.Row only="tablet computer" columns={3} textAlign="center">
+              {featuredUsers
+                ? featuredUsers.map(item => (
+                    <Grid.Column key={item.user.name}>
+                      <Button animated="fade" className="featured-user">
+                        <Button.Content className="-visible">
+                          <Image
+                            fluid
+                            src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                            className="-image"
+                          />
+                        </Button.Content>
+                        <Button.Content hidden>{item.user.name}</Button.Content>
+                      </Button>
+                      <br />
+                      {item.user.name} - {item.ansehen} Ansehen
+                    </Grid.Column>
+                  ))
+                : null}
+            </Grid.Row>
+            <Grid.Row only="mobile" columns={2} textAlign="center">
+              {featuredUsers
+                ? featuredUsers.map(item => (
+                    <Grid.Column key={item.user.name}>
+                      <Button animated="fade" className="featured-user">
+                        <Button.Content className="-visible">
+                          <Image
+                            fluid
+                            src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                            className="-image"
+                          />
+                        </Button.Content>
+                        <Button.Content hidden>{item.user.name}</Button.Content>
+                      </Button>
+                      <br />
+                      {item.user.name} - {item.ansehen} Ansehen
+                    </Grid.Column>
+                  ))
+                : null}
+            </Grid.Row>
+          </Grid>
+        </div>
       </Layout>
     );
   }
