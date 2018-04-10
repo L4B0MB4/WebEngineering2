@@ -108,8 +108,8 @@ class Ninegag {
 }
 const ngag = new Ninegag();
 main();
-//setInterval(main, 1000 * 60 * 5);
+setInterval(main, 1000 * 60 * 5);
 async function main() {
-  //await ngag.crawl();
+  await ngag.crawl();
   await ngag.main();
 }
