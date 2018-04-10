@@ -36,7 +36,16 @@ class Ninegag {
   }
 
   async main() {
-    let res = await request.callLogin({
+    blockchainWrapper.newKeys();
+    let user = {
+      publicKey: blockchainWrapper.getPublicKey(),
+      privateKey: blockchainWrapper.getPrivateKey(),
+      password: hash("9gag"),
+      name: "9gag",
+      email: "9gag"
+    };
+    let res = await request.callRegistration(user);
+    res = await request.callLogin({
       password: hash("9gag"),
       username: "9gag"
     });
@@ -98,8 +107,9 @@ class Ninegag {
   }
 }
 const ngag = new Ninegag();
-setInterval(main, 1000 * 60 * 5);
+main();
+//setInterval(main, 1000 * 60 * 5);
 async function main() {
-  await ngag.crawl();
+  //await ngag.crawl();
   await ngag.main();
 }
