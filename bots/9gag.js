@@ -29,4 +29,10 @@ async function main() {
       console.log(data);
     }
   );
+  res = await request.callUploadExternalFile("https://img-9gag-fun.9cache.com/photo/aeMgwDv_700bwp.webp");
+  if (res.data && res.data.filename) {
+    blockchainWrapper.newTransaction("content", { text: "das ist ein test", picture: res.data.filename }, () => {
+      console.log("success!");
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import fetch from "isomorphic-unfetch";
 import queryString from "query-string";
+import FormData from "form-data";
 
 class Request {
   constructor(url) {
@@ -45,7 +46,9 @@ class Request {
     let customPath = path;
     const config = {
       method,
-      credentials: "include" // wichtig für auth !!!
+      headers: {
+        Cookie: this.cookie[0]
+      }
     };
     if (config.method !== "GET") {
       config.body = formdata;
@@ -122,6 +125,9 @@ class Request {
   }
   callUploadFile(file) {
     return this.callFetchFileUpload("POST", "/uploadPicture", file);
+  }
+  callUploadExternalFile(file) {
+    return this.callFetch("POST", "/uploadExternalPicture", { file });
   }
   callGetUserLikes(username) {
     return this.callFetch("GET", "/blockchain/getUserLikes", { username });

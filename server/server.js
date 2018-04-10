@@ -173,6 +173,10 @@ app
       commonutils.setUpPictureUpload(req, res);
     });
 
+    exp.post("/api/uploadExternalPicture", function(req, res) {
+      commonutils.setExternalPictureUpload(req, res);
+    });
+
     exp.get("/api/picture/:filename", (req, res) => {
       let p = path.resolve(`${__dirname}/../temp/`);
       res.sendFile(`${p}/${req.params.filename}`);
