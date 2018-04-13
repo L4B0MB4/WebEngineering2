@@ -1,16 +1,15 @@
 import React, { Component, Fragment } from "react";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button, Card } from "semantic-ui-react";
-import OwnHeader from "../components/Header.jsx";
+import OwnHeader from "../components/HeaderUnconnected";
 import Layout from "../components/layout.jsx";
 
 var request;
 class Kontakt extends Component {
   state = { activeItem: "kontakt" };
 
-
   render() {
     return (
-      <Fragment>
+      <Layout isUnconnected={true}>
         <h1>About us</h1>
         <br />
         <br />
@@ -72,7 +71,7 @@ class Kontakt extends Component {
             </Card.Content>
           </Card>
         </Card.Group>
-      </Fragment>
+      </Layout>
     );
   }
 }

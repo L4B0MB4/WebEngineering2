@@ -53,15 +53,15 @@ const register = (email, body, httpRes) => {
           privateKey: body.privateKey,
           password: body.password
         };
-        db.collection("users").insertOne(newUser, function(err, res) {
+        db.collection("users").insertOne(newUser, function (err, res) {
           if (err) throw err;
           return httpRes.json({
             type: "success",
-            message: "Erfolgreich registriert"
+            message: "Successfully registered"
           });
         });
       } else {
-        return httpRes.json({ type: "error", message: "Email bereits vorhanden!" });
+        return httpRes.json({ type: "error", message: "Email already exists!" });
       }
     });
   });
@@ -72,7 +72,7 @@ const printAllUsers = () => {
     db
       .collection("users")
       .find({})
-      .toArray(function(err, res) {
+      .toArray(function (err, res) {
         if (err) throw err;
         let users = res;
         resolve(users);
@@ -131,6 +131,16 @@ const findUsersByPublicKey = publicKeys =>
       });
   });
 
+const findSingleUsernameByPublicKey = publicKey =>
+    new Promise((resolve, reject) => {
+        db
+            .collection("users")
+            .findOne({ publicKey: publicKey }, { name: 1}, (err, res) => {
+                if (err) reject(err);
+                resolve(res.name);
+            });
+    });
+
 const findPublicKeyByUsername = name =>
   new Promise((resolve, reject) => {
     db.collection("users").findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
@@ -147,5 +157,6 @@ module.exports = {
   register,
   printAllUsers,
   findUsersByPublicKey,
+  findSingleUsernameByPublicKey,
   findPublicKeyByUsername
 };

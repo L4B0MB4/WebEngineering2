@@ -1,9 +1,11 @@
 import fetch from "isomorphic-unfetch";
 import queryString from "query-string";
+import FormData from "form-data";
 
 class Request {
   constructor(url) {
     this.url = url;
+    this.cookie = "";
   }
 
   async callFetch(method, path, body, formencode) {
@@ -11,9 +13,10 @@ class Request {
     const config = {
       method,
       headers: {
+        Cookie: this.cookie,
         "content-type": formencode ? "application/x-www-form-urlencoded" : "application/json"
       },
-      credentials: "same-origin" // wichtig für auth !!!
+      credentials: "include" // wichtig für auth !!!
     };
 
     if (formencode) {
@@ -26,6 +29,7 @@ class Request {
     try {
       const res = await fetch(`${this.url ? this.url : ""}/api${customPath}`, config);
       const data = await res.json();
+      this.cookie = this.cookie ? this.cookie : res.headers._headers["set-cookie"];
       return {
         data,
         response: res
@@ -42,7 +46,9 @@ class Request {
     let customPath = path;
     const config = {
       method,
-      credentials: "same-origin" // wichtig für auth !!!
+      headers: {
+        Cookie: this.cookie[0]
+      }
     };
     if (config.method !== "GET") {
       config.body = formdata;
@@ -52,6 +58,40 @@ class Request {
     try {
       const res = await fetch(`${this.url ? this.url : ""}/api${customPath}`, config);
       const data = await res.json();
+      this.header = res.headers;
+      return {
+        data,
+        response: res
+      };
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async callNoAPIFetch(method, path, body, formencode) {
+    let customPath = path;
+    const config = {
+      method,
+      headers: {
+        Cookie: this.cookie[0],
+        "content-type": formencode ? "application/x-www-form-urlencoded" : "application/json"
+      }
+    };
+
+    if (formencode) {
+      config.body = queryString.stringify(body);
+    } else if (config.method !== "GET") {
+      config.body = JSON.stringify(body);
+    } else if (body) {
+      customPath = `${path}?${queryString.stringify(body)}`;
+    }
+    try {
+      const res = await fetch(`${this.url ? this.url : ""}/${customPath}`, config);
+      let data = await res.text();
+      let i = data.indexOf("__NEXT_DATA__") + 16;
+      let j = data.indexOf("module=");
+      data = JSON.parse(data.slice(i, j));
       return {
         data,
         response: res
@@ -86,11 +126,18 @@ class Request {
   callUploadFile(file) {
     return this.callFetchFileUpload("POST", "/uploadPicture", file);
   }
+  callUploadExternalFile(file) {
+    return this.callFetch("POST", "/uploadExternalPicture", { file });
+  }
   callGetUserLikes(username) {
     return this.callFetch("GET", "/blockchain/getUserLikes", { username });
   }
   callGetFeaturedUsers() {
     return this.callFetch("GET", "/blockchain/getFeaturedUsers");
+  }
+
+  callMainPage() {
+    return this.callNoAPIFetch("GET", "");
   }
 }
 
