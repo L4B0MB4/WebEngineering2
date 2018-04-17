@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, Button, Input, Container, Card } from "semantic-ui-react";
 import OwnHeader from "../components/Header.jsx";
+import Link from "next/link";
 import Layout from "../components/layout.jsx";
 import FeedElementBig from "../components/FeedElementBig";
 import Request from "../components/utils/request";
@@ -79,16 +80,20 @@ class FeaturedProfiles extends Component {
               {featuredUsers
                 ? featuredUsers.map(item => (
                   <Grid.Column key={item.user.name}>
-                    <Button animated="fade" className="featured-user">
-                      <Button.Content className="-visible">
-                        <Image
-                          fluid
-                          src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
-                          className="-image"
-                        />
-                      </Button.Content>
-                      <Button.Content hidden>{item.user.name}</Button.Content>
-                    </Button>
+                    <Link prefetch href={"./visit/" + item.user.name}>
+                      <Button animated="fade" className="featured-user">
+                        <Button.Content className="-visible">
+                          <Image
+                            fluid
+                            src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                            className="-image"
+                          />
+                        </Button.Content>
+                        <Button.Content hidden>
+                          {item.user.name}
+                        </Button.Content>
+                      </Button>
+                    </Link>
                     <br />
                     {item.user.name} - {item.ansehen} Ansehen
                     </Grid.Column>
