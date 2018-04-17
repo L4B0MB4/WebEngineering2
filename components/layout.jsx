@@ -132,7 +132,7 @@ class Layout extends Component {
             </Card.Content>
             <Card.Content extra>
               <a>
-                <Icon name="users" />
+                <Icon name="trophy" />
                 {user ? user.ansehen : ""}
               </a>
             </Card.Content>

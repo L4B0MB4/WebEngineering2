@@ -156,6 +156,10 @@ body {
   background-color: #daa520 !important;
 }
 
+.-share-button{
+  
+}
+
 .-full-width {
   width: 100% !important;
 }
@@ -299,3 +303,7 @@ h1 {
   text-align: center !important;
 }
 
+.-hidden-content{
+  text-align: left !important;
+  margin-left: 10px !important;
+}

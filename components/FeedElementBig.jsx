@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown } from "semantic-ui-react";
+import { Button, Feed, Icon, Segment, Grid, Image, Container, Dropdown, Label } from "semantic-ui-react";
 import Link from "next/link";
 import { getDate } from "../components/utils/utils";
 import BasicFeedElement from "./BasicFeedElement";
@@ -65,12 +65,17 @@ export default class FeedElement extends BasicFeedElement {
                   <br />
 
                   <div style={{ position: "relative", height: "30px", width: "100%" }}>
-                    <Button size="mini" animated="fade" onClick={handleShare} className="-float-left ">
-                      <Button.Content visible>
-                        <Icon name="share" />
-                      </Button.Content>
-                      <Button.Content hidden>Share</Button.Content>
+
+                    <Button as="div" labelPosition='right' size="mini" animated="fade" onClick={handleShare} className="-float-left -share-button ">
+                      <Button size="mini">
+                        <Button.Content visible>
+                          <Icon name="share" />
+                        </Button.Content>
+                        <Button.Content hidden className="-hidden-content">Share</Button.Content>
+                      </Button>
+                      <Label as="a" basic pointing='left'>2 Ans.</Label>
                     </Button>
+
                     <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
                       <Button.Content visible>
                         <Icon name="heart" />
