@@ -10,7 +10,7 @@ class FeaturedProfiles extends Component {
   render() {
     let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     return (
-      <Layout>
+      <Layout activeItem="featured">
         <h1>!! The Top 12 Users right now !!</h1>
         <br />
         <br />

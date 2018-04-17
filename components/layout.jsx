@@ -53,7 +53,8 @@ class Layout extends Component {
                 direction="right"
                 icon="labeled"
                 vertical
-                inverted>
+                inverted
+                className="mobile-menu">
                 <Link href={relPath + "./profile"}>
                   <Menu.Item name="profil">
                     <Icon name="user" />Profile

@@ -269,3 +269,15 @@ h1 {
 .-image{
   opacity: 0.4 !important;
 }
+
+.mobile-menu{
+  background-color: #c7e1ba !important;
+}
+
+.ui.inverted.icon.menu .item {
+    color: black;
+}
+
+.ui.inverted.menu .link.item:active, .ui.inverted.menu a.item:active {
+    color: #f6e4cc !important;
+}
