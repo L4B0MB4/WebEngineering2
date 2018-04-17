@@ -4,6 +4,8 @@ import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
+import onClickOutside from 'react-onclickoutside';
+
 
 class Layout extends Component {
   state = { openSidebar: false };
@@ -22,9 +24,14 @@ class Layout extends Component {
     this.setState({ openSidebar: bool });
   };
 
+  handleClickOutside = () => {
+    this.setOpenSidebar(false);
+  }
+
   render() {
     const { user, activeItem, isUnconnected } = this.props;
     let { relPath } = this.props;
+
     if (!relPath) relPath = "";
     return (
       <Fragment>
@@ -45,8 +52,9 @@ class Layout extends Component {
             {this.rightSide()}
           </Grid.Row>
           <Grid.Row only="mobile">
-            <Sidebar.Pushable as={"div"} className="-full-width">
+            <Sidebar.Pushable as={"div"} className="-full-width -sidebar">
               <Sidebar
+                id="mobile-menu"
                 as={Menu}
                 animation="overlay"
                 width="thin"
@@ -93,8 +101,8 @@ class Layout extends Component {
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                )}
+                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                  )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -192,4 +200,4 @@ class Layout extends Component {
   };
 }
 
-export default Layout;
+export default onClickOutside(Layout);
