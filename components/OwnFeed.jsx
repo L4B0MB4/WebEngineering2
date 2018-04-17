@@ -30,6 +30,7 @@ class OwnFeed extends Component {
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}
+                        user={this.props.user}
                       />
                     );
                   })
@@ -49,6 +50,7 @@ class OwnFeed extends Component {
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}
+                        user={this.props.user}
                       />
                     );
                   })

@@ -12,7 +12,6 @@ class Post extends Component {
 
   render() {
     const { userContent, user, blockchainWrapper } = this.props;
-    console.log(this.props);
     return (
       <Tab.Pane className="-tab">
         <Container>
@@ -20,9 +19,9 @@ class Post extends Component {
             <Grid>
               <Grid.Row only="tablet computer">
                 <Feed className="-full-width">
-                  {this.props.blockchainFeed
-                    ? this.props.blockchainFeed.map(item => {
-                        if (item.user == undefined) return null;
+                  {userContent
+                    ? userContent.map(item => {
+                        item.user = user;
                         return (
                           <FeedElementBig
                             item={item}
@@ -39,9 +38,9 @@ class Post extends Component {
               </Grid.Row>
               <Grid.Row only="mobile">
                 <Feed className="-full-width">
-                  {this.props.blockchainFeed
-                    ? this.props.blockchainFeed.map(item => {
-                        if (item.user == undefined) return null;
+                  {userContent
+                    ? userContent.map(item => {
+                        item.user = user;
                         return (
                           <FeedElementSmall
                             item={item}

@@ -14,7 +14,9 @@ import {
   receiveUser,
   receiveVisitedUserContent,
   receiveVisitedUserFollower,
-  receiveBlockchainWrapper
+  receiveBlockchainWrapper,
+  receiveLikes,
+  receiveNews
 } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import withRedux from "next-redux-wrapper";
@@ -46,12 +48,22 @@ class Profil extends Component {
     if (req) {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
+      store.dispatch(receiveLikes(query.likes));
+      store.dispatch(receiveVisitedUserContent(query.userContent));
+      store.dispatch(receiveVisitedUserFollower(query.followers));
     } else {
-      let res = await request.callgetBlockchainFeed();
+      let res = await request.callgetFollowerFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
-      res = await request.callgetUser();
-      store.dispatch(receiveUser(res.data));
+      let userres = await request.callGetUser();
+      store.dispatch(receiveUser(userres.data));
+      res = await request.callGetUserLikes(userres.data.name);
+      store.dispatch(receiveLikes(res.data));
+      res = await request.callGetUserContent(userres.data.name);
+      store.dispatch(receiveVisitedUserContent(res.data));
+      res = await request.callGetUserFollower(userres.data.name);
+      store.dispatch(receiveVisitedUserFollower(res.data));
     }
+    receiveNews([]);
   }
 
   constructor(props) {
@@ -62,11 +74,17 @@ class Profil extends Component {
   }
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
-      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
+      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed, this.onNews);
       this.hasInit = true;
       this.props.receiveBlockchainWrapper(this.blockchainWrapper);
     }
   }
+  onNews = news => {
+    const newsarr = [];
+    newsarr.push(...(this.props.news ? this.props.news : []));
+    newsarr.push(news);
+    this.props.receiveNews(newsarr);
+  };
 
   render() {
     return (
@@ -82,7 +100,8 @@ class Profil extends Component {
 
 const mapDispatchToProps = dispatch => ({
   receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
-  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch),
+  receiveNews: bindActionCreators(receiveNews, dispatch)
 });
 
 const mapStateToProps = state => ({
@@ -90,7 +109,9 @@ const mapStateToProps = state => ({
   user: state.commonReducer.user,
   userContent: state.commonReducer.userContent,
   followers: state.commonReducer.followers,
-  blockchainWrapper: state.commonReducer.blockchainWrapper
+  blockchainWrapper: state.commonReducer.blockchainWrapper,
+  likes: state.commonReducer.likes,
+  news: state.commonReducer.news
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Profil);

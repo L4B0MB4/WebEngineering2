@@ -62,18 +62,31 @@ export default class FeedElement extends BasicFeedElement {
                       <Icon name="marker" />Stuttgart
                     </Feed.Date>
                   </Feed.Summary>
+                  <br />
+
+                  <div style={{ position: "relative", height: "30px", width: "100%" }}>
+                    <Button size="mini" animated="fade" onClick={handleShare} className="-float-left ">
+                      <Button.Content visible>
+                        <Icon name="share" />
+                      </Button.Content>
+                      <Button.Content hidden>Share</Button.Content>
+                    </Button>
+                    <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
+                      <Button.Content visible>
+                        <Icon name="heart" />
+                      </Button.Content>
+                      <Button.Content hidden>Like</Button.Content>
+                    </Button>
+                  </div>
                 </Feed.Content>
               </Grid.Column>
               <Grid.Column width={11}>{this.getContent(item)}</Grid.Column>
             </Grid>
             {this.getDropDown(item)}
           </div>
-          <div style={{ minHeight: "30px", width: "100%" }} className="-border-top ">
-            {this.getLikeAndShare(handleLike, handleShare, item)}
-          </div>
-          <br />
+          <div style={{ minHeight: "2px", width: "100%" }} className="-border-top " />
           <div className="-feed-content-wrapper">
-            <div className="">{this.getComments(item, handleLike)}</div>
+            <div className="">{this.getComments(item, this.props.user)}</div>
           </div>
           {this.getCommentForm(this)}
         </Segment>

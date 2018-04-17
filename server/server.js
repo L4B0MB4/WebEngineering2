@@ -28,8 +28,10 @@ function setCurrentSecret() {
   secret.value = Math.random();
 }
 var socketsConnected = 0;
+const sockets = [];
+
 setInterval(setCurrentSecret, 5000);
-websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret);
+websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets);
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
@@ -95,18 +97,17 @@ app
       return app.render(req, res, "/index", query);
     });
     exp.get("/profile", ensureAuthenticated, async (req, res) => {
-      const query = await commonutils.setUpMain(req, res, blockchain);
+      const query = await commonutils.setUpProfile(req, res, blockchain);
       return app.render(req, res, "/profile", query);
+    });
+    exp.get("/featured", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/featured", query);
     });
 
     exp.get("/visit/:username", ensureAuthenticated, async (req, res) => {
       const query = await commonutils.setUpVisitPage(req, res, blockchain);
       return app.render(req, res, "/visitorpage", query);
-    });
-
-    exp.get("/api/blockchain/feed", async (req, res) => {
-      let feed = await blockchainutils.createFeed(req, res, blockchain.chain);
-      res.json(feed);
     });
 
     exp.get("/api/blockchain/getUserFeed", async (req, res) => {
@@ -125,12 +126,19 @@ app
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
-    exp.get("/api/blockchain/getFollowerFeed", async (req, res) => {
+    exp.get("/api/blockchain/getUserLikes", async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
-      const following = await blockchainutils.getFollowing(blockchain.chain, visitedUser.publicKey);
+      res.json(await blockchainutils.getLikesByUser(blockchain.chain, visitedUser.publicKey));
+    });
+    exp.get("/api/blockchain/getFollowerFeed", ensureAuthenticated, async (req, res) => {
+      const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
       const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
+    });
+    exp.get("/api/blockchain/getFeaturedUsers", async (req, res) => {
+      let users = await blockchainutils.getFeaturedUsers(blockchain.chain);
+      res.json(users);
     });
 
     exp.post("/api/user/login", function(req, res, next) {
@@ -163,6 +171,10 @@ app
 
     exp.post("/api/uploadPicture", function(req, res) {
       commonutils.setUpPictureUpload(req, res);
+    });
+
+    exp.post("/api/uploadExternalPicture", function(req, res) {
+      commonutils.setExternalPictureUpload(req, res);
     });
 
     exp.get("/api/picture/:filename", (req, res) => {

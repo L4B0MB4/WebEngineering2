@@ -8,16 +8,25 @@
   min-height: 100% !important;
 }
 
-.-header {
-  background-color: #628b61 !important;
-  color: #daa520 !important;
-  font-family: "Moving Skate" !important;
-  font-size: 45px !important;
-  padding: 5px !important;
-  margin-top: -1px !important;
+.-header-menu {
   position: fixed !important;
   z-index: 2 !important;
+  background-color: #628b61 !important;
+  color: #daa520 !important;
+  padding: 5px !important;
+  margin-top: -1px !important;
   border-radius: 0px !important;
+  height: 52px;
+}
+.-header-news {
+  text-align: center !important;
+}
+.-header-news-button {
+  margin-top: 7px !important;
+}
+.-header {
+  font-family: "Moving Skate" !important;
+  font-size: 45px !important;
 }
 .-header-icon {
   color: #daa520 !important;
@@ -25,7 +34,7 @@
   position: fixed !important;
   z-index: 2 !important;
   right: 0px;
-  top: 18px;
+  top: 7px;
 }
 
 .-sidebars {
@@ -262,11 +271,11 @@ h1 {
   padding: 0 !important;
 }
 
-.-visible{
+.-visible {
   margin: 0 !important;
 }
 
-.-image{
+.-image:hover {
   opacity: 0.4 !important;
 }
 
@@ -281,3 +290,12 @@ h1 {
 .ui.inverted.menu .link.item:active, .ui.inverted.menu a.item:active {
     color: #f6e4cc !important;
 }
+
+.-no-padding {
+  padding: 0 !important;
+}
+
+.-text-center {
+  text-align: center !important;
+}
+

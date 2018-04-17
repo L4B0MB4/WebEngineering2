@@ -1,11 +1,17 @@
 const socketIO = require("socket.io");
+const _ = require("lodash");
 import * as blockchainutils from "./blockchainutils";
+import * as newsutils from "./newsutils";
 
-function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret) {
+function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets) {
   const io = socketIO(server);
   io.on("connection", socket => {
     socketsConnected++;
     socket.emit("blockchain", blockchain.chain);
+
+    socket.on("init", data => {
+      sockets[data.publicKey] = socket;
+    });
 
     socket.on("get transaction code", publicKey => {
       rsaKeys.importKey(publicKey, "public");
@@ -34,6 +40,7 @@ function startWebsockets(server, socketsConnected, blockchain, databaseutils, se
         socket.broadcast.emit("get blockchain", blockchain.chain);
         socket.emit("get blockchain", blockchain.chain);
         await databaseutils.saveBlockchain(blockchain.chain);
+        newsutils.handleNews(blockchain.chain, sockets, block);
       }
     });
     socket.on("get blockchain", () => {
@@ -41,6 +48,7 @@ function startWebsockets(server, socketsConnected, blockchain, databaseutils, se
     });
 
     socket.on("disconnect", () => {
+      _.remove(sockets, socket);
       socketsConnected--;
     });
   });

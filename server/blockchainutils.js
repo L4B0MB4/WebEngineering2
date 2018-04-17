@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const { findUsersByPublicKey } = require("./database");
+const { findUsersByPublicKey, findSingleUsernameByPublicKey, printAllUsers } = require("./database");
 
 async function createFeed(req, res, blockchain) {
   let filtered = getChainByTime(blockchain);
@@ -94,6 +94,16 @@ function sortByTimestamp(a, b) {
     return 1;
   }
   if (a.timestamp < b.timestamp) {
+    return -1;
+  }
+  return 0;
+}
+
+function sortByAnsehen(a, b) {
+  if (a.ansehen < b.ansehen) {
+    return 1;
+  }
+  if (a.ansehen > b.ansehen) {
     return -1;
   }
   return 0;
@@ -248,6 +258,64 @@ async function getLikedContent(blockchain, user) {
   return finalFeed.reverse();
 }
 
+async function getLikesByUser(blockchain, publicKey) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  let posts = _.filter(feed, {
+    sender: publicKey,
+    type: "content"
+  });
+  let p;
+  let likes;
+  let allLikes = [];
+  for (p in posts) {
+    likes = _.filter(feed, {
+      type: "like",
+      data: { previousHash: posts[p].previousHash }
+    });
+    if (likes) allLikes.push(...likes);
+  }
+  let sortedResults = [];
+  let a;
+  for (a in allLikes) {
+    let user = await findSingleUsernameByPublicKey(allLikes[a].sender);
+    let existingUser = _.find(sortedResults, { user });
+    if (!existingUser) {
+      sortedResults.push({
+        user,
+        likes: 1
+      });
+    } else {
+      existingUser.likes += 1;
+      _.remove(sortedResults, { user: existingUser.user });
+      sortedResults.push(existingUser);
+    }
+  }
+  return sortedResults;
+}
+
+async function getFeaturedUsers(blockchain) {
+  let feed = blockchain.map(item => {
+    return { ...item.transactions[0], previousHash: item.previousHash };
+  });
+  let allUsers = await printAllUsers();
+  let result = [];
+  for (let a in allUsers) {
+    result.push({
+      user: {
+        name: await findSingleUsernameByPublicKey(allUsers[a].publicKey),
+        profilePicture: (await getUserWithProfilePicture(blockchain, { publicKey: allUsers[a].publicKey })).profilePicture
+      },
+      ansehen: getAnsehen(blockchain, allUsers[a].publicKey)
+    });
+  }
+
+  result.sort(sortByAnsehen);
+  result.slice(Math.min(result.length - 1, 12));
+  return result;
+}
+
 module.exports = {
   createFeed,
   mergeUserToBlock,
@@ -259,5 +327,8 @@ module.exports = {
   createFollowerFeed,
   getFollowing,
   getUserWithProfilePicture,
-  getLikedContent
+  getLikedContent,
+  getLikesByUser,
+  getBlockByPreviousHash,
+  getFeaturedUsers
 };

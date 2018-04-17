@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { Blockchain } from "./blockchain";
 import io from "socket.io-client";
 import NodeRSA from "node-rsa";
@@ -34,7 +33,7 @@ export default class BlockchainWrapper {
     rsaKeys.importKey(priv);
     this.blockchain.public_adress = rsaKeys.exportKey("public");
     this.blockchain.private_adress = rsaKeys.exportKey("private");
-    this.socket = io({ endpoint: "http://localhost:3000" });
+    this.socket = io("http://localhost:3000");
     this.socket.emit("init", { publicKey: this.blockchain.public_adress });
     this.socket.on("news", data => {
       onNews(data);
@@ -50,8 +49,6 @@ export default class BlockchainWrapper {
     this.socket.on("get blockchain", chain => {
       this.blockchain.chain = chain;
       this.runAction();
-      console.log("get blockchain");
-      console.log(chain);
       if (onUpdate) onUpdate();
       this.handleWaitingTransactions();
     });

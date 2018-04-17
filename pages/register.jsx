@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import OwnHeader from "../components/Header.jsx";
+import OwnHeader from "../components/HeaderUnconnected";
 import { Grid, Form, Input, Button, Message, Image } from "semantic-ui-react";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
@@ -10,8 +10,8 @@ const request = new Request();
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {visible: false};
-    this.state = {msgtext: ""};
+    this.state = { visible: false };
+    this.state = { msgtext: "" };
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
     this.state = {
@@ -24,13 +24,13 @@ class Register extends Component {
 
   componentDidMount() {
     if (!this.hasInit) {
-        this.blockchainWrapper.newKeys();
-        this.setState({
-          keys: {
-            pub: this.blockchainWrapper.getPublicKey(),
-            priv: this.blockchainWrapper.getPrivateKey()
-          }
-        });
+      this.blockchainWrapper.newKeys();
+      this.setState({
+        keys: {
+          pub: this.blockchainWrapper.getPublicKey(),
+          priv: this.blockchainWrapper.getPrivateKey()
+        }
+      });
       this.blockchainWrapper.init(this.blockchainWrapper.getPrivateKey());
       this.hasInit = true;
     }
@@ -48,8 +48,8 @@ class Register extends Component {
     if (res.data.type === "success") {
       window.location.replace("/");
     } else {
-        this.setState({msgtext: res.data.message});
-        this.setState({visible: true});
+      this.setState({ msgtext: res.data.message });
+      this.setState({ visible: true });
     }
   };
 
@@ -62,16 +62,12 @@ class Register extends Component {
             <Grid.Column width={5} />
             <Grid.Column width={6}>
               <Form className="-loginform">
-                <Image
-                  src="/static/golddiggertext.png"
-                  alt="Avatar"
-                  className="ui centered grid -avatar"
-                />
+                <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar" />
 
-                  <Message error visible={this.state.visible}>
-                      <Message.Header>Regisrieren fehlgeschlagen!</Message.Header>
-                      <p>{this.state.msgtext}</p>
-                  </Message>
+                <Message error visible={this.state.visible}>
+                  <Message.Header>Regisrieren fehlgeschlagen!</Message.Header>
+                  <p>{this.state.msgtext}</p>
+                </Message>
 
                 <Form.Field className="-login-field">
                   <label>Username</label>
@@ -85,12 +81,7 @@ class Register extends Component {
                 </Form.Field>
                 <Form.Field className="-login-field">
                   <label>E-Mail-Adresse</label>
-                  <Input
-                    type="text"
-                    name="email"
-                    onChange={e => this.setState({ email: e.target.value })}
-                    placeholder={"E-Mail"}
-                  />
+                  <Input type="text" name="email" onChange={e => this.setState({ email: e.target.value })} placeholder={"E-Mail"} />
                 </Form.Field>
                 <Form.Field className="-login-field">
                   <label>Passwort</label>
@@ -101,27 +92,16 @@ class Register extends Component {
                     placeholder={"Passwort"}
                   />
                 </Form.Field>
-                <input
-                  type="text"
-                  name="publicKey"
-                  hidden
-                  defaultValue={this.state.keys.pub}
-                  value={this.state.keys.pub}
-                />
-                <input
-                  type="text"
-                  hidden
-                  name="privateKey"
-                  defaultValue={this.state.keys.priv}
-                  value={this.state.keys.priv}
-                />
-                <Button
-                  className="-register-btn"
-                  onClick={this.handleRegistration}
-                >
+                <input type="text" name="publicKey" hidden defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
+                <input type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} />
+                <Button className="-register-btn" onClick={this.handleRegistration}>
                   Register
                 </Button>
-                  <span className="-log-span"><Link prefetch href="/login"><a>Bereits registriert? Zum Login</a></Link></span>
+                <span className="-log-span">
+                  <Link prefetch href="/login">
+                    <a>Bereits registriert? Zum Login</a>
+                  </Link>
+                </span>
               </Form>
             </Grid.Column>
             <Grid.Column width={5} />

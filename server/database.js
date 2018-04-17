@@ -131,6 +131,16 @@ const findUsersByPublicKey = publicKeys =>
       });
   });
 
+const findSingleUsernameByPublicKey = publicKey =>
+    new Promise((resolve, reject) => {
+        db
+            .collection("users")
+            .findOne({ publicKey: publicKey }, { name: 1}, (err, res) => {
+                if (err) reject(err);
+                resolve(res.name);
+            });
+    });
+
 const findPublicKeyByUsername = name =>
   new Promise((resolve, reject) => {
     db.collection("users").findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
@@ -147,5 +157,6 @@ module.exports = {
   register,
   printAllUsers,
   findUsersByPublicKey,
+  findSingleUsernameByPublicKey,
   findPublicKeyByUsername
 };

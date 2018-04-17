@@ -9,7 +9,8 @@ import {
   receiveUser,
   receiveVisitedUserContent,
   receiveVisitedUserFollower,
-  receiveBlockchainWrapper
+  receiveBlockchainWrapper,
+  receiveNews
 } from "../components/redux/actions/commonActions";
 import initStore from "../components/redux/store";
 import Link from "next/link";
@@ -26,11 +27,12 @@ class Index extends Component {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
       store.dispatch(receiveUser(query.user));
     } else {
-      let res = await request.callgetBlockchainFeed();
+      let res = await request.callgetFollowerFeed();
       store.dispatch(receiveBlockchainFeed(res.data));
-      res = await request.callgetUser();
+      res = await request.callGetUser();
       store.dispatch(receiveUser(res.data));
     }
+    receiveNews([]);
   }
 
   constructor(props) {
@@ -41,19 +43,21 @@ class Index extends Component {
   }
   componentDidMount() {
     if (!this.hasInit && this.props.user) {
-      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed);
+      this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed, this.onNews);
       this.hasInit = true;
       this.props.receiveBlockchainWrapper(this.blockchainWrapper);
     }
   }
+  onNews = news => {
+    const newsarr = [];
+    newsarr.push(...(this.props.news ? this.props.news : []));
+    newsarr.push(news);
+    this.props.receiveNews(newsarr);
+  };
 
   updateBlockchainFeed = async () => {
     let res = await request.callgetFollowerFeed(this.props.user.name);
     this.props.receiveBlockchainFeed(res.data);
-  };
-
-  handleItemClick = item => {
-    this.setState({ activeItem: item });
   };
 
   render() {
@@ -70,7 +74,8 @@ class Index extends Component {
 }
 const mapDispatchToProps = dispatch => ({
   receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
-  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch),
+  receiveNews: bindActionCreators(receiveNews, dispatch)
 });
 
 const mapStateToProps = state => ({
@@ -78,7 +83,8 @@ const mapStateToProps = state => ({
   user: state.commonReducer.user,
   userContent: state.commonReducer.userContent,
   followers: state.commonReducer.followers,
-  blockchainWrapper: state.commonReducer.blockchainWrapper
+  blockchainWrapper: state.commonReducer.blockchainWrapper,
+  news: state.commonReducer.news
 });
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Index);

@@ -66,11 +66,9 @@ export default class FeedElement extends BasicFeedElement {
             <br />
             {this.getLikeAndShare(handleLike, handleShare, item)}
             <br />
-            <br />
-            <br />
           </div>
           <br />
-          {this.getComments(item, handleLike)}
+          {this.getComments(item, this.props.user)}
           {this.getCommentForm(this)}
         </Segment>
         <br />
