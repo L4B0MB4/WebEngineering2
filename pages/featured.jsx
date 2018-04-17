@@ -18,6 +18,7 @@ import {
   receiveFeaturedUsers
 } from "../components/redux/actions/commonActions";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
+import Lux from "../components/Lux";
 
 var request;
 class FeaturedProfiles extends Component {
@@ -69,64 +70,66 @@ class FeaturedProfiles extends Component {
   render() {
     const { featuredUsers } = this.props;
     return (
-      <Layout activeItem="featured" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
-        <div className="-text-center">
-          <h1>!! The Top {featuredUsers ? featuredUsers.length : ""} Users right now !!</h1>
-          <br />
-          <br />
-          <br />
-          <Grid>
-            <Grid.Row only="tablet computer" columns={3} textAlign="center">
-              {featuredUsers
-                ? featuredUsers.map(item => (
-                    <Grid.Column key={item.user.name}>
-                      <Link href={"./visit/" + item.user.name}>
-                        <Button animated="fade" className="featured-user">
-                          <Button.Content className="-visible">
-                            <Image
-                              fluid
-                              src={
-                                item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"
-                              }
-                              className="-image"
-                            />
-                          </Button.Content>
-                          <Button.Content hidden>{item.user.name}</Button.Content>
-                        </Button>
-                      </Link>
-                      <br />
-                      {item.user.name} - {item.ansehen} Ansehen
-                    </Grid.Column>
-                  ))
-                : null}
-            </Grid.Row>
-            <Grid.Row only="mobile" columns={2} textAlign="center">
-              {featuredUsers
-                ? featuredUsers.map(item => (
-                    <Grid.Column key={item.user.name}>
-                      <Link href={"./visit/" + item.user.name}>
-                        <Button animated="fade" className="featured-user">
-                          <Button.Content className="-visible">
-                            <Image
-                              fluid
-                              src={
-                                item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"
-                              }
-                              className="-image"
-                            />
-                          </Button.Content>
-                          <Button.Content hidden>{item.user.name}</Button.Content>
-                        </Button>
-                      </Link>
-                      <br />
-                      {item.user.name} - {item.ansehen} Ansehen
-                    </Grid.Column>
-                  ))
-                : null}
-            </Grid.Row>
-          </Grid>
-        </div>
-      </Layout>
+      <Lux>
+        <Layout activeItem="featured" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+          <div className="-text-center">
+            <h1>!! The Top {featuredUsers ? featuredUsers.length : ""} Users right now !!</h1>
+            <br />
+            <br />
+            <br />
+            <Grid>
+              <Grid.Row only="tablet computer" columns={3} textAlign="center">
+                {featuredUsers
+                  ? featuredUsers.map(item => (
+                      <Grid.Column key={item.user.name}>
+                        <Link href={"./visit/" + item.user.name}>
+                          <Button animated="fade" className="featured-user">
+                            <Button.Content className="-visible">
+                              <Image
+                                fluid
+                                src={
+                                  item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"
+                                }
+                                className="-image"
+                              />
+                            </Button.Content>
+                            <Button.Content hidden>{item.user.name}</Button.Content>
+                          </Button>
+                        </Link>
+                        <br />
+                        {item.user.name} - {item.ansehen} Ansehen
+                      </Grid.Column>
+                    ))
+                  : null}
+              </Grid.Row>
+              <Grid.Row only="mobile" columns={2} textAlign="center">
+                {featuredUsers
+                  ? featuredUsers.map(item => (
+                      <Grid.Column key={item.user.name}>
+                        <Link href={"./visit/" + item.user.name}>
+                          <Button animated="fade" className="featured-user">
+                            <Button.Content className="-visible">
+                              <Image
+                                fluid
+                                src={
+                                  item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"
+                                }
+                                className="-image"
+                              />
+                            </Button.Content>
+                            <Button.Content hidden>{item.user.name}</Button.Content>
+                          </Button>
+                        </Link>
+                        <br />
+                        {item.user.name} - {item.ansehen} Ansehen
+                      </Grid.Column>
+                    ))
+                  : null}
+              </Grid.Row>
+            </Grid>
+          </div>
+        </Layout>
+      </Lux>
     );
   }
 }

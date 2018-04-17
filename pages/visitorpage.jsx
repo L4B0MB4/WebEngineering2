@@ -22,6 +22,7 @@ import FeedElementBig from "../components/FeedElementBig";
 import Follower from "../components/Follower";
 import Post from "../components/Post";
 import Ansehen from "../components/Ansehen";
+import Lux from "../components/Lux";
 
 var request;
 
@@ -89,7 +90,7 @@ class VisitorPage extends Component {
 
   render() {
     return (
-      <Fragment>
+      <Lux>
         <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
           <div className="-full-width -padding-10">
             <h1>
@@ -110,7 +111,7 @@ class VisitorPage extends Component {
           <br />
           <Tab className="-tab" panes={panes} props={this.props} />
         </Layout>
-      </Fragment>
+      </Lux>
     );
   }
 }
