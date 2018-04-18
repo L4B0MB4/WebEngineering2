@@ -188,6 +188,11 @@ app
       res.sendFile(`${p}/${req.params.filename}`);
     });
 
+    exp.get('/logout', function (req, res) {
+      req.logout();
+      res.redirect('/');
+    });
+
     exp.get("*", (req, res) => {
       return handle(req, res);
     });

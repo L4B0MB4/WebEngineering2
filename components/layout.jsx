@@ -132,9 +132,11 @@ class Layout extends Component {
                   <Icon name="delete" />
                   Close
                 </Menu.Item>
-                <Menu.Item name="logout">
-                  <Icon name="power" />Logout
+                <Link href={relPath + "./logout"}>
+                  <Menu.Item name="logout">
+                    <Icon name="power" />Logout
                 </Menu.Item>
+                </Link>
               </Sidebar>
               <Sidebar.Pusher>
                 {isUnconnected ? (
@@ -196,9 +198,11 @@ class Layout extends Component {
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
             </Link>
-            <Menu.Item name="logout" active={activeItem === "logout"}>
-              <Icon name="power" />Logout
+            <Link href={relPath + "./logout"}>
+              <Menu.Item name="logout" active={activeItem === "logout"}>
+                <Icon name="power" />Logout
             </Menu.Item>
+            </Link>
             <Menu.Item>
               <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>
