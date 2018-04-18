@@ -62,7 +62,7 @@ class Index extends Component {
 
   render() {
     return (
-      <Layout activeItem="feed" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+      <Layout activeItem="feed" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
         <Fragment>
           <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
           <Divider />

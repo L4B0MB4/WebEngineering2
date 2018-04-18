@@ -90,7 +90,7 @@ class VisitorPage extends Component {
   render() {
     return (
       <Fragment>
-        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
           <div className="-full-width -padding-10">
             <h1>
               {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen

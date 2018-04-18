@@ -4,9 +4,11 @@ import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
+import { request } from "http";
 
 class Layout extends Component {
   state = { openSidebar: false };
+  searchValue = "";
 
   isReadyToMine = () => {
     if (this.props.blockchainWrapper) {
@@ -21,6 +23,17 @@ class Layout extends Component {
   setOpenSidebar = bool => {
     this.setState({ openSidebar: bool });
   };
+
+  Search = async e => {
+    if (e.key === 'Enter') {
+      if (this.props.request) {
+        const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
+        if (data[0] && data[0].name) {
+          window.location = "./visit/" + data[0].name;
+        }
+      }
+    }
+  }
 
   render() {
     const { user, activeItem, isUnconnected } = this.props;
@@ -92,8 +105,8 @@ class Layout extends Component {
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                )}
+                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                  )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -148,7 +161,7 @@ class Layout extends Component {
               <Icon name="power" />Logout
             </Menu.Item>
             <Menu.Item>
-              <Input icon="search" placeholder="Search..." />
+              <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>
           </Menu>
         </div>

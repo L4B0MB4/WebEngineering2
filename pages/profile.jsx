@@ -88,7 +88,7 @@ class Profil extends Component {
 
   render() {
     return (
-      <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+      <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
         <h1>Your Profile</h1>
         <br />
         <br />
