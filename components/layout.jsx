@@ -6,9 +6,9 @@ import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
 import onClickOutside from 'react-onclickoutside';
 
-
 class Layout extends Component {
   state = { openSidebar: false };
+  searchValue = "";
 
   isReadyToMine = () => {
     if (this.props.blockchainWrapper) {
@@ -26,6 +26,16 @@ class Layout extends Component {
 
   handleClickOutside = () => {
     this.setOpenSidebar(false);
+  }
+  Search = async e => {
+    if (e.key === 'Enter') {
+      if (this.props.request) {
+        const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
+        if (data[0] && data[0].name) {
+          window.location = "./visit/" + data[0].name;
+        }
+      }
+    }
   }
 
   render() {
@@ -161,7 +171,7 @@ class Layout extends Component {
               <Icon name="power" />Logout
             </Menu.Item>
             <Menu.Item>
-              <Input icon="search" placeholder="Search..." />
+              <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>
           </Menu>
         </div>

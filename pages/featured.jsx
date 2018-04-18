@@ -71,7 +71,7 @@ class FeaturedProfiles extends Component {
         const { featuredUsers } = this.props;
         return (
             <Lux>
-                <Layout activeItem="featured" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+                <Layout activeItem="featured" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
                     <div className="-text-center">
                         <h1>!! The Top {featuredUsers ? featuredUsers.length : ""} Users right now !!</h1>
                         <br />

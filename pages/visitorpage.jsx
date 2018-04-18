@@ -90,8 +90,8 @@ class VisitorPage extends Component {
 
   render() {
     return (
-      <Lux>
-        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+      <Lux relPath="../">
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
           <div className="-full-width -padding-10">
             <h1>
               {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
