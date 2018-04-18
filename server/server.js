@@ -96,6 +96,14 @@ app
       const query = await commonutils.setUpMain(req, res, blockchain);
       return app.render(req, res, "/index", query);
     });
+    exp.get("/impressum", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/impressum", query);
+    });
+    exp.get("/about", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/about", query);
+    });
     exp.get("/profile", ensureAuthenticated, async (req, res) => {
       const query = await commonutils.setUpProfile(req, res, blockchain);
       return app.render(req, res, "/profile", query);
