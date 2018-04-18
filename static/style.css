@@ -13,7 +13,7 @@
   z-index: 2 !important;
   background-color: #628b61 !important;
   color: #daa520 !important;
-  padding: 5px !important;
+  padding: 10px !important;
   margin-top: -1px !important;
   border-radius: 0px !important;
   height: 52px;
@@ -149,12 +149,15 @@ body {
 .-reg-span {
   z-index: 1 !important;
   float: right !important;
-  margin-top: 10px; !important;
   margin-right: 10px !important;
 }
 
 .-like-button {
   background-color: #daa520 !important;
+}
+
+.-share-button{
+
 }
 
 .-full-width {
@@ -279,6 +282,19 @@ h1 {
 .-image:hover {
   opacity: 0.4 !important;
 }
+
+.mobile-menu{
+  background-color: #c7e1ba !important;
+}
+
+.ui.inverted.icon.menu .item {
+    color: black;
+}
+
+.ui.inverted.menu .link.item:active, .ui.inverted.menu a.item:active {
+    color: #f6e4cc !important;
+}
+
 .-no-padding {
   padding: 0 !important;
 }
@@ -289,4 +305,8 @@ h1 {
 
 .-log-span{
     margin-left: 10px;
+}
+.-hidden-content{
+  text-align: left !important;
+  margin-left: 10px !important;
 }

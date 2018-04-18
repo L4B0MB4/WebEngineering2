@@ -92,6 +92,9 @@ class Request {
   callGetFeaturedUsers() {
     return this.callFetch("GET", "/blockchain/getFeaturedUsers");
   }
+  callGetUserByUsername(username) {
+    return this.callFetch("GET", "/user/search", { username });
+  }
 }
 
 export default Request;

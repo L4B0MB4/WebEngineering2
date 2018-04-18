@@ -4,6 +4,7 @@ import { Grid, Form, Input, Button, Message, Image } from "semantic-ui-react";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
+import Lux from "../components/Lux";
 import { hash } from "../components/utils/utils";
 const request = new Request();
 
@@ -55,7 +56,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div>
+      <Lux>
         <OwnHeader />
         <Grid>
           <Grid.Row>
@@ -65,7 +66,7 @@ class Register extends Component {
                 <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar" />
 
                 <Message error visible={this.state.visible}>
-                  <Message.Header>Regisrieren fehlgeschlagen!</Message.Header>
+                  <Message.Header>Register failed!</Message.Header>
                   <p>{this.state.msgtext}</p>
                 </Message>
 
@@ -80,16 +81,16 @@ class Register extends Component {
                   />
                 </Form.Field>
                 <Form.Field className="-login-field">
-                  <label>E-Mail-Adresse</label>
+                  <label>E-Mail-Address</label>
                   <Input type="text" name="email" onChange={e => this.setState({ email: e.target.value })} placeholder={"E-Mail"} />
                 </Form.Field>
                 <Form.Field className="-login-field">
-                  <label>Passwort</label>
+                  <label>Password</label>
                   <Input
                     type="password"
                     name="password"
                     onChange={e => this.setState({ password: e.target.value })}
-                    placeholder={"Passwort"}
+                    placeholder={"Password"}
                   />
                 </Form.Field>
                 <input type="text" name="publicKey" hidden defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
@@ -99,7 +100,7 @@ class Register extends Component {
                 </Button>
                 <span className="-log-span">
                   <Link prefetch href="/login">
-                    <a>Bereits registriert? Zum Login</a>
+                    <a>Already registered? To Login</a>
                   </Link>
                 </span>
               </Form>
@@ -107,7 +108,7 @@ class Register extends Component {
             <Grid.Column width={5} />
           </Grid.Row>
         </Grid>
-      </div>
+      </Lux>
     );
   }
 }

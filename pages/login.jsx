@@ -1,14 +1,13 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import OwnHeader from "../components/HeaderUnconnected";
 import Link from "next/link";
 import Request from "../components/utils/request";
-import {hash} from "../components/utils/utils";
-import {Grid, Image, Button, Form, Input, Message} from "semantic-ui-react";
-
+import { hash } from "../components/utils/utils";
+import { Grid, Image, Button, Form, Input, Message } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
+import Lux from "../components/Lux";
 
 const request = new Request();
-
 
 class Login extends Component {
     constructor(props) {

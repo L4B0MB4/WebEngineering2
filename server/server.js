@@ -42,7 +42,7 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 passport.use(
-  new LocalStrategy(async function(username, password, done) {
+  new LocalStrategy(async function (username, password, done) {
     let user = await databaseutils.login(username, password);
     if (user) {
       return done(null, user);
@@ -141,7 +141,7 @@ app
       res.json(users);
     });
 
-    exp.post("/api/user/login", function(req, res, next) {
+    exp.post("/api/user/login", function (req, res, next) {
       passport.authenticate("local", (err, user, info) => serverutils.handleLogin(err, user, info, req, res))(req, res, next);
     });
 
@@ -169,11 +169,17 @@ app
       res.json(user);
     });
 
-    exp.post("/api/uploadPicture", function(req, res) {
+    exp.get("/api/user/search", async (req, res) => {
+      if (!req.query.username) res.json({ message: "no user fund" });
+      const resp = await databaseutils.findUserByUsername(req.query.username);
+      res.json(resp);
+    });
+
+    exp.post("/api/uploadPicture", function (req, res) {
       commonutils.setUpPictureUpload(req, res);
     });
 
-    exp.post("/api/uploadExternalPicture", function(req, res) {
+    exp.post("/api/uploadExternalPicture", function (req, res) {
       commonutils.setExternalPictureUpload(req, res);
     });
 

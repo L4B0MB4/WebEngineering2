@@ -22,6 +22,7 @@ import FeedElementBig from "../components/FeedElementBig";
 import Follower from "../components/Follower";
 import Post from "../components/Post";
 import Ansehen from "../components/Ansehen";
+import Lux from "../components/Lux";
 
 var request;
 
@@ -35,7 +36,7 @@ const panes = [
     render: () => <Post />
   },
   {
-    menuItem: "Ansehen",
+    menuItem: "Kudos",
     render: () => <Ansehen />
   }
 ];
@@ -89,11 +90,11 @@ class VisitorPage extends Component {
 
   render() {
     return (
-      <Fragment>
-        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+      <Lux relPath="../">
+        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
           <div className="-full-width -padding-10">
             <h1>
-              {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen
+              {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
             </h1>
             <Button
               floated="right"
@@ -110,7 +111,7 @@ class VisitorPage extends Component {
           <br />
           <Tab className="-tab" panes={panes} props={this.props} />
         </Layout>
-      </Fragment>
+      </Lux>
     );
   }
 }

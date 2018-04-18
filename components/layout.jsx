@@ -4,9 +4,11 @@ import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
+import onClickOutside from 'react-onclickoutside';
 
 class Layout extends Component {
   state = { openSidebar: false };
+  searchValue = "";
 
   isReadyToMine = () => {
     if (this.props.blockchainWrapper) {
@@ -22,9 +24,52 @@ class Layout extends Component {
     this.setState({ openSidebar: bool });
   };
 
+  handleClickOutside = () => {
+    this.setOpenSidebar(false);
+  }
+  Search = async e => {
+    if (e.key === 'Enter') {
+      if (this.props.request) {
+        const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
+        if (data[0] && data[0].name) {
+          window.location = "./visit/" + data[0].name;
+        }
+        else {
+          this.setState({ showError: true, errorMessage: "Couldn´t find User" });
+          window.setTimeout(() => this.setState({ showError: false }), 2000);
+        }
+      }
+    }
+  }
+
+
+  errorDialog = () => {
+    if (this.state.showError)
+      return (
+        <Card
+          style={{
+            backgroundColor: "#e54747",
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            zIndex: "10000"
+          }}>
+          <Card.Content>
+            <Card.Header style={{ color: "whitesmoke" }}>ERROR</Card.Header>
+            <Card.Description style={{ color: "whitesmoke" }}>{this.state.errorMessage}</Card.Description>
+            <Card.Content extra>
+              <br />
+              <Button onClick={() => this.setState({ showError: false })}>Schließen</Button>
+            </Card.Content>
+          </Card.Content>
+        </Card>
+      );
+  };
+
   render() {
     const { user, activeItem, isUnconnected } = this.props;
     let { relPath } = this.props;
+
     if (!relPath) relPath = "";
     return (
       <Fragment>
@@ -33,6 +78,7 @@ class Layout extends Component {
           <Grid.Row only="tablet computer">
             {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
             {this.leftSide()}
+            {this.errorDialog()}
             <Grid.Column width={10} stretched className="grid-column">
               <Grid>
                 <Grid.Column width={1} />
@@ -45,8 +91,9 @@ class Layout extends Component {
             {this.rightSide()}
           </Grid.Row>
           <Grid.Row only="mobile">
-            <Sidebar.Pushable as={"div"} className="-full-width">
+            <Sidebar.Pushable as={"div"} className="-full-width -sidebar">
               <Sidebar
+                id="mobile-menu"
                 as={Menu}
                 animation="overlay"
                 width="thin"
@@ -54,7 +101,8 @@ class Layout extends Component {
                 direction="right"
                 icon="labeled"
                 vertical
-                inverted>
+                inverted
+                className="mobile-menu">
                 <Link href={relPath + "./profile"}>
                   <Menu.Item name="profil">
                     <Icon name="user" />Profile
@@ -92,8 +140,8 @@ class Layout extends Component {
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                )}
+                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                  )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -111,20 +159,24 @@ class Layout extends Component {
 
   leftSide = () => {
     const { user, activeItem } = this.props;
+    const { preloadeImage } = this.state;
     let { relPath } = this.props;
     if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
           <Card>
-            <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
+            <Image src={preloadeImage
+              ? preloadeImage
+              : user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
+              rounded />
             <Card.Content>
               <Card.Header>{user ? user.name : ""}</Card.Header>
             </Card.Content>
             <Card.Content extra>
               <a>
-                <Icon name="users" />
-                {user ? user.ansehen : ""}
+                <Icon name="trophy" />
+                {user ? user.ansehen : ""} k
               </a>
             </Card.Content>
           </Card>
@@ -148,7 +200,7 @@ class Layout extends Component {
               <Icon name="power" />Logout
             </Menu.Item>
             <Menu.Item>
-              <Input icon="search" placeholder="Search..." />
+              <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>
           </Menu>
         </div>
@@ -191,4 +243,4 @@ class Layout extends Component {
   };
 }
 
-export default Layout;
+export default onClickOutside(Layout);

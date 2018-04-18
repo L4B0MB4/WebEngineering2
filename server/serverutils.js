@@ -10,18 +10,18 @@ async function checkFileType(file) {
 
 function handleLogin(err, user, info, req, res) {
   if (err) {
-    return res.json({ type: "error", message: "Fehler beim Login" });
+    return res.json({ type: "error", message: "Invalid Login" });
   }
   if (!user) {
-    return res.json({ type: "error", message: "Fehler beim Login" });
+    return res.json({ type: "error", message: "Invalid Username" });
   }
-  req.logIn(user, function(err) {
+  req.logIn(user, function (err) {
     if (err) {
-      return res.json({ type: "error", message: "Fehler beim Login" });
+      return res.json({ type: "error", message: "Invalid Login" });
     }
     return res.json({
       type: "success",
-      message: "Erfolgreich eingeloggt"
+      message: "Successfully logged in"
     });
   });
 }
