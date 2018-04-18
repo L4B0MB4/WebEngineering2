@@ -55,7 +55,7 @@ export default class FeedElement extends BasicFeedElement {
             <Feed.Meta>
               <Feed.Like className="-float-left ">
                 <Icon name="trophy" />
-                {item.likes.length} Ansehen
+                {item.likes.length} Kudos
               </Feed.Like>
             </Feed.Meta>
             <Feed.Date className="-float-right ">

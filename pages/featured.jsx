@@ -95,7 +95,7 @@ class FeaturedProfiles extends Component {
                       </Button>
                     </Link>
                     <br />
-                    {item.user.name} - {item.ansehen} Ansehen
+                    {item.user.name} - {item.ansehen} Kudos
                     </Grid.Column>
                 ))
                 : null}
@@ -115,7 +115,7 @@ class FeaturedProfiles extends Component {
                       <Button.Content hidden>{item.user.name}</Button.Content>
                     </Button>
                     <br />
-                    {item.user.name} - {item.ansehen} Ansehen
+                    {item.user.name} - {item.ansehen} Kudos
                     </Grid.Column>
                 ))
                 : null}

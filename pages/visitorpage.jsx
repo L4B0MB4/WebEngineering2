@@ -35,7 +35,7 @@ const panes = [
     render: () => <Post />
   },
   {
-    menuItem: "Ansehen",
+    menuItem: "Kudos",
     render: () => <Ansehen />
   }
 ];
@@ -93,7 +93,7 @@ class VisitorPage extends Component {
         <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
           <div className="-full-width -padding-10">
             <h1>
-              {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Ansehen
+              {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
             </h1>
             <Button
               floated="right"

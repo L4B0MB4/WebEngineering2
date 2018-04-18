@@ -33,7 +33,7 @@ const panes = [
     render: () => <Post />
   },
   {
-    menuItem: "Ansehen",
+    menuItem: "Kudos",
     render: () => <Ansehen />
   },
   {
