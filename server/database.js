@@ -131,15 +131,26 @@ const findUsersByPublicKey = publicKeys =>
       });
   });
 
+const findUserByUsername = username =>
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .find({ name: username }, { name: 1 })
+      .toArray((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
 const findSingleUsernameByPublicKey = publicKey =>
-    new Promise((resolve, reject) => {
-        db
-            .collection("users")
-            .findOne({ publicKey: publicKey }, { name: 1}, (err, res) => {
-                if (err) reject(err);
-                resolve(res.name);
-            });
-    });
+  new Promise((resolve, reject) => {
+    db
+      .collection("users")
+      .findOne({ publicKey: publicKey }, { name: 1 }, (err, res) => {
+        if (err) reject(err);
+        resolve(res.name);
+      });
+  });
 
 const findPublicKeyByUsername = name =>
   new Promise((resolve, reject) => {
@@ -158,5 +169,6 @@ module.exports = {
   printAllUsers,
   findUsersByPublicKey,
   findSingleUsernameByPublicKey,
-  findPublicKeyByUsername
+  findPublicKeyByUsername,
+  findUserByUsername
 };

@@ -6,9 +6,9 @@ import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
 import onClickOutside from 'react-onclickoutside';
 
-
 class Layout extends Component {
   state = { openSidebar: false };
+  searchValue = "";
 
   isReadyToMine = () => {
     if (this.props.blockchainWrapper) {
@@ -28,6 +28,44 @@ class Layout extends Component {
   handleClickOutside = () => {
     this.setOpenSidebar(false);
   }
+  Search = async e => {
+    if (e.key === 'Enter') {
+      if (this.props.request) {
+        const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
+        if (data[0] && data[0].name) {
+          window.location = "./visit/" + data[0].name;
+        }
+        else {
+          this.setState({ showError: true, errorMessage: "Couldn´t find User" });
+          window.setTimeout(() => this.setState({ showError: false }), 2000);
+        }
+      }
+    }
+  }
+
+
+  errorDialog = () => {
+    if (this.state.showError)
+      return (
+        <Card
+          style={{
+            backgroundColor: "#e54747",
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            zIndex: "10000"
+          }}>
+          <Card.Content>
+            <Card.Header style={{ color: "whitesmoke" }}>ERROR</Card.Header>
+            <Card.Description style={{ color: "whitesmoke" }}>{this.state.errorMessage}</Card.Description>
+            <Card.Content extra>
+              <br />
+              <Button onClick={() => this.setState({ showError: false })}>Schließen</Button>
+            </Card.Content>
+          </Card.Content>
+        </Card>
+      );
+  };
 
   render() {
     const { user, activeItem, isUnconnected } = this.props;
@@ -41,6 +79,7 @@ class Layout extends Component {
           <Grid.Row only="tablet computer">
             {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
             {this.leftSide()}
+            {this.errorDialog()}
             <Grid.Column width={10} stretched className="grid-column">
               <Grid>
                 <Grid.Column width={1} />
@@ -94,9 +133,11 @@ class Layout extends Component {
                   <Icon name="delete" />
                   Close
                 </Menu.Item>
-                <Menu.Item name="logout">
-                  <Icon name="power" />Logout
+                <Link href={relPath + "./logout"}>
+                  <Menu.Item name="logout">
+                    <Icon name="power" />Logout
                 </Menu.Item>
+                </Link>
               </Sidebar>
               <Sidebar.Pusher>
                 {isUnconnected ? (
@@ -155,11 +196,13 @@ class Layout extends Component {
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
             </Link>
-            <Menu.Item name="logout" active={activeItem === "logout"}>
-              <Icon name="power" />Logout
+            <Link href={relPath + "./logout"}>
+              <Menu.Item name="logout" active={activeItem === "logout"}>
+                <Icon name="power" />Logout
             </Menu.Item>
+            </Link>
             <Menu.Item>
-              <Input icon="search" placeholder="Search..." />
+              <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>
           </Menu>
         </div>
