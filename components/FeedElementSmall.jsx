@@ -7,7 +7,7 @@ import BasicFeedElement from "./BasicFeedElement";
 export default class FeedElement extends BasicFeedElement {
   constructor(props) {
     super(props);
-    this.state = { content: "" };
+    this.state = { content: "", showResults: false };
     this.checkForVideo();
   }
 
@@ -34,6 +34,13 @@ export default class FeedElement extends BasicFeedElement {
   isSuccessfull = () => {
     return !this.state.buttonLoading && this.state.buttonSucess;
   };
+  onClick = () => {
+    this.setState({ showResults: true });
+  };
+
+  onHide = () => {
+    this.setState({ showResults: false });
+  };
 
   render() {
     const { item, request, handleLike, handleShare, user } = this.props;
@@ -47,8 +54,8 @@ export default class FeedElement extends BasicFeedElement {
                 <Feed.Summary>{this.getUserSection(item)}</Feed.Summary>
               </Feed.Content>
             </div>
-            <br />
-            <div className="-feed-font-size">{this.getContent(item, true)}</div>
+
+            <div className="-feed-font-size -float-center">{this.getContent(item, true)}</div>
             {this.getDropDown(item)}
           </div>
           <div style={{ minHeight: "35px", width: "100%" }} className="-border-bottom ">
@@ -58,7 +65,9 @@ export default class FeedElement extends BasicFeedElement {
                 {item.likes.length} Kudos
               </Feed.Like>
             </Feed.Meta>
-            <Feed.Date className="-float-right ">
+            <br />
+            <br />
+            <Feed.Date className="-float-left ">
               <Icon name="wait" />
               {getDate(item.timestamp)}
             </Feed.Date>
@@ -68,8 +77,17 @@ export default class FeedElement extends BasicFeedElement {
             <br />
           </div>
           <br />
-          {this.getComments(item, this.props.user)}
-          {this.getCommentForm(this)}
+          {this.state.showResults ?
+            <div>
+              <a onClick={this.onHide}>Hide Comments</a>
+              {this.getComments(item, this.props.user)}
+              {this.getCommentForm(this)}
+            </div>
+            :
+            <div>
+              <a onClick={this.onClick} >Show Comments</a>
+            </div>
+          }
         </Segment>
         <br />
       </Feed.Event>
