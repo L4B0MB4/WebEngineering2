@@ -104,6 +104,10 @@ body {
   color: #daa520 !important;
 }
 
+a#mine.ui.big.button.mine-button {
+  cursor: default !important;
+}
+
 .-avatar {
   width: 40% !important;
   border-radius: 50% !important;
