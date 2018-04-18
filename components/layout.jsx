@@ -34,9 +34,37 @@ class Layout extends Component {
         if (data[0] && data[0].name) {
           window.location = "./visit/" + data[0].name;
         }
+        else {
+          this.setState({ showError: true, errorMessage: "Couldn´t find User" });
+          window.setTimeout(() => this.setState({ showError: false }), 2000);
+        }
       }
     }
   }
+
+
+  errorDialog = () => {
+    if (this.state.showError)
+      return (
+        <Card
+          style={{
+            backgroundColor: "#e54747",
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            zIndex: "10000"
+          }}>
+          <Card.Content>
+            <Card.Header style={{ color: "whitesmoke" }}>ERROR</Card.Header>
+            <Card.Description style={{ color: "whitesmoke" }}>{this.state.errorMessage}</Card.Description>
+            <Card.Content extra>
+              <br />
+              <Button onClick={() => this.setState({ showError: false })}>Schließen</Button>
+            </Card.Content>
+          </Card.Content>
+        </Card>
+      );
+  };
 
   render() {
     const { user, activeItem, isUnconnected } = this.props;
@@ -50,6 +78,7 @@ class Layout extends Component {
           <Grid.Row only="tablet computer">
             {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
             {this.leftSide()}
+            {this.errorDialog()}
             <Grid.Column width={10} stretched className="grid-column">
               <Grid>
                 <Grid.Column width={1} />
