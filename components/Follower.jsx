@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Tab, Form, Button, Input } from "semantic-ui-react";
 import Request from "./utils/request";
+import Link from "next/link";
 const request = new Request();
 
 class Follower extends Component {
@@ -18,12 +19,18 @@ class Follower extends Component {
                                 ? followers.map(follower => {
                                     if (!follower.user) return null;
                                     return (
+
                                         <Item key={follower.user.name}>
                                             <Item.Image size="tiny" src="../static/bild.jpeg" />
                                             <Item.Content verticalAlign="middle">
-                                                <Item.Header>{follower.user.name}</Item.Header>
+                                                <Item.Header className="-follower">
+                                                    <Link prefetch href={"./visit/" + follower.user.name}>
+                                                        {follower.user.name}
+                                                    </Link>
+                                                </Item.Header>
                                             </Item.Content>
                                         </Item>
+
                                     );
                                 })
                                 : null}

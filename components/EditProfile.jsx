@@ -48,6 +48,7 @@ class EditProfile extends Component {
   onSuccessFullyPosted = () => {
     this.setState({ buttonSucess: true, buttonLoading: false });
     setInterval(() => this.setState({ buttonSucess: false }), 1000);
+    location.reload();
   };
   isLoading = () => {
     return this.state.buttonLoading;
