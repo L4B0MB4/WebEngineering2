@@ -22,6 +22,7 @@ import initStore from "../components/redux/store";
 import withRedux from "next-redux-wrapper";
 import Link from "next/link";
 import Request from "../components/utils/request";
+import Lux from "../components/Lux";
 
 const panes = [
   {
@@ -88,12 +89,14 @@ class Profil extends Component {
 
   render() {
     return (
-      <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
-        <h1>Your Profile</h1>
-        <br />
-        <br />
-        <Tab className="-tab" panes={panes} props={this.props} />
-      </Layout>
+      <Lux>
+        <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+          <h1>Your Profile</h1>
+          <br />
+          <br />
+          <Tab className="-tab" panes={panes} props={this.props} />
+        </Layout>
+      </Lux>
     );
   }
 }

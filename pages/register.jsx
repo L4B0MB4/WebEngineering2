@@ -4,6 +4,7 @@ import { Grid, Form, Input, Button, Message, Image } from "semantic-ui-react";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import Request from "../components/utils/request";
+import Lux from "../components/Lux";
 import { hash } from "../components/utils/utils";
 const request = new Request();
 
@@ -55,7 +56,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div>
+      <Lux>
         <OwnHeader />
         <Grid>
           <Grid.Row>
@@ -107,7 +108,7 @@ class Register extends Component {
             <Grid.Column width={5} />
           </Grid.Row>
         </Grid>
-      </div>
+      </Lux>
     );
   }
 }

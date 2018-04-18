@@ -18,6 +18,7 @@ import Layout from "../components/layout.jsx";
 import ContentForm from "../components/ContentForm";
 import OwnFeed from "../components/OwnFeed";
 import { Divider } from "semantic-ui-react";
+import Lux from "../components/Lux";
 import Request from "../components/utils/request";
 const request = new Request();
 
@@ -62,13 +63,15 @@ class Index extends Component {
 
   render() {
     return (
-      <Layout activeItem="feed" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
-        <Fragment>
-          <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
-          <Divider />
-          <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} user={this.props.user} />
-        </Fragment>
-      </Layout>
+      <Lux>
+        <Layout activeItem="feed" blockchainWrapper={this.blockchainWrapper} user={this.props.user}>
+          <Fragment>
+            <ContentForm blockchainWrapper={this.blockchainWrapper} request={request} />
+            <Divider />
+            <OwnFeed blockchainWrapper={this.blockchainWrapper} blockchainFeed={this.props.blockchainFeed} user={this.props.user} />
+          </Fragment>
+        </Layout>
+      </Lux>
     );
   }
 }

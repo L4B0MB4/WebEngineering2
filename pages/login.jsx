@@ -5,6 +5,7 @@ import Request from "../components/utils/request";
 import { hash } from "../components/utils/utils";
 import { Grid, Image, Button, Form, Input, Message } from "semantic-ui-react";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
+import Lux from "../components/Lux";
 
 const request = new Request();
 
@@ -32,7 +33,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <Lux>
         <OwnHeader />
         <Grid>
           <Grid.Row>
@@ -81,7 +82,7 @@ class Login extends Component {
             <Grid.Column width={5} />
           </Grid.Row>
         </Grid>
-      </div>
+      </Lux>
     );
   }
 }
