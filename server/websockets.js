@@ -3,7 +3,9 @@ const _ = require("lodash");
 import * as blockchainutils from "./blockchainutils";
 import * as newsutils from "./newsutils";
 
-function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets) {
+
+
+function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets, SHARECOSTS) {
   const io = socketIO(server);
   io.on("connection", socket => {
     socketsConnected++;
@@ -26,7 +28,15 @@ function startWebsockets(server, socketsConnected, blockchain, databaseutils, se
         data: data.data,
         timestamp: data.timestamp
       };
-      if ((data.type === "share" && blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      if (data.type === "share" && transaction.data.previousHash) {
+        let block = blockchainutils.getBlockByPreviousHash(blockchain.chain, transaction.data.previousHash);
+        const neededAnsehen = blockchainutils.getNeededAnsehen(blockchain.chain, block.sender);
+        if (blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, neededAnsehen)) {
+          transaction.data.costs = neededAnsehen;
+          serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+        }
+      }
+      else if (data.type !== "share") {
         serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
       }
     });

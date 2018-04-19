@@ -82,7 +82,7 @@ export default class FeedElement extends BasicFeedElement {
                                                 </Button.Content>
                                                 <Button.Content hidden className="-hidden-content">Share</Button.Content>
                                             </Button>
-                                            <Label as="a" basic pointing='left'>2 k</Label>
+                                            <Label as="a" basic pointing='left'>{item.data.costs}</Label>
                                         </Button>
 
                                         <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">

@@ -21,18 +21,18 @@ class Post extends Component {
                 <Feed className="-full-width">
                   {userContent
                     ? userContent.map(item => {
-                        item.user = user;
-                        return (
-                          <FeedElementBig
-                            item={item}
-                            handleShare={() => handleShare(blockchainWrapper, user.name, item)}
-                            handleLike={() => handleLike(blockchainWrapper, user.name, item.previousHash)}
-                            request={request}
-                            key={item.timestamp}
-                            blockchainWrapper={this.props.blockchainWrapper}
-                          />
-                        );
-                      })
+                      item.user = user;
+                      return (
+                        <FeedElementBig
+                          item={item}
+                          handleShare={() => handleShare(blockchainWrapper, user.name, item)}
+                          handleLike={() => handleLike(blockchainWrapper, user.name, item.previousHash)}
+                          request={request}
+                          key={item.timestamp}
+                          blockchainWrapper={this.props.blockchainWrapper}
+                        />
+                      );
+                    })
                     : null}
                 </Feed>
               </Grid.Row>
@@ -40,18 +40,18 @@ class Post extends Component {
                 <Feed className="-full-width">
                   {userContent
                     ? userContent.map(item => {
-                        item.user = user;
-                        return (
-                          <FeedElementSmall
-                            item={item}
-                            handleShare={() => handleShare(blockchainWrapper, user.name, item)}
-                            handleLike={() => handleLike(blockchainWrapper, user.name, item.previousHash)}
-                            request={request}
-                            key={item.timestamp}
-                            blockchainWrapper={this.props.blockchainWrapper}
-                          />
-                        );
-                      })
+                      item.user = user;
+                      return (
+                        <FeedElementSmall
+                          item={item}
+                          handleShare={() => handleShare(blockchainWrapper, user.name, item)}
+                          handleLike={() => handleLike(blockchainWrapper, user.name, item.previousHash)}
+                          request={request}
+                          key={item.timestamp}
+                          blockchainWrapper={this.props.blockchainWrapper}
+                        />
+                      );
+                    })
                     : null}
                 </Feed>
               </Grid.Row>

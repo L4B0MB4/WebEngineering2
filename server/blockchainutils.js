@@ -145,7 +145,11 @@ function getAnsehen(blockchain, publicKey) {
   let miningRewards = _.filter(rewardTransactions, { data: { userKey: publicKey } });
   let foreignshares = _.filter(transactions, { type: "share", data: { userKey: publicKey } });
   let ownshares = _.filter(transactions, { type: "share", sender: publicKey });
-  return likes.length + miningRewards.length + foreignshares.length - ownshares.length;
+  let shareCosts = 0;
+  let shareReward = 0;
+  ownshares.map(item => shareCosts += item.data.costs);
+  foreignshares.map(item => shareReward += item.data.costs);
+  return likes.length + miningRewards.length + shareReward - shareCosts;
 }
 
 function hasEnoughAnsehen(blockchain, publicKey, amount) {
@@ -202,6 +206,7 @@ async function createFollowerFeed(req, res, blockchain, following) {
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
+  feed.map(item => item.data.costs = getNeededAnsehen(blockchain, item.sender));
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
   for (let i = 0; i < feed.length; i++) {
     feed[i].likes = (await getTagByPreviousHash(blockchain, feed[i].previousHash, "like")).map(item => item.user);
@@ -316,7 +321,12 @@ async function getFeaturedUsers(blockchain) {
   return result;
 }
 
+function getNeededAnsehen(blockchain, userPublicKey) {
+  return parseInt(getAnsehen(blockchain, userPublicKey) / 10) + 1;
+}
+
 module.exports = {
+  getNeededAnsehen,
   createFeed,
   mergeUserToBlock,
   getTagByPreviousHash,

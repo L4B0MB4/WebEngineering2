@@ -30,6 +30,7 @@ function setCurrentSecret() {
 var socketsConnected = 0;
 const sockets = [];
 
+
 setInterval(setCurrentSecret, 5000);
 websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets);
 exp.use(bodyParser.json());
