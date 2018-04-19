@@ -182,12 +182,13 @@ async function createFollowerFeed(req, res, blockchain, following) {
   filtered = blockchain.map(item => {
     return { ...item.transactions[0], previousHash: item.previousHash };
   });
-  const feedshares = getShares(blockchain, filtered);
 
+  const feedshares = getShares(blockchain, filtered);
   let followerKeys = [];
   let f;
   for (f in following) followerKeys.push(following[f].data.following);
   followerKeys.push(req.user.publicKey);
+  filtered.push(...feedshares);
 
   let feed = [];
   let k;
@@ -197,7 +198,6 @@ async function createFollowerFeed(req, res, blockchain, following) {
     for (a in array) feed.push(array[a]);
   }
 
-  feed.push(...feedshares);
   feed.sort(sortByTimestamp);
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);
