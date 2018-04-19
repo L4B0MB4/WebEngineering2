@@ -42,7 +42,7 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 passport.use(
-  new LocalStrategy(async function(username, password, done) {
+  new LocalStrategy(async function (username, password, done) {
     let user = await databaseutils.login(username, password);
     if (user) {
       return done(null, user);
@@ -149,7 +149,7 @@ app
       res.json(users);
     });
 
-    exp.post("/api/user/login", function(req, res, next) {
+    exp.post("/api/user/login", function (req, res, next) {
       passport.authenticate("local", (err, user, info) => serverutils.handleLogin(err, user, info, req, res))(req, res, next);
     });
 
@@ -163,6 +163,7 @@ app
 
     exp.get("/api/user/getUser", ensureAuthenticated, async (req, res) => {
       let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
+      user.ansehen = await blockchainutils.getAnsehen(blockchain.chain, user.publicKey);
       res.json(user);
     });
 
@@ -183,11 +184,11 @@ app
       res.json(resp);
     });
 
-    exp.post("/api/uploadPicture", ensureAuthenticated, function(req, res) {
+    exp.post("/api/uploadPicture", ensureAuthenticated, function (req, res) {
       commonutils.setUpPictureUpload(req, res);
     });
 
-    exp.post("/api/uploadExternalPicture", ensureAuthenticated, function(req, res) {
+    exp.post("/api/uploadExternalPicture", ensureAuthenticated, function (req, res) {
       commonutils.setExternalPictureUpload(req, res);
     });
 
@@ -196,7 +197,7 @@ app
       res.sendFile(`${p}/${req.params.filename}`);
     });
 
-    exp.get("/logout", ensureAuthenticated, function(req, res) {
+    exp.get("/logout", ensureAuthenticated, function (req, res) {
       req.logout();
       res.redirect("/");
     });
