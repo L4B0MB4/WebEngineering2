@@ -145,7 +145,11 @@ function getAnsehen(blockchain, publicKey) {
   let miningRewards = _.filter(rewardTransactions, { data: { userKey: publicKey } });
   let foreignshares = _.filter(transactions, { type: "share", data: { userKey: publicKey } });
   let ownshares = _.filter(transactions, { type: "share", sender: publicKey });
-  return likes.length + miningRewards.length + foreignshares.length * 10 - ownshares.length * 10;
+  console.log("foreignshares:" + foreignshares.length);
+  console.log("ownshares:" + ownshares.length);
+  console.log("-------------------------------");
+
+  return 20 + likes.length + miningRewards.length + foreignshares.length * 10 - ownshares.length * 10;
 }
 
 function hasEnoughAnsehen(blockchain, publicKey, amount) {
