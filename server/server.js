@@ -42,7 +42,7 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 passport.use(
-  new LocalStrategy(async function (username, password, done) {
+  new LocalStrategy(async function(username, password, done) {
     let user = await databaseutils.login(username, password);
     if (user) {
       return done(null, user);
@@ -96,6 +96,14 @@ app
       const query = await commonutils.setUpMain(req, res, blockchain);
       return app.render(req, res, "/index", query);
     });
+    exp.get("/impressum", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/impressum", query);
+    });
+    exp.get("/about", ensureAuthenticated, async (req, res) => {
+      const query = await commonutils.setUpMain(req, res, blockchain);
+      return app.render(req, res, "/about", query);
+    });
     exp.get("/profile", ensureAuthenticated, async (req, res) => {
       const query = await commonutils.setUpProfile(req, res, blockchain);
       return app.render(req, res, "/profile", query);
@@ -110,38 +118,38 @@ app
       return app.render(req, res, "/visitorpage", query);
     });
 
-    exp.get("/api/blockchain/getUserFeed", async (req, res) => {
+    exp.get("/api/blockchain/getUserFeed", ensureAuthenticated, async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       const feed = await blockchainutils.getContentOfUser(blockchain.chain, visitedUser.publicKey);
       res.json(feed);
     });
-    exp.get("/api/blockchain/getUserFollower", async (req, res) => {
+    exp.get("/api/blockchain/getUserFollower", ensureAuthenticated, async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getFollower(blockchain.chain, visitedUser.publicKey));
     });
-    exp.get("/api/blockchain/getUserAnsehen", async (req, res) => {
+    exp.get("/api/blockchain/getUserAnsehen", ensureAuthenticated, async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getAnsehen(blockchain.chain, visitedUser.publicKey));
     });
-    exp.get("/api/blockchain/getUserLikes", async (req, res) => {
+    exp.get("/api/blockchain/getUserLikes", ensureAuthenticated, async (req, res) => {
       if (!req.query.username) return res.json({});
       const visitedUser = await databaseutils.findPublicKeyByUsername(req.query.username);
       res.json(await blockchainutils.getLikesByUser(blockchain.chain, visitedUser.publicKey));
     });
-    exp.get("/api/blockchain/getFollowerFeed", ensureAuthenticated, async (req, res) => {
+    exp.get("/api/blockchain/getFollowerFeed", ensureAuthenticated, ensureAuthenticated, async (req, res) => {
       const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
       const feed = await blockchainutils.createFollowerFeed(req, res, blockchain.chain, following);
       res.json(feed);
     });
-    exp.get("/api/blockchain/getFeaturedUsers", async (req, res) => {
+    exp.get("/api/blockchain/getFeaturedUsers", ensureAuthenticated, async (req, res) => {
       let users = await blockchainutils.getFeaturedUsers(blockchain.chain);
       res.json(users);
     });
 
-    exp.post("/api/user/login", function (req, res, next) {
+    exp.post("/api/user/login", function(req, res, next) {
       passport.authenticate("local", (err, user, info) => serverutils.handleLogin(err, user, info, req, res))(req, res, next);
     });
 
@@ -153,39 +161,44 @@ app
       }
     });
 
-    exp.get("/api/user/getUser", async (req, res) => {
+    exp.get("/api/user/getUser", ensureAuthenticated, async (req, res) => {
       let user = blockchainutils.getUserWithProfilePicture(blockchain.chain, req.user);
       res.json(user);
     });
 
-    exp.get("/api/user/getAllUsers", async (req, res) => {
+    exp.get("/api/user/getAllUsers", ensureAuthenticated, async (req, res) => {
       let users = await databaseutils.printAllUsers();
       res.json(users);
     });
 
-    exp.post("/api/user/getPublicKey", async (req, res) => {
+    exp.post("/api/user/getPublicKey", ensureAuthenticated, async (req, res) => {
       if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
       let user = await databaseutils.findPublicKeyByUsername(req.body.username);
       res.json(user);
     });
 
-    exp.get("/api/user/search", async (req, res) => {
+    exp.get("/api/user/search", ensureAuthenticated, async (req, res) => {
       if (!req.query.username) res.json({ message: "no user fund" });
       const resp = await databaseutils.findUserByUsername(req.query.username);
       res.json(resp);
     });
 
-    exp.post("/api/uploadPicture", function (req, res) {
+    exp.post("/api/uploadPicture", ensureAuthenticated, function(req, res) {
       commonutils.setUpPictureUpload(req, res);
     });
 
-    exp.post("/api/uploadExternalPicture", function (req, res) {
+    exp.post("/api/uploadExternalPicture", ensureAuthenticated, function(req, res) {
       commonutils.setExternalPictureUpload(req, res);
     });
 
-    exp.get("/api/picture/:filename", (req, res) => {
+    exp.get("/api/picture/:filename", ensureAuthenticated, (req, res) => {
       let p = path.resolve(`${__dirname}/../temp/`);
       res.sendFile(`${p}/${req.params.filename}`);
+    });
+
+    exp.get("/logout", ensureAuthenticated, function(req, res) {
+      req.logout();
+      res.redirect("/");
     });
 
     exp.get("*", (req, res) => {

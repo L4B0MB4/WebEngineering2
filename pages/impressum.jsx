@@ -3,15 +3,40 @@ import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button, Card
 import OwnHeader from "../components/HeaderUnconnected";
 import Layout from "../components/layout.jsx";
 import Lux from "../components/Lux";
+import { bindActionCreators } from "redux";
+import {
+  receiveBlockchainFeed,
+  receiveUser,
+  receiveVisitedUserContent,
+  receiveVisitedUserFollower,
+  receiveBlockchainWrapper,
+  receiveNews
+} from "../components/redux/actions/commonActions";
+import initStore from "../components/redux/store";
+import withRedux from "next-redux-wrapper";
+import Request from "../components/utils/request";
 
-var request;
+const request = new Request();
 class Impressum extends Component {
-  state = { activeItem: "impressum" };
+
+  static async getInitialProps({ store, query, req }) {
+    if (req) {
+      store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
+      store.dispatch(receiveUser(query.user));
+    } else {
+      let res = await request.callgetFollowerFeed();
+      store.dispatch(receiveBlockchainFeed(res.data));
+      res = await request.callGetUser();
+      store.dispatch(receiveUser(res.data));
+    }
+    receiveNews([]);
+  }
+
 
   render() {
     return (
       <Lux>
-        <Layout isUnconnected={true}>
+        <Layout activeItem="impressum" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
           <h1>Disclaimer</h1>
           <h2>Address</h2>
           <p>
@@ -90,4 +115,19 @@ class Impressum extends Component {
   }
 }
 
-export default Impressum;
+const mapDispatchToProps = dispatch => ({
+  receiveBlockchainFeed: bindActionCreators(receiveBlockchainFeed, dispatch),
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch),
+  receiveNews: bindActionCreators(receiveNews, dispatch)
+});
+
+const mapStateToProps = state => ({
+  blockchainFeed: state.commonReducer.blockchainFeed,
+  user: state.commonReducer.user,
+  userContent: state.commonReducer.userContent,
+  followers: state.commonReducer.followers,
+  blockchainWrapper: state.commonReducer.blockchainWrapper,
+  news: state.commonReducer.news
+});
+
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Impressum);

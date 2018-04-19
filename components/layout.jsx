@@ -24,6 +24,7 @@ class Layout extends Component {
     this.setState({ openSidebar: bool });
   };
 
+
   handleClickOutside = () => {
     this.setOpenSidebar(false);
   }
@@ -132,9 +133,11 @@ class Layout extends Component {
                   <Icon name="delete" />
                   Close
                 </Menu.Item>
-                <Menu.Item name="logout">
-                  <Icon name="power" />Logout
+                <Link href={relPath + "./logout"}>
+                  <Menu.Item name="logout">
+                    <Icon name="power" />Logout
                 </Menu.Item>
+                </Link>
               </Sidebar>
               <Sidebar.Pusher>
                 {isUnconnected ? (
@@ -159,25 +162,22 @@ class Layout extends Component {
 
   leftSide = () => {
     const { user, activeItem } = this.props;
-    const { preloadeImage } = this.state;
     let { relPath } = this.props;
     if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
           <Card>
-            <Image src={preloadeImage
-              ? preloadeImage
-              : user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
+            <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
               rounded />
             <Card.Content>
               <Card.Header>{user ? user.name : ""}</Card.Header>
             </Card.Content>
             <Card.Content extra>
-              <a>
+              <p>
                 <Icon name="trophy" />
                 {user ? user.ansehen : ""} k
-              </a>
+              </p>
             </Card.Content>
           </Card>
           <Menu vertical floated fixed="bottom" tabular className="-menu">
@@ -196,9 +196,11 @@ class Layout extends Component {
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
             </Link>
-            <Menu.Item name="logout" active={activeItem === "logout"}>
-              <Icon name="power" />Logout
+            <Link href={relPath + "./logout"}>
+              <Menu.Item name="logout" active={activeItem === "logout"}>
+                <Icon name="power" />Logout
             </Menu.Item>
+            </Link>
             <Menu.Item>
               <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
             </Menu.Item>

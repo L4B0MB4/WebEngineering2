@@ -13,7 +13,7 @@ class Request {
       headers: {
         "content-type": formencode ? "application/x-www-form-urlencoded" : "application/json"
       },
-      credentials: "same-origin" // wichtig für auth !!!
+      credentials: "include" // wichtig für auth !!!
     };
 
     if (formencode) {

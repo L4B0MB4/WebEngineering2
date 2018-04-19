@@ -63,7 +63,7 @@ export default class FeedElement extends Component {
               <Comment>
                 <Comment.Avatar
                   as="a"
-                  src={comment.user && comment.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
+                  src={comment.user && comment.user.profilePicture ? "/api/picture/" + comment.user.profilePicture : "../static/bild.jpeg"}
                 />
                 <Comment.Content>
                   <Comment.Author as="a">{comment.user.name}</Comment.Author>
