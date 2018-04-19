@@ -50,12 +50,7 @@ class VisitorPage extends Component {
       store.dispatch(receiveVisitedUser(query.visitedUser));
       store.dispatch(receiveLikes(query.likes));
     }
-    let { data } = await request.callGetUserContent(query.visitedUser.name);
-    store.dispatch(receiveVisitedUserContent(data));
-    data = (await request.callGetUserFollower(query.visitedUser.name)).data;
-    store.dispatch(receiveVisitedUserFollower(data));
     receiveNews([]);
-    return {};
   }
 
   constructor(props) {
@@ -64,11 +59,16 @@ class VisitorPage extends Component {
     this.hasInit = false;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.hasInit && this.props.user) {
       this.blockchainWrapper.init(this.props.user.privateKey, this.updateBlockchainFeed, this.onNews);
       this.hasInit = true;
       this.props.receiveBlockchainWrapper(this.blockchainWrapper);
+      request = new Request();
+      let { data } = await request.callGetUserContent(this.props.visitedUser.name);
+      this.props.receiveVisitedUserContent(data);
+      data = (await request.callGetUserFollower(this.props.visitedUser.name)).data;
+      this.props.receiveVisitedUserFollower(data);
     }
   }
   onNews = news => {
@@ -118,7 +118,9 @@ class VisitorPage extends Component {
 
 const mapDispatchToProps = dispatch => ({
   receiveNews: bindActionCreators(receiveNews, dispatch),
-  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch)
+  receiveBlockchainWrapper: bindActionCreators(receiveBlockchainWrapper, dispatch),
+  receiveVisitedUserContent: bindActionCreators(receiveVisitedUserContent, dispatch),
+  receiveVisitedUserFollower: bindActionCreators(receiveVisitedUserFollower, dispatch)
 });
 
 const mapStateToProps = state => ({
