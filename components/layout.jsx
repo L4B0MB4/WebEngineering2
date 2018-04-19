@@ -169,7 +169,7 @@ class Layout extends Component {
         <div className="-sidebars">
           <Card>
             <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
-              rounded fluid />
+              rounded />
             <Card.Content>
               <Card.Header>{user ? user.name : ""}</Card.Header>
             </Card.Content>
