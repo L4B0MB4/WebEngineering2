@@ -71,17 +71,17 @@ export default class FeedElement extends BasicFeedElement {
                       <Icon name="marker" />Stuttgart
                     </Feed.Date>
                   </Feed.Summary>
-                  <br />
-
-                  <div style={{ position: "relative", height: "30px", width: "100%" }}>
-                    <Button
-                      as="div"
-                      labelPosition="right"
-                      size="mini"
-                      animated="fade"
-                      onClick={handleShare}
-                      className="-float-left -share-button ">
-                      <Button size="mini">
+                  <div style={{ width: "100%" }}>
+                    <div style={{ paddingTop: "10px !important", paddingBottom: "15px!important" }}>
+                      <Button fluid animated="fade" onClick={handleLike} className="-like-button">
+                        <Button.Content visible>
+                          <Icon name="heart" />
+                        </Button.Content>
+                        <Button.Content hidden>Like</Button.Content>
+                      </Button>
+                    </div>
+                    <Button as="div" labelPosition="right" animated="fade" onClick={handleShare} className="" fluid>
+                      <Button fluid>
                         <Button.Content visible>
                           <Icon name="share" />
                         </Button.Content>
@@ -92,13 +92,6 @@ export default class FeedElement extends BasicFeedElement {
                       <Label as="a" basic pointing="left">
                         {10}
                       </Label>
-                    </Button>
-
-                    <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
-                      <Button.Content visible>
-                        <Icon name="heart" />
-                      </Button.Content>
-                      <Button.Content hidden>Like</Button.Content>
                     </Button>
                   </div>
                 </Feed.Content>
