@@ -4,7 +4,7 @@ import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
 import OwnUnconnectedHeader from "./HeaderUnconnected";
-import onClickOutside from 'react-onclickoutside';
+import onClickOutside from "react-onclickoutside";
 
 class Layout extends Component {
   state = { openSidebar: false };
@@ -24,25 +24,22 @@ class Layout extends Component {
     this.setState({ openSidebar: bool });
   };
 
-
   handleClickOutside = () => {
     this.setOpenSidebar(false);
-  }
+  };
   Search = async e => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       if (this.props.request) {
         const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
         if (data[0] && data[0].name) {
           window.location = "./visit/" + data[0].name;
-        }
-        else {
+        } else {
           this.setState({ showError: true, errorMessage: "Couldn´t find User" });
           window.setTimeout(() => this.setState({ showError: false }), 2000);
         }
       }
     }
-  }
-
+  };
 
   errorDialog = () => {
     if (this.state.showError)
@@ -74,7 +71,6 @@ class Layout extends Component {
     if (!relPath) relPath = "";
     return (
       <Fragment>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Grid divided={false} celled="internally">
           <Grid.Row only="tablet computer">
             {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
@@ -136,15 +132,15 @@ class Layout extends Component {
                 <Link href={relPath + "./logout"}>
                   <Menu.Item name="logout">
                     <Icon name="power" />Logout
-                </Menu.Item>
+                  </Menu.Item>
                 </Link>
               </Sidebar>
               <Sidebar.Pusher>
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                  )}
+                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -168,8 +164,7 @@ class Layout extends Component {
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
           <Card>
-            <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"}
-              rounded />
+            <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded />
             <Card.Content>
               <Card.Header>{user ? user.name : ""}</Card.Header>
             </Card.Content>
@@ -199,10 +194,10 @@ class Layout extends Component {
             <Link href={relPath + "./logout"}>
               <Menu.Item name="logout" active={activeItem === "logout"}>
                 <Icon name="power" />Logout
-            </Menu.Item>
+              </Menu.Item>
             </Link>
             <Menu.Item>
-              <Input icon="search" placeholder="Search..." onChange={(e) => this.searchValue = e.target.value} onKeyPress={this.Search} />
+              <Input icon="search" placeholder="Search..." onChange={e => (this.searchValue = e.target.value)} onKeyPress={this.Search} />
             </Menu.Item>
           </Menu>
         </div>
