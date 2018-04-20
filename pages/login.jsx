@@ -33,7 +33,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <Lux>
         <OwnHeader />
         <Grid>
           <Grid.Row only="mobile tablet computer">
@@ -82,7 +82,7 @@ class Login extends Component {
             <Grid.Column width={5} />
           </Grid.Row>
         </Grid>
-      </div>
+      </Lux>
     );
   }
 }
