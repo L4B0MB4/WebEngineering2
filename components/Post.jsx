@@ -29,6 +29,7 @@ class Post extends Component {
                             request={request}
                             key={item.timestamp}
                             blockchainWrapper={this.props.blockchainWrapper}
+                            user={user}
                           />
                         );
                       })
@@ -47,6 +48,7 @@ class Post extends Component {
                             request={request}
                             key={item.timestamp}
                             blockchainWrapper={this.props.blockchainWrapper}
+                            user={user}
                           />
                         );
                       })
