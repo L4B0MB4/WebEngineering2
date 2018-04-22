@@ -28,7 +28,8 @@ const login = (email, password) => {
             name: email,
             password
           }
-        ]
+        ],
+        verified: true
       },
       {},
       (err, res) => {
@@ -45,13 +46,19 @@ const login = (email, password) => {
 const register = (email, body, httpRes) => {
   return new Promise((resolve, reject) => {
     db.collection("users").findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
-      if (res === null) {
+      let saver = res;
+      db.collection("users").deleteOne({name: res.name}, (err, res) => {
+          if(err) throw error;
+          console.log("Successfully deleted");
+      });
+      if (saver.verified === false) {
         var newUser = {
-          email: body.email,
-          name: body.name,
-          publicKey: body.publicKey,
-          privateKey: body.privateKey,
-          password: body.password
+          email: saver.email,
+          name: saver.name,
+          publicKey: saver.publicKey,
+          privateKey: saver.privateKey,
+          password: saver.password,
+          verified: true
         };
         db.collection("users").insertOne(newUser, function (err, res) {
           if (err) throw err;
@@ -65,6 +72,34 @@ const register = (email, body, httpRes) => {
       }
     });
   });
+};
+
+const unverifiedRegister = (email, body, rand, httpRes) => {
+    return new Promise((resolve, reject) => {
+        db.collection("users").findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
+            if (res === null) {
+                var newUser = {
+                    email: body.email,
+                    name: body.name,
+                    publicKey: body.publicKey,
+                    privateKey: body.privateKey,
+                    password: body.password,
+                    verified: false,
+                    rand: rand,
+                    saveBody: body
+                };
+                db.collection("users").insertOne(newUser, function (err, res) {
+                    if (err) throw err;
+                    return httpRes.json({
+                        type: "success",
+                        message: "An Email has been sent. In order to log in with your new Account, go into your email account and click on the link."
+                    });
+                });
+            } else {
+                return httpRes.json({ type: "error", message: "Email already exists!" });
+            }
+        });
+    });
 };
 
 const printAllUsers = () => {
@@ -131,6 +166,17 @@ const findUsersByPublicKey = publicKeys =>
       });
   });
 
+
+const findUnverifiedUser = (name, rand) =>
+    new Promise((resolve, reject) => {
+        db
+            .collection("users")
+            .findOne({ verified: false}, {email: 1, saveBody: 1}, (err, res) => {
+                if (err) reject(err);
+                resolve(res);
+            });
+    });
+
 const findUserByUsername = username =>
   new Promise((resolve, reject) => {
     db
@@ -165,9 +211,11 @@ module.exports = {
   getBlockchain,
   saveBlockchain,
   login,
+  unverifiedRegister,
   register,
   printAllUsers,
   findUsersByPublicKey,
+  findUnverifiedUser,
   findSingleUsernameByPublicKey,
   findPublicKeyByUsername,
   findUserByUsername

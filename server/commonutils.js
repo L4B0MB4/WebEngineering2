@@ -3,9 +3,18 @@ import * as blockchainutils from "./blockchainutils";
 import * as websocketutils from "./websockets";
 import * as databaseutils from "./database";
 const path = require("path");
+const nodemailer = require('nodemailer');
 
 var fs = require("fs"),
-  request = require("request");
+    request = require("request");
+
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "golddiggerio420",
+        pass: "G0lddiggerio."
+    }
+});
 
 async function setUpMain(req, res, blockchain) {
   const following = await blockchainutils.getFollowing(blockchain.chain, req.user.publicKey);
@@ -90,4 +99,20 @@ function setExternalPictureUpload(req, res) {
   });
 }
 
-module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload, setUpProfile, setExternalPictureUpload };
+async function sendRegisterMail(rand, name, email) {
+    let link = "http://localhost:3000/api/user/verify?id=" + rand + "&name=" + name;
+    let mailOptions = {
+        to: email,
+        subject: "Please verify your new Account for golddigger.io",
+        html: "Dear new user, <br> Welcome to the crew! We wish you happy digging and hope you will have fun on our platform. But" +
+        " first of all we need you to confirm your registration by clicking on the following link: <br><a href="+link+">Click" +
+        " here to verify </a> <br> Thank you and best regards, <br> The Golddigger Gang"
+    };
+
+    smtpTransport.sendMail(mailOptions, function (err, res) {
+        if (err) throw err;
+        console.log("Message sent");
+    });
+}
+
+module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload, setUpProfile, setExternalPictureUpload, sendRegisterMail };

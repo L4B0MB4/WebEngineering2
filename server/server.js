@@ -21,19 +21,8 @@ const passport = require("passport"),
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
-const nodemailer = require('nodemailer');
 
 const server = http.createServer(exp);
-
-var smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: "golddiggerio420",
-        pass: "G0lddiggerio."
-    }
-});
-
-var rand, saveBody;
 
 const secret = {
     value: Math.random()
@@ -170,33 +159,20 @@ app
             passport.authenticate("local", (err, user, info) => serverutils.handleLogin(err, user, info, req, res))(req, res, next);
         });
 
-        exp.post("/api/user/register", (req, res) => {
+        exp.post("/api/user/register", async (req, res) => {
             if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
                 return res.json({type: "error", message: "Please fill in all the necessary fields!"});
             } else {
-                saveBody = req.body;
-                rand = Math.floor((Math.random() * 100) + 54);
-                let link = "http://localhost:3000/api/user/verify?id=" + rand;
-                let mailOptions = {
-                    to: req.body.email,
-                    subject: "Please verify your new Account for golddigger.io",
-                    html: "Dear new user, <br> Welcome to the crew! We wish you happy digging and hope you will have fun on our platform. But" +
-                    " first of all we need you to confirm your registration by clicking on the following link: <br><a href="+link+">Click" +
-                    " here to verify </a> <br> Thank you and best regards, <br> The Golddigger Gang"
-                }
-                smtpTransport.sendMail(mailOptions, function (err, res) {
-                    if (err) throw err;
-                    console.log("Message sent");
-                });
+                let rand = Math.floor((Math.random() * 100) + 54);
+                await commonutils.sendRegisterMail(rand, req.body.name, req.body.email);
+                databaseutils.unverifiedRegister(req.body.email, req.body, rand, res);
             }
         });
 
-        exp.get("/api/user/verify", function (req, res) {
-            if (req.query.id == rand) {
-                databaseutils.register(saveBody.email, saveBody, res);
-            } else {
-                console.log("Error verifying. Please try again!");
-            }
+        exp.get("/api/user/verify", async function (req, res) {
+            let unverifiedUser = await databaseutils.findUnverifiedUser(req.query.name, req.query.id);
+            if(!unverifiedUser) console.log("Error verifying. Please try again!");
+            else databaseutils.register(unverifiedUser.email, unverifiedUser.saveBody, res);
         });
 
         exp.get("/api/user/getUser", ensureAuthenticated, async (req, res) => {
