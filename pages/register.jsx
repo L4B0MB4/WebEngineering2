@@ -82,7 +82,7 @@ class Register extends Component {
                 </Form.Field>
                 <Form.Field className="-login-field">
                   <label>E-Mail-Address</label>
-                  <Input type="text" name="email" onChange={e => this.setState({ email: e.target.value })} placeholder={"E-Mail"} />
+                  <Input type="text" name="email" pattern={"[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*"} onChange={e => this.setState({ email: e.target.value })} placeholder={"E-Mail"} />
                 </Form.Field>
                 <Form.Field className="-login-field">
                   <label>Password</label>
