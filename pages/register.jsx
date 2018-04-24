@@ -59,7 +59,51 @@ class Register extends Component {
       <Lux>
         <OwnHeader />
         <Grid>
-          <Grid.Row>
+            <Grid.Row only="mobile">
+                <Form className="-loginform">
+                    <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar" />
+
+                    <Message error visible={this.state.visible}>
+                        <Message.Header>Register failed!</Message.Header>
+                        <p>{this.state.msgtext}</p>
+                    </Message>
+
+                    <Form.Field className="-login-field">
+                        <label>Username</label>
+                        <Input
+                            type="text"
+                            name="name"
+                            id={"name"}
+                            onChange={e => this.setState({ name: e.target.value })}
+                            placeholder={"Username"}
+                        />
+                    </Form.Field>
+                    <Form.Field className="-login-field">
+                        <label>E-Mail-Address</label>
+                        <Input type="text" name="email" onChange={e => this.setState({ email: e.target.value })} placeholder={"E-Mail"} />
+                    </Form.Field>
+                    <Form.Field className="-login-field">
+                        <label>Password</label>
+                        <Input
+                            type="password"
+                            name="password"
+                            onChange={e => this.setState({ password: e.target.value })}
+                            placeholder={"Password"}
+                        />
+                    </Form.Field>
+                    <input type="text" name="publicKey" hidden defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
+                    <input type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} />
+                    <Button className="-register-btn" onClick={this.handleRegistration}>
+                        Register
+                    </Button>
+                    <span className="-log-span">
+                  <Link prefetch href="/login">
+                    <a>Already registered? To Login</a>
+                  </Link>
+                </span>
+                </Form>
+            </Grid.Row>
+          <Grid.Row only="computer tabelt">
             <Grid.Column width={5} />
             <Grid.Column width={6}>
               <Form className="-loginform">
