@@ -104,6 +104,10 @@ body {
   color: #daa520 !important;
 }
 
+a#mine.ui.big.button.mine-button {
+  cursor: default !important;
+}
+
 .-avatar {
   width: 40% !important;
   border-radius: 50% !important;
@@ -309,4 +313,12 @@ h1 {
 .-hidden-content{
   text-align: left !important;
   margin-left: 10px !important;
+}
+
+a:hover{
+  cursor: pointer !important;
+}
+
+.-float-center{
+  text-align: center !important;
 }

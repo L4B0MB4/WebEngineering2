@@ -7,7 +7,7 @@ import BasicFeedElement from "./BasicFeedElement";
 export default class FeedElement extends BasicFeedElement {
     constructor(props) {
         super(props);
-        this.state = { content: "" };
+        this.state = { content: "", showResults: false };
         this.checkForVideo();
     }
     sendContent = async () => {
@@ -34,6 +34,15 @@ export default class FeedElement extends BasicFeedElement {
     isSuccessfull = () => {
         return !this.state.buttonLoading && this.state.buttonSucess;
     };
+
+    onClick = () => {
+        this.setState({ showResults: true });
+    };
+
+    onHide = () => {
+        this.setState({ showResults: false });
+    };
+
     render() {
         const { item, request, handleLike, handleShare, user } = this.props;
         if (!item.user) item.user = user;
@@ -50,7 +59,7 @@ export default class FeedElement extends BasicFeedElement {
                                             <Feed.Like>
                                                 <Icon name="trophy" />
                                                 {item.likes.length} Kudos
-                      </Feed.Like>
+                                            </Feed.Like>
                                         </Feed.Meta>
                                         <br />
                                         <Feed.Date>
@@ -60,7 +69,7 @@ export default class FeedElement extends BasicFeedElement {
                                         <br />
                                         <Feed.Date>
                                             <Icon name="marker" />Stuttgart
-                    </Feed.Date>
+                                        </Feed.Date>
                                     </Feed.Summary>
                                     <br />
 
@@ -91,9 +100,21 @@ export default class FeedElement extends BasicFeedElement {
                     </div>
                     <div style={{ minHeight: "2px", width: "100%" }} className="-border-top " />
                     <div className="-feed-content-wrapper">
-                        <div className="">{this.getComments(item, this.props.user)}</div>
+                        <div className="">
+                            {this.state.showResults ?
+                                <div>
+                                    <a onClick={this.onHide}>Hide Comments</a>
+                                    {this.getComments(item, this.props.user)}
+                                    {this.getCommentForm(this)}
+                                </div>
+                                :
+                                <div>
+                                    <a onClick={this.onClick} >Show Comments</a>
+                                </div>
+                            }
+                        </div>
                     </div>
-                    {this.getCommentForm(this)}
+
                 </Segment>
                 <br />
             </Feed.Event>
