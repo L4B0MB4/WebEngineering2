@@ -1,13 +1,13 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
-import {Blockchain} from "./blockchain";
+import { Blockchain } from "./blockchain";
 
 const blockchain = new Blockchain();
 const exp = express();
 const fileUpload = require("express-fileupload");
 const NodeRSA = require("node-rsa");
-const rsaKeys = new NodeRSA({b: 512});
+const rsaKeys = new NodeRSA({ b: 512 });
 import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
 import * as websocketutils from "./websockets";
@@ -39,7 +39,7 @@ const sockets = [];
 setInterval(setCurrentSecret, 5000);
 websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets);
 exp.use(bodyParser.json());
-exp.use(bodyParser.urlencoded({extended: true}));
+exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
 passport.serializeUser(async (user, done) => {
     done(null, user);
@@ -53,15 +53,15 @@ passport.use(
         if (user) {
             return done(null, user);
         } else {
-            return done({message: "Error while logging in"});
+            return done({ message: "Error while logging in" });
         }
     })
 );
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production";
-const app = next({dev});
+const app = next({ dev });
 const handle = app.getRequestHandler();
-exp.use(bodyParser.urlencoded({extended: false}));
+exp.use(bodyParser.urlencoded({ extended: false }));
 exp.use(bodyParser.json());
 exp.use(
     session({
@@ -161,17 +161,17 @@ app
 
         exp.post("/api/user/register", async (req, res) => {
             if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
-                return res.json({type: "error", message: "Please fill in all the necessary fields!"});
+                return res.json({ type: "error", message: "Please fill in all the necessary fields!" });
             } else {
                 let rand = Math.floor((Math.random() * 100) + 54);
-                let mailed = await commonutils.sendRegisterMail(rand, req.body.name, req.body.email);
-                if(mailed) databaseutils.unverifiedRegister(req.body.email, req.body, rand, res);
+                let mailed = await commonutils.sendRegisterMail(rand, req.body.name, req.body.email, res);
+                if (mailed) databaseutils.unverifiedRegister(req.body.email, req.body, rand, res);
             }
         });
 
         exp.get("/api/user/verify", async function (req, res) {
             let unverifiedUser = await databaseutils.findUnverifiedUser(req.query.name, req.query.id);
-            if(!unverifiedUser) console.log("Error verifying. Please try again!");
+            if (!unverifiedUser) console.log("Error verifying. Please try again!");
             else databaseutils.register(unverifiedUser.email, unverifiedUser.name, res);
         });
 
@@ -187,13 +187,13 @@ app
         });
 
         exp.post("/api/user/getPublicKey", ensureAuthenticated, async (req, res) => {
-            if (!req.body.username) return res.json({type: "error", message: "Benutzername fehlt!"});
+            if (!req.body.username) return res.json({ type: "error", message: "Benutzername fehlt!" });
             let user = await databaseutils.findPublicKeyByUsername(req.body.username);
             res.json(user);
         });
 
         exp.get("/api/user/search", ensureAuthenticated, async (req, res) => {
-            if (!req.query.username) res.json({message: "no user fund"});
+            if (!req.query.username) res.json({ message: "no user fund" });
             const resp = await databaseutils.findUserByUsername(req.query.username);
             res.json(resp);
         });

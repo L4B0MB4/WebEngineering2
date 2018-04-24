@@ -1,5 +1,5 @@
 const mongoUrl = "mongodb://127.0.0.1:27017/local";
-const {MongoClient} = require("mongodb");
+const { MongoClient } = require("mongodb");
 let db;
 
 const connect = () => {
@@ -45,9 +45,9 @@ const login = (email, password) => {
 
 const register = (email, name, httpRes) => {
     return new Promise((resolve, reject) => {
-        db.collection("users").findOne({$or: [{email}, {name: name}]}, {}, (err, res) => {
+        db.collection("users").findOne({ $or: [{ email }, { name: name }] }, {}, (err, res) => {
             let saver = res;
-            db.collection("users").deleteOne({name: res.name}, (err, res) => {
+            db.collection("users").deleteOne({ name: res.name }, (err, res) => {
                 if (err) throw error;
                 console.log("Successfully deleted");
             });
@@ -68,7 +68,7 @@ const register = (email, name, httpRes) => {
                     });
                 });
             } else {
-                return httpRes.json({type: "error", message: "Email already exists!"});
+                return httpRes.json({ type: "error", message: "Email already exists!" });
             }
         });
     });
@@ -76,7 +76,7 @@ const register = (email, name, httpRes) => {
 
 const unverifiedRegister = (email, body, rand, httpRes) => {
     return new Promise((resolve, reject) => {
-        db.collection("users").findOne({$or: [{email}, {name: body.name}]}, {}, (err, res) => {
+        db.collection("users").findOne({ $or: [{ email }, { name: body.name }] }, {}, (err, res) => {
             if (res === null) {
                 var newUser = {
                     email: body.email,
@@ -90,12 +90,12 @@ const unverifiedRegister = (email, body, rand, httpRes) => {
                 db.collection("users").insertOne(newUser, function (err, res) {
                     if (err) throw err;
                     return httpRes.json({
-                        type: "success",
+                        type: "info",
                         message: "An Email has been sent. In order to log in with your new Account, go into your email account and click on the link."
                     });
                 });
             } else {
-                return httpRes.json({type: "error", message: "Email already exists!"});
+                return httpRes.json({ type: "error", message: "Email already exists!" });
             }
         });
     });
@@ -118,12 +118,12 @@ const saveBlockchain = blockchain =>
     new Promise((resolve, reject) => {
         const id = 1;
         const now = Date.now();
-        db.collection("blockchain").findOne({_id: id}, {}, (err, res) => {
+        db.collection("blockchain").findOne({ _id: id }, {}, (err, res) => {
             if (err) {
                 reject(err);
             }
             if (res !== null) {
-                db.collection("blockchain").updateOne({_id: id}, {blockchain, lastUpdate: now}, (e, r) => {
+                db.collection("blockchain").updateOne({ _id: id }, { blockchain, lastUpdate: now }, (e, r) => {
                     if (e) throw e;
                     resolve(blockchain);
                 });
@@ -135,7 +135,7 @@ const saveBlockchain = blockchain =>
                         lastUpdate: now,
                         created: now
                     },
-                    {w: 1},
+                    { w: 1 },
                     resolve
                 );
             }
@@ -158,7 +158,7 @@ const findUsersByPublicKey = publicKeys =>
     new Promise((resolve, reject) => {
         db
             .collection("users")
-            .find({publicKey: {$in: [...publicKeys]}}, {name: 1, publicKey: 1})
+            .find({ publicKey: { $in: [...publicKeys] } }, { name: 1, publicKey: 1 })
             .toArray((err, res) => {
                 if (err) reject(err);
                 resolve(res);
@@ -170,7 +170,7 @@ const findUnverifiedUser = (name, rand) =>
     new Promise((resolve, reject) => {
         db
             .collection("users")
-            .findOne({name: name, verified: false}, (err, res) => {
+            .findOne({ name: name, verified: false }, (err, res) => {
                 if (err) reject(err);
                 resolve(res);
             });
@@ -180,7 +180,7 @@ const findUserByUsername = username =>
     new Promise((resolve, reject) => {
         db
             .collection("users")
-            .find({name: username}, {name: 1})
+            .find({ name: username }, { name: 1 })
             .toArray((err, res) => {
                 if (err) reject(err);
                 resolve(res);
@@ -191,7 +191,7 @@ const findUserByEmail = email =>
     new Promise((resolve, reject) => {
         db
             .collection("users")
-            .find({email: email}, {email: 1})
+            .find({ email: email }, { email: 1 })
             .toArray((err, res) => {
                 if (err) reject(err);
                 resolve(res);
@@ -202,7 +202,7 @@ const findSingleUsernameByPublicKey = publicKey =>
     new Promise((resolve, reject) => {
         db
             .collection("users")
-            .findOne({publicKey: publicKey}, {name: 1}, (err, res) => {
+            .findOne({ publicKey: publicKey }, { name: 1 }, (err, res) => {
                 if (err) reject(err);
                 resolve(res.name);
             });
@@ -210,7 +210,7 @@ const findSingleUsernameByPublicKey = publicKey =>
 
 const findPublicKeyByUsername = name =>
     new Promise((resolve, reject) => {
-        db.collection("users").findOne({name}, {name: 1, publicKey: 1}, (err, res) => {
+        db.collection("users").findOne({ name }, { name: 1, publicKey: 1 }, (err, res) => {
             if (err) reject(err);
             resolve(res);
         });

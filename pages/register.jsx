@@ -11,7 +11,7 @@ const request = new Request();
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false };
+    this.state = { visibleError: false, visibleInfo: false };
     this.state = { msgtext: "" };
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
@@ -48,9 +48,14 @@ class Register extends Component {
     let res = await request.callRegistration(user);
     if (res.data.type === "success") {
       window.location.replace("/");
-    } else {
+    }
+    else if (res.data.type === "info") {
       this.setState({ msgtext: res.data.message });
-      this.setState({ visible: true });
+      this.setState({ visibleInfo: true });
+    }
+    else {
+      this.setState({ msgtext: res.data.message });
+      this.setState({ visibleError: true });
     }
   };
 
@@ -65,8 +70,13 @@ class Register extends Component {
               <Form className="-loginform">
                 <Image src="/static/golddiggertext.png" alt="Avatar" className="ui centered grid -avatar" />
 
-                <Message error visible={this.state.visible}>
+                <Message error visible={this.state.visibleError}>
                   <Message.Header>Register failed!</Message.Header>
+                  <p>{this.state.msgtext}</p>
+                </Message>
+
+                <Message info style={{ display: this.state.visibleInfo ? "" : "none" }}>
+                  <Message.Header>Info!</Message.Header>
                   <p>{this.state.msgtext}</p>
                 </Message>
 
@@ -93,8 +103,8 @@ class Register extends Component {
                     placeholder={"Password"}
                   />
                 </Form.Field>
-                <input type="text" name="publicKey" hidden defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
-                <input type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} />
+                <input type="text" name="publicKey" hidden defaultValue={this.state.keys.pub} value={this.state.keys.pub} readOnly={true} />
+                <input type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} readOnly={true} />
                 <Button className="-register-btn" onClick={this.handleRegistration}>
                   Register
                 </Button>
