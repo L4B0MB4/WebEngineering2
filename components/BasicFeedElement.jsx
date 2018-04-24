@@ -26,7 +26,7 @@ export default class FeedElement extends Component {
       <div className="-full-width">
         <br />
         <Form size="mini">
-          <Form.Group unstackable widths={16} >
+          <Form.Group unstackable widths={16}>
             <Form.Field style={{ width: "calc(100% - 96px)" }}>
               <TextArea
                 placeholder="Comment here..."
@@ -59,30 +59,32 @@ export default class FeedElement extends Component {
       <Comment.Group size="mini">
         {comments
           ? comments.map(comment => {
-            return (
-              <Comment>
-                <Comment.Avatar
-                  as="a"
-                  src={comment.user && comment.user.profilePicture ? "/api/picture/" + comment.user.profilePicture : "../static/bild.jpeg"}
-                />
-                <Comment.Content>
-                  <Comment.Author as="a">{comment.user.name}</Comment.Author>
-                  <Comment.Metadata>
-                    <div className="-feed-comment-font-color">
-                      {comment.likes.length} <Icon name="heart" />
-                    </div>
-                    <div>{getDate(comment.timestamp)}</div>
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.data.text}</Comment.Text>
-                  <Comment.Actions>
-                    <Comment.Action onClick={() => handleLike(this.props.blockchainWrapper, user.name, comment.previousHash)}>
-                      <Icon name="heart" style={{ color: "#daa520" }} /> <span className="-feed-comment-font-color">Like!</span>
-                    </Comment.Action>
-                  </Comment.Actions>
-                </Comment.Content>
-              </Comment>
-            );
-          })
+              return (
+                <Comment>
+                  <Comment.Avatar
+                    as="a"
+                    src={
+                      comment.user && comment.user.profilePicture ? "/api/picture/" + comment.user.profilePicture : "../static/bild.jpeg"
+                    }
+                  />
+                  <Comment.Content>
+                    <Comment.Author as="a">{comment.user.name}</Comment.Author>
+                    <Comment.Metadata>
+                      <div className="-feed-comment-font-color">
+                        {comment.likes.length} <Icon name="heart" />
+                      </div>
+                      <div>{getDate(comment.timestamp)}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.data.text}</Comment.Text>
+                    <Comment.Actions>
+                      <Comment.Action onClick={() => handleLike(this.props.blockchainWrapper, user.name, comment.previousHash)}>
+                        <Icon name="heart" style={{ color: "#daa520" }} /> <span className="-feed-comment-font-color">Like!</span>
+                      </Comment.Action>
+                    </Comment.Actions>
+                  </Comment.Content>
+                </Comment>
+              );
+            })
           : null}
       </Comment.Group>
     );
@@ -148,14 +150,18 @@ export default class FeedElement extends Component {
   getLikeAndShare(handleLike, handleShare, item) {
     return (
       <Fragment>
-        <Button as="div" labelPosition='right' size="mini" animated="fade" onClick={handleShare} className="-float-left -share-button ">
+        <Button as="div" labelPosition="right" size="mini" animated="fade" onClick={handleShare} className="-float-left -share-button ">
           <Button size="mini">
             <Button.Content visible>
               <Icon name="share" />
             </Button.Content>
-            <Button.Content hidden className="-hidden-content">Share</Button.Content>
+            <Button.Content hidden className="-hidden-content">
+              Share
+            </Button.Content>
           </Button>
-          <Label as="a" basic pointing='left'>2 k</Label>
+          <Label as="a" basic pointing="left">
+            {10}
+          </Label>
         </Button>
 
         <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">

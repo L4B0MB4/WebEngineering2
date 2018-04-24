@@ -18,7 +18,6 @@ import Request from "../components/utils/request";
 
 const request = new Request();
 class Kontakt extends Component {
-
   static async getInitialProps({ store, query, req }) {
     if (req) {
       store.dispatch(receiveBlockchainFeed(query.blockchainFeed));
@@ -32,7 +31,6 @@ class Kontakt extends Component {
     receiveNews([]);
   }
 
-
   render() {
     return (
       <Lux>
@@ -41,7 +39,7 @@ class Kontakt extends Component {
           <br />
           <br />
           <br />
-          <Card.Group centered itemsPerRow={2}>
+          <Card.Group centered itemsPerRow={2} doubling>
             <Card>
               <Image src="../static/lars.jpeg" />
               <Card.Content>

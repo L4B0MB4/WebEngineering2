@@ -145,7 +145,7 @@ function getAnsehen(blockchain, publicKey) {
   let miningRewards = _.filter(rewardTransactions, { data: { userKey: publicKey } });
   let foreignshares = _.filter(transactions, { type: "share", data: { userKey: publicKey } });
   let ownshares = _.filter(transactions, { type: "share", sender: publicKey });
-  return likes.length + miningRewards.length + foreignshares.length - ownshares.length;
+  return 20 + likes.length + miningRewards.length + foreignshares.length * 10 - ownshares.length * 10;
 }
 
 function hasEnoughAnsehen(blockchain, publicKey, amount) {
@@ -182,12 +182,13 @@ async function createFollowerFeed(req, res, blockchain, following) {
   filtered = blockchain.map(item => {
     return { ...item.transactions[0], previousHash: item.previousHash };
   });
-  const feedshares = getShares(blockchain, filtered);
 
+  const feedshares = getShares(blockchain, filtered);
   let followerKeys = [];
   let f;
   for (f in following) followerKeys.push(following[f].data.following);
   followerKeys.push(req.user.publicKey);
+  filtered.push(...feedshares);
 
   let feed = [];
   let k;
@@ -197,7 +198,6 @@ async function createFollowerFeed(req, res, blockchain, following) {
     for (a in array) feed.push(array[a]);
   }
 
-  feed.push(...feedshares);
   feed.sort(sortByTimestamp);
   feed.slice(Math.max(feed.length - 10, 1));
   let publicKeys = feed.map(item => item.sender);

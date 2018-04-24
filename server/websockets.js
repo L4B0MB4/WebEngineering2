@@ -26,7 +26,12 @@ function startWebsockets(server, socketsConnected, blockchain, databaseutils, se
         data: data.data,
         timestamp: data.timestamp
       };
-      if ((data.type === "share" && blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 1)) || data.type !== "share") {
+      if (data.type === "share" && transaction.data.previousHash) {
+        let block = blockchainutils.getBlockByPreviousHash(blockchain.chain, transaction.data.previousHash);
+        if (blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 10)) {
+          serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+        }
+      } else if (data.type !== "share") {
         serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
       }
     });

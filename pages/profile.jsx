@@ -38,7 +38,7 @@ const panes = [
     render: () => <Ansehen />
   },
   {
-    menuItem: "Edit Profile",
+    menuItem: "Edit",
     render: () => <EditProfile />
   }
 ];

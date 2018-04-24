@@ -13,10 +13,10 @@ class Header extends Component {
             <Menu.Item className="-header-menu">
               <Grid style={{ width: "inherit", height: "inherit" }}>
                 <Grid.Column className="-no-padding" mobile={1} tablet={3} computer={3} />
-                <Grid.Column className="-no-padding" mobile={7} tablet={10} computer={10}>
+                <Grid.Column className="-no-padding" mobile={5} tablet={10} computer={10}>
                   <span className="-header">golddigger.io</span>
                 </Grid.Column>
-                <Grid.Column className="-no-padding -header-news " mobile={8} tablet={3} computer={3}>
+                <Grid.Column className="-no-padding -header-news " mobile={10} tablet={3} computer={3}>
                   <Popup
                     trigger={
                       <Button as="div" className="-header-news-button" labelPosition="right">

@@ -21,7 +21,6 @@ class Post extends Component {
                 <Feed className="-full-width">
                   {userContent
                     ? userContent.map(item => {
-                        item.user = user;
                         return (
                           <FeedElementBig
                             item={item}
@@ -30,6 +29,7 @@ class Post extends Component {
                             request={request}
                             key={item.timestamp}
                             blockchainWrapper={this.props.blockchainWrapper}
+                            user={user}
                           />
                         );
                       })
@@ -40,7 +40,6 @@ class Post extends Component {
                 <Feed className="-full-width">
                   {userContent
                     ? userContent.map(item => {
-                        item.user = user;
                         return (
                           <FeedElementSmall
                             item={item}
@@ -49,6 +48,7 @@ class Post extends Component {
                             request={request}
                             key={item.timestamp}
                             blockchainWrapper={this.props.blockchainWrapper}
+                            user={user}
                           />
                         );
                       })
