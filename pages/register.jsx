@@ -108,7 +108,7 @@ class Register extends Component {
                 </span>
                 </Form>
             </Grid.Row>
-          <Grid.Row only="computer tabelt">
+          <Grid.Row only="computer tablet">
             <Grid.Column width={5} />
             <Grid.Column width={6}>
               <Form className="-loginform">
