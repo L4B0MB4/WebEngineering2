@@ -164,15 +164,15 @@ app
                 return res.json({type: "error", message: "Please fill in all the necessary fields!"});
             } else {
                 let rand = Math.floor((Math.random() * 100) + 54);
-                await commonutils.sendRegisterMail(rand, req.body.name, req.body.email);
-                databaseutils.unverifiedRegister(req.body.email, req.body, rand, res);
+                let mailed = await commonutils.sendRegisterMail(rand, req.body.name, req.body.email);
+                if(mailed) databaseutils.unverifiedRegister(req.body.email, req.body, rand, res);
             }
         });
 
         exp.get("/api/user/verify", async function (req, res) {
             let unverifiedUser = await databaseutils.findUnverifiedUser(req.query.name, req.query.id);
             if(!unverifiedUser) console.log("Error verifying. Please try again!");
-            else databaseutils.register(unverifiedUser.email, unverifiedUser.saveBody, res);
+            else databaseutils.register(unverifiedUser.email, unverifiedUser.name, res);
         });
 
         exp.get("/api/user/getUser", ensureAuthenticated, async (req, res) => {

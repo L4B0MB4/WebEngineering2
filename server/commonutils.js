@@ -100,6 +100,11 @@ function setExternalPictureUpload(req, res) {
 }
 
 async function sendRegisterMail(rand, name, email) {
+    let user = await databaseutils.findUserByEmail(email);
+    if(user.length > 0) {
+        console.log("Email already in use");
+        return false;
+    }
     let link = "http://localhost:3000/api/user/verify?id=" + rand + "&name=" + name;
     let mailOptions = {
         to: email,
@@ -113,6 +118,7 @@ async function sendRegisterMail(rand, name, email) {
         if (err) throw err;
         console.log("Message sent");
     });
+    return true;
 }
 
 module.exports = { setUpMain, setUpVisitPage, setUpPictureUpload, setUpProfile, setExternalPictureUpload, sendRegisterMail };
