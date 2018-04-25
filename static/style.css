@@ -126,10 +126,6 @@ a#mine.ui.big.button.mine-button {
   margin-top: 2em !important;
 }
 
-.-psw {
-  align-self: center !important;
-}
-
 .ui.button.-login-btn {
   background-color: #daa520 !important;
   color: white !important;
@@ -152,7 +148,7 @@ a#mine.ui.big.button.mine-button {
 
 .-reg-span {
   z-index: 1 !important;
-  float: right !important;
+  align-self: center; !important;
   margin-right: 10px !important;
 }
 
@@ -321,4 +317,9 @@ a:hover{
 
 .-float-center{
   text-align: center !important;
+}
+
+.ui.rounded.image.-image-left {
+  width: 100%;
+  height: auto;
 }
