@@ -43,7 +43,7 @@ const login = (email, password) => {
     });
 };
 
-const register = (email, name, httpRes) => {
+const register = (email, name) => {
     return new Promise((resolve, reject) => {
         db.collection("users").findOne({ $or: [{ email }, { name: name }] }, {}, (err, res) => {
             let saver = res;
@@ -62,13 +62,13 @@ const register = (email, name, httpRes) => {
                 };
                 db.collection("users").insertOne(newUser, function (err, res) {
                     if (err) throw err;
-                    return httpRes.json({
+                    return {
                         type: "success",
                         message: "Successfully registered"
-                    });
+                    };
                 });
             } else {
-                return httpRes.json({ type: "error", message: "Email already exists!" });
+                return { type: "error", message: "Email already exists!" };
             }
         });
     });

@@ -171,8 +171,12 @@ app
 
         exp.get("/api/user/verify", async function (req, res) {
             let unverifiedUser = await databaseutils.findUnverifiedUser(req.query.name, req.query.id);
-            if (!unverifiedUser) console.log("Error verifying. Please try again!");
-            else databaseutils.register(unverifiedUser.email, unverifiedUser.name, res);
+            if (!unverifiedUser) return { type: "error", message: "Error verifying. Please try again!" };
+            else {
+                const res = await databaseutils.register(unverifiedUser.email, unverifiedUser.name, res);
+                if (res.type == "success") res.redirect("/");
+            }
+            return { type: "error", message: "undefined behaviour" };
         });
 
         exp.get("/api/user/getUser", ensureAuthenticated, async (req, res) => {

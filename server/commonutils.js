@@ -107,13 +107,13 @@ async function sendRegisterMail(rand, name, email, httpRes) {
     });
     return false;
   }
-  let link = "http://localhost:3000/api/user/verify?id=" + rand + "&name=" + name;
+  let link = "http://gruppe4.testsites.info/api/user/verify?id=" + rand + "&name=" + name;
   let mailOptions = {
     to: email,
     subject: "Please verify your new Account for golddigger.io",
-    html: "Dear new user, <br> Welcome to the crew! We wish you happy digging and hope you will have fun on our platform. But" +
+    html: "<center><img src='https://gruppe4.testsites.info/static/golddiggertext.png'/><br>Dear new user, <br> Welcome to the crew! We wish you happy digging and hope you will have fun on our platform. But" +
       " first of all we need you to confirm your registration by clicking on the following link: <br><a href=" + link + ">Click" +
-      " here to verify </a> <br> Thank you and best regards, <br> The Golddigger Gang"
+      " here to verify </a> <br> Thank you and best regards, <br> The Golddigger Gang </center>"
   };
 
   smtpTransport.sendMail(mailOptions, function (err, res) {
