@@ -17,7 +17,11 @@ class EditProfile extends Component {
             <Form>
 
               <div className="-square" style={{ maxWidth: "200px" }}>
-                <img src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} className="-content" />
+                <img src={
+                  preloadeImage
+                    ? preloadeImage
+                    : user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"
+                } className="-content" />
               </div>
               <br />
               <Form.Field>
