@@ -160,7 +160,7 @@ app
         });
 
         exp.post("/api/user/register", async (req, res) => {
-            if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password) {
+            if (!req.body.name || !req.body.email || !req.body.publicKey || !req.body.privateKey || !req.body.password || !req.body.email.includes("@")) {
                 return res.json({ type: "error", message: "Please fill in all the necessary fields!" });
             } else {
                 let rand = Math.floor((Math.random() * 100) + 54);
@@ -169,12 +169,12 @@ app
             }
         });
 
-        exp.get("/api/user/verify", async function (req, res) {
-            let unverifiedUser = await databaseutils.findUnverifiedUser(req.query.name, req.query.id);
+        exp.get("/api/user/verify/:id/:name", async function (req, res) {
+            let unverifiedUser = await databaseutils.findUnverifiedUser(req.params.name, req.params.id);
             if (!unverifiedUser) return { type: "error", message: "Error verifying. Please try again!" };
             else {
-                const res = await databaseutils.register(unverifiedUser.email, unverifiedUser.name, res);
-                if (res.type == "success") res.redirect("/");
+                const ret = await databaseutils.register(unverifiedUser.email, unverifiedUser.name);
+                if (ret.type == "success") res.redirect("/");
             }
             return { type: "error", message: "undefined behaviour" };
         });

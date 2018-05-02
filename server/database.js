@@ -62,13 +62,13 @@ const register = (email, name) => {
                 };
                 db.collection("users").insertOne(newUser, function (err, res) {
                     if (err) throw err;
-                    return {
+                    resolve({
                         type: "success",
                         message: "Successfully registered"
-                    };
+                    });
                 });
             } else {
-                return { type: "error", message: "Email already exists!" };
+                resolve({ type: "error", message: "Email already exists!" });
             }
         });
     });
