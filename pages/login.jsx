@@ -68,9 +68,6 @@ class Login extends Component {
                   <Button className="-login-btn" onClick={this.handleLogin}>
                     Login
                   </Button>
-                  <span className="-psw">
-                    <a href="#">Forgot Password?</a>
-                  </span>
                   <span className="-reg-span">
                     <Link prefetch href="/register">
                       <a>Not registered yet? Register Now!</a>
@@ -112,14 +109,11 @@ class Login extends Component {
                             <Button className="-login-btn" onClick={this.handleLogin}>
                                 Login
                             </Button>
-                            <span className="-psw">
-                    <a href="#">Forgot Password?</a>
-                  </span>
                             <span className="-reg-span">
-                    <Link prefetch href="/register">
-                      <a>Not registered yet? Register Now!</a>
-                    </Link>
-                  </span>
+                            <Link prefetch href="/register">
+                              <a>Not registered yet? Register Now!</a>
+                            </Link>
+                          </span>
                         </div>
                     </Form>
 
