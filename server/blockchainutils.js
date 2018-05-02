@@ -157,8 +157,7 @@ function getChainByTime(blockchain, hours = 2) {
   let feed = [...blockchain];
   var elem;
   let i = 0;
-  let length = 100 > feed.length ? feed.length : 100;
-  for (i = lenght - 1; i >= 0; i--) {
+  for (i = feed.length - 1; i >= 0; i--) {
     if (new Date(Date.now() - new Date(feed[i].timestamp)) > 1000 * 60 * 60 * hours) break;
   }
   return feed.splice(i + 1, feed.length - i);

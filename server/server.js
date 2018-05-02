@@ -34,10 +34,11 @@ function setCurrentSecret() {
 
 var socketsConnected = 0;
 const sockets = [];
+const users = [];
 
 
 setInterval(setCurrentSecret, 5000);
-websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets);
+websocketutils.startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets, users);
 exp.use(bodyParser.json());
 exp.use(bodyParser.urlencoded({ extended: true }));
 exp.use(flash());
@@ -100,6 +101,7 @@ app
 
         exp.get("/", ensureAuthenticated, async (req, res) => {
             const query = await commonutils.setUpMain(req, res, blockchain);
+            users[req.user.publicKey] = Date.now() - 10000;
             return app.render(req, res, "/index", query);
         });
         exp.get("/impressum", ensureAuthenticated, async (req, res) => {
@@ -174,7 +176,9 @@ app
             if (!unverifiedUser) return { type: "error", message: "Error verifying. Please try again!" };
             else {
                 const ret = await databaseutils.register(unverifiedUser.email, unverifiedUser.name);
-                if (ret.type == "success") res.redirect("/");
+                if (ret.type == "success") {
+                    res.redirect("/");
+                }
             }
             return { type: "error", message: "undefined behaviour" };
         });

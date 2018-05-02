@@ -3,7 +3,7 @@ const _ = require("lodash");
 import * as blockchainutils from "./blockchainutils";
 import * as newsutils from "./newsutils";
 
-function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets) {
+function startWebsockets(server, socketsConnected, blockchain, databaseutils, serverutils, rsaKeys, secret, sockets, users) {
   const io = socketIO(server);
   io.on("connection", socket => {
     socketsConnected++;
@@ -26,13 +26,16 @@ function startWebsockets(server, socketsConnected, blockchain, databaseutils, se
         data: data.data,
         timestamp: data.timestamp
       };
-      if (data.type === "share" && transaction.data.previousHash) {
-        let block = blockchainutils.getBlockByPreviousHash(blockchain.chain, transaction.data.previousHash);
-        if (blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 10)) {
+      if (users[data.sender] && Date.now() - users[data.sender] > 2000) {
+        users[data.sender] = Date.now();
+        if (data.type === "share" && transaction.data.previousHash) {
+          let block = blockchainutils.getBlockByPreviousHash(blockchain.chain, transaction.data.previousHash);
+          if (blockchainutils.hasEnoughAnsehen(blockchain.chain, data.sender, 10)) {
+            serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
+          }
+        } else if (data.type !== "share") {
           serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
         }
-      } else if (data.type !== "share") {
-        serverutils.broadcastOrEmit(socket, "mine", transaction, socketsConnected);
       }
     });
 
