@@ -139,8 +139,8 @@ class Layout extends Component {
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                )}
+                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                  )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -164,7 +164,9 @@ class Layout extends Component {
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
           <Card>
-            <Image src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} rounded className="-image-left" />
+            <div className="-square">
+              <img src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} className="-content" />
+            </div>
             <Card.Content>
               <Card.Header>{user ? user.name : ""}</Card.Header>
             </Card.Content>

@@ -322,3 +322,21 @@ a:hover{
 .ui.rounded.image.-image-left {
   object-fit:scale-down;
 }
+
+.-square {
+  margin:auto;
+  position: relative;
+  width: 100%;
+}
+
+.-square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
