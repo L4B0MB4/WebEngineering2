@@ -320,6 +320,5 @@ a:hover{
 }
 
 .ui.rounded.image.-image-left {
-  width: 100%;
-  height: auto;
+  object-fit:scale-down;
 }
