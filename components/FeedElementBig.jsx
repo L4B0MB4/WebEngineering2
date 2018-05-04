@@ -73,7 +73,7 @@ export default class FeedElement extends BasicFeedElement {
                   </Feed.Summary>
                   <div style={{ width: "100%" }}>
                     <div className="-like-button-div">
-                      <Button as="div" labelPosition="right" animated="fade" onClick={handleShare} fluid>
+                      <Button as="div" labelPosition="right" animated="fade" onClick={handleLike} fluid>
                         <Button fluid className="-like-button">
                           <Button.Content visible>
                             <Icon name="heart" />
