@@ -1,6 +1,8 @@
 const _ = require("lodash");
 const { findUsersByPublicKey, findSingleUsernameByPublicKey, printAllUsers } = require("./database");
 
+const MaxContent = 50;
+
 async function createFeed(req, res, blockchain) {
   let filtered = getChainByTime(blockchain);
   filtered = blockchain.map(item => {
@@ -10,7 +12,7 @@ async function createFeed(req, res, blockchain) {
   let feed = _.filter(filtered, { type: "content" });
   feed.push(...feedshares);
   feed.sort(sortByTimestamp);
-  feed.slice(Math.max(feed.length - 10, 1));
+  feed.slice(Math.max(feed.length - MaxContent, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
@@ -199,7 +201,7 @@ async function createFollowerFeed(req, res, blockchain, following) {
   }
 
   feed.sort(sortByTimestamp);
-  feed.slice(Math.max(feed.length - 10, 1));
+  feed.slice(Math.max(feed.length - MaxContent, 1));
   let publicKeys = feed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
   feed = feed.map(block => mergeUserToBlock(block, users, blockchain));
@@ -248,7 +250,7 @@ async function getLikedContent(blockchain, user) {
     finalFeed.push(content);
   }
   finalFeed.sort(sortByTimestamp);
-  finalFeed.slice(Math.max(feed.length - 10, 1));
+  finalFeed.slice(Math.max(feed.length - MaxContent, 1));
   let publicKeys = finalFeed.map(item => item.sender);
   let users = await findUsersByPublicKey(publicKeys);
   finalFeed = finalFeed.map(block => mergeUserToBlock(block, users, blockchain));
