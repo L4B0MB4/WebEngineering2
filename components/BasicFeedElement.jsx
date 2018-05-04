@@ -93,7 +93,7 @@ export default class FeedElement extends Component {
   getUserSection(item) {
     return (
       <Fragment>
-        <Link prefetch href={"./visit/" + item.user.name}>
+        <Link prefetch href={"./v_" + item.user.name}>
           <a>
             <Image
               src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}

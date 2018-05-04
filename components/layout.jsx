@@ -32,7 +32,7 @@ class Layout extends Component {
       if (this.props.request) {
         const { data } = await this.props.request.callGetUserByUsername(this.searchValue);
         if (data[0] && data[0].name) {
-          window.location = "./visit/" + data[0].name;
+          window.location = "./v_" + data[0].name;
         } else {
           this.setState({ showError: true, errorMessage: "Couldn´t find User" });
           window.setTimeout(() => this.setState({ showError: false }), 2000);
@@ -139,8 +139,8 @@ class Layout extends Component {
                 {isUnconnected ? (
                   <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
                 ) : (
-                    <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                  )}
+                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
+                )}
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>

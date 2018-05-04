@@ -6,48 +6,46 @@ import Link from "next/link";
 const request = new Request();
 
 class Follower extends Component {
-    state = {};
+  state = {};
 
-    render() {
-        const { followers, user } = this.props;
-        return (
-            <Tab.Pane className="-tab">
-                <div className="-padding-10 -full-width">
-                    <Segment raised compact className="-full-width -segment">
-                        <Item.Group>
-                            {followers
-                                ? followers.map(follower => {
-                                    if (!follower.user) return null;
-                                    return (
-
-                                        <Item key={follower.user.name}>
-                                            <Item.Image size="tiny" src="../static/bild.jpeg" />
-                                            <Item.Content verticalAlign="middle">
-                                                <Item.Header className="-follower">
-                                                    <Link prefetch href={"./visit/" + follower.user.name}>
-                                                        {follower.user.name}
-                                                    </Link>
-                                                </Item.Header>
-                                            </Item.Content>
-                                        </Item>
-
-                                    );
-                                })
-                                : null}
-                        </Item.Group>
-                    </Segment>
-                </div>
-            </Tab.Pane>
-        );
-    }
+  render() {
+    const { followers, user } = this.props;
+    return (
+      <Tab.Pane className="-tab">
+        <div className="-padding-10 -full-width">
+          <Segment raised compact className="-full-width -segment">
+            <Item.Group>
+              {followers
+                ? followers.map(follower => {
+                    if (!follower.user) return null;
+                    return (
+                      <Item key={follower.user.name}>
+                        <Item.Image size="tiny" src="../static/bild.jpeg" />
+                        <Item.Content verticalAlign="middle">
+                          <Item.Header className="-follower">
+                            <Link prefetch href={"./_" + follower.user.name}>
+                              {follower.user.name}
+                            </Link>
+                          </Item.Header>
+                        </Item.Content>
+                      </Item>
+                    );
+                  })
+                : null}
+            </Item.Group>
+          </Segment>
+        </div>
+      </Tab.Pane>
+    );
+  }
 }
 
 const mapStateToProps = state => ({
-    blockchainFeed: state.commonReducer.blockchainFeed,
-    user: state.commonReducer.user,
-    userContent: state.commonReducer.userContent,
-    followers: state.commonReducer.followers,
-    blockchainWrapper: state.commonReducer.blockchainWrapper
+  blockchainFeed: state.commonReducer.blockchainFeed,
+  user: state.commonReducer.user,
+  userContent: state.commonReducer.userContent,
+  followers: state.commonReducer.followers,
+  blockchainWrapper: state.commonReducer.blockchainWrapper
 });
 
 export default connect(mapStateToProps)(Follower);

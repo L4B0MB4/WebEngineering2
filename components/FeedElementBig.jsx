@@ -72,7 +72,7 @@ export default class FeedElement extends BasicFeedElement {
                     </Feed.Date>
                   </Feed.Summary>
                   <div style={{ width: "100%" }}>
-                    <div style={{ paddingTop: "10px !important", paddingBottom: "15px!important" }}>
+                    <div className="-like-button-div">
                       <Button fluid animated="fade" onClick={handleLike} className="-like-button">
                         <Button.Content visible>
                           <Icon name="heart" />

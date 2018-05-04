@@ -81,7 +81,7 @@ class FeaturedProfiles extends Component {
               {featuredUsers
                 ? featuredUsers.map(item => (
                     <Grid.Column key={item.user.name}>
-                      <Link href={"./visit/" + item.user.name}>
+                      <Link href={"./v_" + item.user.name}>
                         <Button animated="fade" className="featured-user">
                           <Button.Content className="-visible">
                             <Image
@@ -105,7 +105,7 @@ class FeaturedProfiles extends Component {
               {featuredUsers
                 ? featuredUsers.map(item => (
                     <Grid.Column key={item.user.name}>
-                      <Link href={"./visit/" + item.user.name}>
+                      <Link href={"./v_" + item.user.name}>
                         <Button animated="fade" className="featured-user">
                           <Button.Content className="-visible">
                             <Image
