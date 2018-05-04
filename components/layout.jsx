@@ -3,7 +3,6 @@ import { Icon, Card, Label, Input, Menu, Header, Grid, Image, List, Button, Moda
 import OwnHeader from "./Header";
 import Link from "next/link";
 import BlockchainWrapper from "../components/utils/BlockchainWrapper";
-import OwnUnconnectedHeader from "./HeaderUnconnected";
 import onClickOutside from "react-onclickoutside";
 
 class Layout extends Component {
@@ -66,14 +65,11 @@ class Layout extends Component {
 
   render() {
     const { user, activeItem, isUnconnected } = this.props;
-    let { relPath } = this.props;
-
-    if (!relPath) relPath = "";
     return (
       <Fragment>
         <Grid divided={false} celled="internally">
           <Grid.Row only="tablet computer">
-            {isUnconnected ? <OwnUnconnectedHeader relPath={relPath} /> : <OwnHeader relPath={relPath} />}
+            <OwnHeader />
             {this.leftSide()}
             {this.errorDialog()}
             <Grid.Column width={10} stretched className="grid-column">
@@ -100,27 +96,27 @@ class Layout extends Component {
                 vertical
                 inverted
                 className="mobile-menu">
-                <Link href={relPath + "./profile"}>
+                <Link href={"./profile"}>
                   <Menu.Item name="profil">
                     <Icon name="user" />Profile
                   </Menu.Item>
                 </Link>
-                <Link href={relPath + "./"}>
+                <Link href={"./"}>
                   <Menu.Item name="feed">
                     <Icon name="newspaper" />Feed
                   </Menu.Item>
                 </Link>
-                <Link href={relPath + "./featured"}>
+                <Link href={"./featured"}>
                   <Menu.Item name="featured">
                     <Icon name="trophy" />Featured Profiles
                   </Menu.Item>
                 </Link>
-                <Link href={relPath + "./aboutus"}>
+                <Link href={"./aboutus"}>
                   <Menu.Item name="kontakt">
                     <Icon name="hand victory" />About us
                   </Menu.Item>
                 </Link>
-                <Link href={relPath + "./impressum"}>
+                <Link href={"./impressum"}>
                   <Menu.Item name="impressum">
                     <Icon name="legal" />Disclaimer
                   </Menu.Item>
@@ -129,18 +125,14 @@ class Layout extends Component {
                   <Icon name="delete" />
                   Close
                 </Menu.Item>
-                <Link href={relPath + "./logout"}>
+                <Link href={"./logout"}>
                   <Menu.Item name="logout">
                     <Icon name="power" />Logout
                   </Menu.Item>
                 </Link>
               </Sidebar>
               <Sidebar.Pusher>
-                {isUnconnected ? (
-                  <OwnUnconnectedHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                ) : (
-                  <OwnHeader relPath={relPath} setOpenSidebar={this.setOpenSidebar} />
-                )}
+                <OwnHeader setOpenSidebar={this.setOpenSidebar} />
                 <Grid>
                   <Grid.Column width={16} style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <div className="-feed" style={{ minHeight: "500px" }}>
@@ -158,8 +150,6 @@ class Layout extends Component {
 
   leftSide = () => {
     const { user, activeItem } = this.props;
-    let { relPath } = this.props;
-    if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -178,22 +168,22 @@ class Layout extends Component {
             </Card.Content>
           </Card>
           <Menu vertical floated fixed="bottom" tabular className="-menu">
-            <Link href={relPath + "./profile"}>
+            <Link href={"./profile"}>
               <Menu.Item name="profile" active={activeItem === "profile"}>
                 <Icon name="user" />Profile
               </Menu.Item>
             </Link>
-            <Link href={relPath + "./"}>
+            <Link href={"./"}>
               <Menu.Item name="feed" active={activeItem === "feed"}>
                 <Icon name="newspaper" />Feed
               </Menu.Item>
             </Link>
-            <Link href={relPath + "./featured"}>
+            <Link href={"./featured"}>
               <Menu.Item name="featured" active={activeItem === "featured"}>
                 <Icon name="trophy" />Featured Profiles
               </Menu.Item>
             </Link>
-            <Link href={relPath + "./logout"}>
+            <Link href={"./logout"}>
               <Menu.Item name="logout" active={activeItem === "logout"}>
                 <Icon name="power" />Logout
               </Menu.Item>
@@ -208,8 +198,6 @@ class Layout extends Component {
   };
   rightSide = () => {
     const { user, activeItem } = this.props;
-    let { relPath } = this.props;
-    if (!relPath) relPath = "";
     return (
       <Grid.Column width={3} stretched className="grid-column">
         <div className="-sidebars">
@@ -221,14 +209,14 @@ class Layout extends Component {
             </List.Item>
           </List>
           <List relaxed className="-list">
-            <Link href={relPath + "./aboutus"}>
+            <Link href={"./aboutus"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="kontakt" active={activeItem === "kontakt"}>
                   <Icon name="mail" />About us
                 </Button>
               </List.Item>
             </Link>
-            <Link href={relPath + "./impressum"}>
+            <Link href={"./impressum"}>
               <List.Item>
                 <Button compact as="a" size="big" className="list-item" name="impressum" active={activeItem === "impressum"}>
                   <Icon name="registered" />Disclaimer

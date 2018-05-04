@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button, Card } from "semantic-ui-react";
-import OwnHeader from "../components/HeaderUnconnected";
 import Layout from "../components/layout.jsx";
 import Lux from "../components/Lux";
 import { bindActionCreators } from "redux";
