@@ -89,14 +89,12 @@ class Profil extends Component {
 
   render() {
     return (
-      <Lux>
-        <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
-          <h1>Your Profile</h1>
-          <br />
-          <br />
-          <Tab className="-tab" panes={panes} props={this.props} />
-        </Layout>
-      </Lux>
+      <Layout activeItem="profile" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
+        <h1>Your Profile</h1>
+        <br />
+        <br />
+        <Tab className="-tab" panes={panes} props={this.props} />
+      </Layout>
     );
   }
 }

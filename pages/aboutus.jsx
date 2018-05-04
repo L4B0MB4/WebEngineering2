@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import { Image, Item, Segment, Feed, Icon, Label, Grid, Pagination, Button, Card } from "semantic-ui-react";
 import OwnHeader from "../components/HeaderUnconnected";
 import Layout from "../components/layout.jsx";
-import Lux from "../components/Lux";
 import { bindActionCreators } from "redux";
 import {
   receiveBlockchainFeed,
@@ -32,8 +31,7 @@ class Kontakt extends Component {
   }
 
   render() {
-    return (
-      <Lux>
+    return(
         <Layout activeItem="about" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
           <h1>About us</h1>
           <br />
@@ -97,8 +95,7 @@ class Kontakt extends Component {
               </Card.Content>
             </Card>
           </Card.Group>
-        </Layout>
-      </Lux>
+        </Layout>%
     );
   }
 }

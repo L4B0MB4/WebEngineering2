@@ -90,28 +90,22 @@ class VisitorPage extends Component {
 
   render() {
     return (
-      <Lux relPath="../">
-        <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
-          <div className="-full-width -padding-10">
-            <h1>
-              {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
-            </h1>
-            <Button
-              floated="right"
-              animated="fade"
-              className="follow-button"
-              onClick={() => this.handleFollow(this.props.visitedUser.name)}>
-              <Button.Content visible>
-                <Icon name="add user" size="large" />
-              </Button.Content>
-              <Button.Content hidden>Follow</Button.Content>
-            </Button>
-          </div>
-          <br />
-          <br />
-          <Tab className="-tab" panes={panes} props={this.props} />
-        </Layout>
-      </Lux>
+      <Layout relPath="../" blockchainWrapper={this.blockchainWrapper} user={this.props.user} request={request}>
+        <div className="-full-width -padding-10">
+          <h1>
+            {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
+          </h1>
+          <Button floated="right" animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
+            <Button.Content visible>
+              <Icon name="add user" size="large" />
+            </Button.Content>
+            <Button.Content hidden>Follow</Button.Content>
+          </Button>
+        </div>
+        <br />
+        <br />
+        <Tab className="-tab" panes={panes} props={this.props} />
+      </Layout>
     );
   }
 }

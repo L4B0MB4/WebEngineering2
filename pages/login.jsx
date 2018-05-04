@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import OwnHeader from "../components/HeaderUnconnected";
 import Link from "next/link";
 import Request from "../components/utils/request";
@@ -33,7 +33,7 @@ class Login extends Component {
 
   render() {
     return (
-      <Lux>
+      <Fragment>
         <OwnHeader />
         <Grid>
           <Grid.Row only="mobile tablet computer">
@@ -82,7 +82,7 @@ class Login extends Component {
             <Grid.Column width={5} />
           </Grid.Row>
         </Grid>
-      </Lux>
+      </Fragment>
     );
   }
 }
