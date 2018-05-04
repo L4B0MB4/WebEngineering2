@@ -96,8 +96,8 @@ class Register extends Component {
                   placeholder={"Password"}
                 />
               </Form.Field>
-              <input type="text" hidden name="publicKey" defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
-              <input type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} />
+              <input readOnly type="text" hidden name="publicKey" defaultValue={this.state.keys.pub} value={this.state.keys.pub} />
+              <input readOnly type="text" hidden name="privateKey" defaultValue={this.state.keys.priv} value={this.state.keys.priv} />
               <Button className="-register-btn" onClick={this.handleRegistration}>
                 Register
               </Button>

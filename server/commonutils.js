@@ -2,17 +2,18 @@ import * as serverutils from "./serverutils";
 import * as blockchainutils from "./blockchainutils";
 import * as websocketutils from "./websockets";
 import * as databaseutils from "./database";
+import gmailPassword from "./golddigger.pw.js";
 const path = require("path");
 const nodemailer = require("nodemailer");
 
 var fs = require("fs"),
   request = require("request");
 
-var smtpTransport = nodemailer.createTransport({
+const smtpTransport = nodemailer.createTransport({
   service: "Gmail",
   auth: {
     user: "golddiggerio420",
-    pass: "G0lddiggerio."
+    pass: gmailPassword.password
   }
 });
 
