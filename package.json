@@ -8,6 +8,7 @@
     "dev": "npm run dev-babel-node -- ./server/server",
     "build": "babel ./server/ -s -d dist && next build",
     "start": "rm -r temp && mkdir temp && NODE_ENV=production node dist/server.js",
+    "start-windows": "rm -r temp && mkdir temp && set NODE_ENV=production&& node dist/server.js",
     "bot": "npm run dev-babel-node -- ./bots/9gag.js"
   },
   "devDependencies": {
