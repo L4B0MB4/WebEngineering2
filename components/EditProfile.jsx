@@ -15,16 +15,14 @@ class EditProfile extends Component {
         <div className="-full-width -padding-10">
           <Segment raised className="-full-width -segment">
             <Form>
-              <Image
-                src={
+
+              <div className="-square" style={{ maxWidth: "200px" }}>
+                <img src={
                   preloadeImage
                     ? preloadeImage
                     : user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"
-                }
-                size="small"
-                rounded
-                centered
-              />
+                } className="-content" />
+              </div>
               <br />
               <Form.Field>
                 <label>Profile Picture</label>

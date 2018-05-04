@@ -107,7 +107,7 @@ async function sendRegisterMail(rand, name, email, httpRes) {
     });
     return false;
   }
-  let link = "http://gruppe4.testsites.info/api/user/verify?id=" + rand + "&name=" + name;
+  let link = "https://gruppe4.testsites.info/api/user/verify/" + rand + "/" + name;
   let mailOptions = {
     to: email,
     subject: "Please verify your new Account for golddigger.io",
