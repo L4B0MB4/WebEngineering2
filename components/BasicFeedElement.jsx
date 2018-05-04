@@ -60,7 +60,7 @@ export default class FeedElement extends Component {
         {comments
           ? comments.map(comment => {
               return (
-                <Comment>
+                <Comment key={comment.previousHash}>
                   <Comment.Avatar
                     as="a"
                     src={
@@ -93,7 +93,7 @@ export default class FeedElement extends Component {
   getUserSection(item) {
     return (
       <Fragment>
-        <Link prefetch href={"./v_" + item.user.name}>
+        <Link href={"./v_" + item.user.name}>
           <a>
             <Image
               src={item.user && item.user.profilePicture ? "/api/picture/" + item.user.profilePicture : "../static/bild.jpeg"}
