@@ -12,11 +12,21 @@ export default class ContentForm extends Component {
     setInterval(() => this.setState({ buttonSucess: false }), 1000);
   };
 
+  onErrorPosted = () => {
+    if (this.state.inputImage) this.state.inputImage.value = "";
+    this.setState({ content: "", buttonError: true, buttonLoading: false, file: undefined });
+    setInterval(() => this.setState({ buttonError: false }), 1000);
+  };
+
   isLoading = () => {
     return this.state.buttonLoading;
   };
   isSuccessfull = () => {
     return !this.state.buttonLoading && this.state.buttonSucess;
+  };
+
+  isError = () => {
+    return !this.state.buttonLoading && this.state.buttonError;
   };
 
   sendContent = async () => {
@@ -25,13 +35,15 @@ export default class ContentForm extends Component {
       this.setState({ buttonLoading: true });
     } else if (this.state.file) {
       this.setState({ buttonLoading: true });
-      const { data } = await this.props.request.callUploadFile(this.state.file);
-      if (data.filename) {
+      const res = await this.props.request.callUploadFile(this.state.file);
+      if (res.data && res.data.filename) {
         this.props.blockchainWrapper.newTransaction(
           "content",
-          { text: this.state.content, picture: data.filename },
+          { text: this.state.content, picture: res.data.filename },
           this.onSuccessFullyPosted
         );
+      } else {
+        this.onErrorPosted();
       }
     }
   };
@@ -51,15 +63,15 @@ export default class ContentForm extends Component {
           />
         </Form.Field>
         <Form.Field>
-          <Input type="file" onChange={e => this.onSelectFiles(e)} className="upload" />
+          <Input type="file" accept="image/*" onChange={e => this.onSelectFiles(e)} className="upload" />
         </Form.Field>
         <Form.Field className="-text-right">
           <Button
             type="submit"
             loading={this.isLoading()}
-            color={this.isSuccessfull() ? "green" : null}
+            color={this.isSuccessfull() ? "green" : this.isError() ? "red" : null}
             onClick={this.isLoading() ? null : this.sendContent}>
-            {this.isSuccessfull() ? "Success" : "Post"}
+            {this.isSuccessfull() ? "Success" : this.isError() ? "Error" : "Post"}
           </Button>
         </Form.Field>
       </Form>
