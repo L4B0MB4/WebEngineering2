@@ -57,6 +57,7 @@ class VisitorPage extends Component {
     super(props);
     this.blockchainWrapper = new BlockchainWrapper();
     this.hasInit = false;
+    this.state = {};
   }
 
   async componentDidMount() {
@@ -82,9 +83,15 @@ class VisitorPage extends Component {
     let publicKey = (await new Request().callGetPublicKey({ username })).data.publicKey;
 
     if (!this.blockchainWrapper.alreadyFollowed(publicKey)) {
-      this.blockchainWrapper.newTransaction("follow", {
-        following: publicKey
-      });
+      this.blockchainWrapper.newTransaction(
+        "follow",
+        {
+          following: publicKey
+        },
+        () => {
+          this.setState({ followed: true });
+        }
+      );
     }
   };
 
@@ -95,7 +102,11 @@ class VisitorPage extends Component {
           <h1>
             {this.props.visitedUser.name}, {this.props.visitedUser.ansehen} Kudos
           </h1>
-          <Button floated="right" animated="fade" className="follow-button" onClick={() => this.handleFollow(this.props.visitedUser.name)}>
+          <Button
+            floated="right"
+            animated="fade"
+            className={this.state.followed ? "-follow-button-success" : "-follow-button"}
+            onClick={this.state.followed ? null : () => this.handleFollow(this.props.visitedUser.name)}>
             <Button.Content visible>
               <Icon name="add user" size="large" />
             </Button.Content>

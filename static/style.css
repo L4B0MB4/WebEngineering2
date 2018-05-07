@@ -161,6 +161,9 @@ a#mine.ui.big.button.mine-button {
 
 .-share-button {
 }
+.-follow-button-success {
+  background-color: #628b61 !important;
+}
 
 .-share-button-success {
   background-color: #628b61 !important;
