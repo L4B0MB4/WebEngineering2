@@ -148,16 +148,25 @@ a#mine.ui.big.button.mine-button {
 
 .-reg-span {
   z-index: 1 !important;
-  align-self: center; !important;
+  align-self: center !important;
   margin-right: 10px !important;
 }
 
 .-like-button {
   background-color: #daa520 !important;
 }
+.-like-button-success {
+  background-color: #628b61 !important;
+}
 
-.-share-button{
+.-share-button {
+}
+.-follow-button-success {
+  background-color: #628b61 !important;
+}
 
+.-share-button-success {
+  background-color: #628b61 !important;
 }
 
 .-full-width {
@@ -283,16 +292,17 @@ h1 {
   opacity: 0.4 !important;
 }
 
-.mobile-menu{
+.mobile-menu {
   background-color: #c7e1ba !important;
 }
 
 .ui.inverted.icon.menu .item {
-    color: black;
+  color: black;
 }
 
-.ui.inverted.menu .link.item:active, .ui.inverted.menu a.item:active {
-    color: #f6e4cc !important;
+.ui.inverted.menu .link.item:active,
+.ui.inverted.menu a.item:active {
+  color: #f6e4cc !important;
 }
 
 .-no-padding {
@@ -303,28 +313,28 @@ h1 {
   text-align: center !important;
 }
 
-.-log-span{
-    margin-left: 10px;
+.-log-span {
+  margin-left: 10px;
 }
-.-hidden-content{
+.-hidden-content {
   text-align: left !important;
   margin-left: 10px !important;
 }
 
-a:hover{
+a:hover {
   cursor: pointer !important;
 }
 
-.-float-center{
+.-float-center {
   text-align: center !important;
 }
 
 .ui.rounded.image.-image-left {
-  object-fit:scale-down;
+  object-fit: scale-down;
 }
 
 .-square {
-  margin:auto;
+  margin: auto;
   position: relative;
   width: 100%;
 }
@@ -341,7 +351,7 @@ a:hover{
   height: 100%;
 }
 
-.-like-button-div{
+.-like-button-div {
   padding-top: 10px !important;
-  padding-bottom: 15px!important;
+  padding-bottom: 15px !important;
 }

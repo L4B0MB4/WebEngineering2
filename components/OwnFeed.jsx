@@ -25,8 +25,8 @@ class OwnFeed extends Component {
                     return (
                       <FeedElementBig
                         item={item}
-                        handleShare={() => handleShare(this.props.blockchainWrapper, item.user.name, item)}
-                        handleLike={() => handleLike(this.props.blockchainWrapper, item.user.name, item.previousHash)}
+                        handleShare={callback => handleShare(this.props.blockchainWrapper, item.user.name, item, callback)}
+                        handleLike={callback => handleLike(this.props.blockchainWrapper, item.user.name, item.previousHash, callback)}
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}
@@ -45,8 +45,8 @@ class OwnFeed extends Component {
                     return (
                       <FeedElementSmall
                         item={item}
-                        handleShare={() => handleShare(this.props.blockchainWrapper, item.user.name, item)}
-                        handleLike={() => handleLike(this.props.blockchainWrapper, item.user.name, item.previousHash)}
+                        handleShare={callback => handleShare(this.props.blockchainWrapper, item.user.name, item, callback)}
+                        handleLike={callback => handleLike(this.props.blockchainWrapper, item.user.name, item.previousHash, callback)}
                         request={request}
                         key={item.timestamp}
                         blockchainWrapper={this.props.blockchainWrapper}
