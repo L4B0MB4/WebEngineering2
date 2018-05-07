@@ -158,7 +158,7 @@ class Layout extends Component {
               <img src={user && user.profilePicture ? "/api/picture/" + user.profilePicture : "../static/bild.jpeg"} className="-content" />
             </div>
             <Card.Content>
-              <Card.Header>{user ? user.name : ""}</Card.Header>
+              <Card.Header style={{ wordWarp: "break-word" }}>{user ? user.name : ""}</Card.Header>
             </Card.Content>
             <Card.Content extra>
               <p>
