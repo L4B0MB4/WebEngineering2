@@ -150,7 +150,14 @@ export default class FeedElement extends Component {
   getLikeAndShare(handleLike, handleShare, item) {
     return (
       <Fragment>
-        <Button as="div" labelPosition="right" size="mini" animated="fade" onClick={handleShare} className="-float-left -share-button ">
+        <Button
+          as="div"
+          labelPosition="right"
+          size="mini"
+          animated="fade"
+          onClick={() => handleShare(() => this.setState({ shared: true }))}
+          className={this.state.shared ? "-share-button-success -float-left" : "-float-left -share-button"}
+          className=" ">
           <Button size="mini">
             <Button.Content visible>
               <Icon name="share" />
@@ -164,7 +171,11 @@ export default class FeedElement extends Component {
           </Label>
         </Button>
 
-        <Button size="mini" animated="fade" onClick={handleLike} className="-float-right -like-button">
+        <Button
+          size="mini"
+          animated="fade"
+          onClick={() => handleLike(() => this.setState({ liked: true }))}
+          className={this.state.liked ? "-float-right -like-button-success" : "-float-right -like-button"}>
           <Button.Content visible>
             <Icon name="heart" />
           </Button.Content>

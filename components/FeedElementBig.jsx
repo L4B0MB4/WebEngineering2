@@ -73,8 +73,13 @@ export default class FeedElement extends BasicFeedElement {
                   </Feed.Summary>
                   <div style={{ width: "100%" }}>
                     <div className="-like-button-div">
-                      <Button as="div" labelPosition="right" animated="fade" onClick={handleLike} fluid>
-                        <Button fluid className="-like-button">
+                      <Button
+                        as="div"
+                        labelPosition="right"
+                        animated="fade"
+                        onClick={() => handleLike(() => this.setState({ liked: true }))}
+                        fluid>
+                        <Button fluid className={this.state.liked ? "-like-button-success" : "-like-button"}>
                           <Button.Content visible>
                             <Icon name="heart" />
                           </Button.Content>
@@ -87,7 +92,13 @@ export default class FeedElement extends BasicFeedElement {
                         </Label>
                       </Button>
                     </div>
-                    <Button as="div" labelPosition="right" animated="fade" onClick={handleShare} className="" fluid>
+                    <Button
+                      as="div"
+                      labelPosition="right"
+                      animated="fade"
+                      onClick={() => handleShare(() => this.setState({ shared: true }))}
+                      className={this.state.shared ? "-share-button-success" : ""}
+                      fluid>
                       <Button fluid>
                         <Button.Content visible>
                           <Icon name="share" />
